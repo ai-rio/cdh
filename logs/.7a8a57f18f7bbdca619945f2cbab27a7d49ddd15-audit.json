@@ -1,0 +1,20 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "/root/dev/.devcontainer/payload-template/logs/.7a8a57f18f7bbdca619945f2cbab27a7d49ddd15-audit.json",
+    "files": [
+        {
+            "date": 1751242372380,
+            "name": "/root/dev/.devcontainer/payload-template/logs/mcp-puppeteer-2025-06-29.log",
+            "hash": "a86c2e04e6fa7e0274356ee5072104fab093e2d408442c4de9c77e9d2e9be397"
+        },
+        {
+            "date": 1751289399170,
+            "name": "/root/dev/.devcontainer/payload-template/logs/mcp-puppeteer-2025-06-30.log",
+            "hash": "6f883bdaffb57fba8f4c60ca614159e384fd1cd2f5360a99b580ccd8e895d72a"
+        }
+    ],
+    "hashType": "sha256"
+}
