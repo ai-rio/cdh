@@ -32,8 +32,8 @@ Relevant Source Tree info:
 
 Dev Note: Story Requires the following tests:
 
-- [ ] Jest Unit Tests: (nextToFile: true), coverage requirement: 80%
-- [ ] Jest with in memory db Integration Test (Test Location): location: `/tests/components/waitlistmodallanding.spec.ts`
+- [ ] Vitest Unit Tests: (nextToFile: true), coverage requirement: 80%
+- [ ] Vitest with in memory db Integration Test (Test Location): location: `/tests/components/waitlistmodallanding.spec.ts`
 - [ ] Cypress E2E: location: `/e2e/waitlistmodallanding.test.ts`
 
 Manual Test Steps:

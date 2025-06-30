@@ -28,8 +28,8 @@ Relevant Source Tree info:
 
 Dev Note: Story Requires the following tests:
 
-- [ ] Jest Unit Tests: (nextToFile: true), coverage requirement: 80%
-- [ ] Jest with in memory db Integration Test (Test Location): location: `/tests/components/starfieldcanvas.spec.ts`
+- [ ] Vitest Unit Tests: (nextToFile: true), coverage requirement: 80%
+- [ ] Vitest with in memory db Integration Test (Test Location): location: `/tests/components/starfieldcanvas.spec.ts`
 - [ ] Cypress E2E: location: `/e2e/starfieldcanvas.test.ts`
 
 Manual Test Steps:

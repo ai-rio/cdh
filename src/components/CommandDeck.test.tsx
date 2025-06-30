@@ -1,9 +1,10 @@
+import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import CommandDeck from './CommandDeck.tsx';
 
 describe('CommandDeck', () => {
-  const mockOnClose = jest.fn();
+  const mockOnClose = vi.fn();
 
   it('renders navigation links', () => {
     render(<CommandDeck onClose={mockOnClose} />);
