@@ -1,5 +1,6 @@
 "use client";
 
+import React from 'react';
 import Link from "next/link";
 
 interface CommandDeckProps {
@@ -9,7 +10,7 @@ interface CommandDeckProps {
 
 export function CommandDeck({ isOpen, onClose }: CommandDeckProps) {
   return (
-    <div id="command-deck" data-testid="command-deck" className={isOpen ? "open" : ""}>
+    <div id="command-deck" data-testid="command-deck" className={isOpen ? "open" : "closed"}>
       <button
         id="command-deck-close"
         className="absolute top-8 right-8 p-2 text-gray-400 hover:text-white"

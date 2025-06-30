@@ -6,7 +6,7 @@ module.exports = defineConfig({
       // implement node event listeners here
     },
     specPattern: "e2e/**/*.ts",
-    baseUrl: "http://localhost:3006",
+    baseUrl: "http://localhost:3007",
     supportFile: false,
   },
 });
