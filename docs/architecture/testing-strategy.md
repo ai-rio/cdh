@@ -27,9 +27,9 @@ This document outlines the comprehensive testing strategy for the Creator's Deal
 - **Location**: Typically in a `tests/integration` directory or within feature modules.
 
 ### **3. End-to-End (E2E) Tests**
-- **Purpose**: Simulate real user scenarios across the entire application stack (frontend to backend).
-- **Scope**: Critical user flows and business processes.
-- **Frameworks**: Playwright.
+- **Purpose**: Validate the most critical user journeys and core functionalities by simulating real user scenarios across the entire application stack (frontend to backend). These tests ensure the application works as expected from an end-user perspective.
+- **Scope**: Limited to high-value, critical user flows (e.g., primary conversion funnels, core business processes). E2E testing efforts are capped at approximately 10% of the total project testing efforts, emphasizing efficiency and strategic coverage.
+- **Frameworks**: Cypress.
 - **Execution**: Run on staging environments as part of the CI/CD pipeline, and periodically in production.
 - **Location**: `tests/e2e` directory.
 

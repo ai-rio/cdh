@@ -10,6 +10,7 @@ import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 
+
 export default async function HomePage() {
   const headers = await getHeaders()
   const payloadConfig = await config
@@ -19,7 +20,7 @@ export default async function HomePage() {
   const fileURL = `vscode://file/${fileURLToPath(import.meta.url)}`
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4">
+    <div className="flex items-center justify-center bg-gray-100 p-4 min-h-full">
       <Card className="w-full max-w-md p-6 shadow-lg rounded-lg">
         <CardContent className="flex flex-col items-center text-center">
           <picture>
@@ -68,6 +69,7 @@ export default async function HomePage() {
           </a>
         </CardFooter>
       </Card>
+
     </div>
   )
 }
