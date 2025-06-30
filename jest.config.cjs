@@ -10,13 +10,16 @@ module.exports = {
     },
   },
   testEnvironment: "jest-environment-jsdom",
+  setupFilesAfterEnv: ["@testing-library/jest-dom"],
   transform: {
-    "^.+\.(ts|tsx)$": "babel-jest",
+    "^.+\.(ts|tsx|js|jsx)$": "babel-jest",
   },
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
+  testMatch: ["<rootDir>/tests/**/*.+(ts|tsx|js)", "<rootDir>/src/**/*.+(spec|test).+(ts|tsx|js)"],
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/src/$1",
     "^gsap$": "<rootDir>/__mocks__/gsap.js",
     "^gsap/ScrollToPlugin$": "<rootDir>/__mocks__/gsap.js",
   },
+  testPathIgnorePatterns: ["/node_modules/", "/e2e/"],
 };
