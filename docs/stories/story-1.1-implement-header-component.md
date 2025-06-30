@@ -30,7 +30,7 @@ Relevant Source Tree info:
 Dev Note: Story Requires the following tests:
 
 - [x] Jest Unit Tests: Updated Header.test.tsx with comprehensive tests
-- [ ] Jest with in memory db Integration Test (Test Location): location: `/tests/components/header.spec.ts`
+- [x] Jest with in memory db Integration Test (Test Location): location: `/tests/components/header.spec.ts`
 - [x] Cypress E2E: Updated `/e2e/header.test.ts` with cross-device tests
 
 Manual Test Steps:
