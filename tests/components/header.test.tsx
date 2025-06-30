@@ -1,12 +1,13 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
+import "@testing-library/jest-dom";
 import { Header } from "../../src/app/(frontend)/components/Header";
 
 describe("Header Integration Test", () => {
   it("should open and close the CommandDeck when the toggle button is clicked", () => {
     render(<Header />);
     const toggleButton = screen.getByLabelText("Open navigation menu");
-    const commandDeck = screen.getByRole("dialog", { hidden: true });
+    const commandDeck = screen.getByTestId("command-deck");
 
     // Initially, CommandDeck should be closed
     expect(commandDeck).not.toHaveClass("open");

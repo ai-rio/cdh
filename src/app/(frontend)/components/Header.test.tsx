@@ -2,6 +2,7 @@
 
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
+import "@testing-library/jest-dom";
 import { Header } from "./Header";
 
 describe("Header", () => {
@@ -18,10 +19,20 @@ describe("Header", () => {
     expect(screen.getByLabelText("Open navigation menu")).toBeInTheDocument();
   });
 
-  it("toggles the CommandDeck on mobile navigation button click", () => {
+  it("renders HUD items with correct data", () => {
+    render(<Header />);
+    expect(screen.getByText("Active Deals")).toBeInTheDocument();
+    expect(screen.getByText("12")).toBeInTheDocument();
+    expect(screen.getByText("Overdue")).toBeInTheDocument();
+    expect(screen.getByText("3")).toBeInTheDocument();
+    expect(screen.getByText("Key Contacts")).toBeInTheDocument();
+    expect(screen.getByText("47")).toBeInTheDocument();
+  });
+
+  it("toggles the CommandDeck on navigation button click", () => {
     render(<Header />);
     const toggleButton = screen.getByLabelText("Open navigation menu");
-    const commandDeck = screen.getByRole("dialog", { hidden: true }); // Assuming CommandDeck will have a dialog role
+    const commandDeck = screen.getByTestId("command-deck");
 
     expect(commandDeck).not.toHaveClass("open");
     fireEvent.click(toggleButton);
