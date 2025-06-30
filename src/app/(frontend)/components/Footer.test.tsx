@@ -1,12 +1,13 @@
 import { render, screen } from '@testing-library/react';
+import React from 'react';
 import { Footer } from './Footer';
 
 // Mock Next.js Link component
-jest.mock('next/link', () => {
-  return function MockLink({ children, href, className }: { children: React.ReactNode; href: string; className?: string }) {
+vi.mock('next/link', () => ({
+  default: function MockLink({ children, href, className }: { children: React.ReactNode; href: string; className?: string }) {
     return <a href={href} className={className}>{children}</a>;
-  };
-});
+  },
+}));
 
 describe('Footer Component', () => {
   beforeEach(() => {
