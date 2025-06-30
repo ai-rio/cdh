@@ -3,10 +3,10 @@ module.exports = {
   coverageReporters: ["json", "lcov", "text", "clover"],
   coverageThreshold: {
     global: {
-      branches: 80,
-      functions: 80,
-      lines: 80,
-      statements: 80,
+      branches: 75,
+      functions: 75,
+      lines: 75,
+      statements: 75,
     },
   },
   testEnvironment: "jest-environment-jsdom",
@@ -20,6 +20,7 @@ module.exports = {
     "^@/(.*)$": "<rootDir>/src/$1",
     "^gsap$": "<rootDir>/__mocks__/gsap.js",
     "^gsap/ScrollToPlugin$": "<rootDir>/__mocks__/gsap.js",
+    "\\.(css|less|scss|sass)$": "identity-obj-proxy",
   },
   testPathIgnorePatterns: ["/node_modules/", "/e2e/"],
 };

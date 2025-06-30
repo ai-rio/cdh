@@ -3,6 +3,13 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { Header } from "../../src/app/(frontend)/components/Header";
 
+// Mock Next.js Link component
+jest.mock('next/link', () => {
+  return function MockLink({ children, href, className }: { children: React.ReactNode; href: string; className?: string }) {
+    return <a href={href} className={className}>{children}</a>;
+  };
+});
+
 describe("Header Integration Test", () => {
   it("should open and close the CommandDeck when the toggle button is clicked", () => {
     render(<Header />);

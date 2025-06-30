@@ -277,6 +277,34 @@ svg {
   color: #eefc97;
 }
 
+.site-footer {
+  background-color: #111111;
+  padding: 4rem 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+.footer-grid {
+  padding-top: 0;
+  margin-top: 0;
+}
+.footer-link {
+  color: #a1a1aa !important;
+  text-decoration: none !important;
+  transition: color 0.2s ease-in-out;
+}
+.footer-link:hover {
+  color: #ffffff !important;
+}
+.social-link {
+  color: #a1a1aa;
+  transition:
+    color 0.2s ease-in-out,
+    transform 0.2s ease-in-out;
+}
+.social-link:hover {
+  color: #eefc97;
+  transform: scale(1.1);
+}
+
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
