@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creator's Deal Hub - Contact Us</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #111111;
+            color: #F3F3F4;
+            overflow-x: hidden;
+        }
+        #bg-canvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;
+        }
+        .content-container {
+            position: relative; z-index: 2; width: 100%; padding-top: 112px;
+        }
+        .mission-control-hud {
+            background-color: rgba(17, 17, 17, 0.5); backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: fixed; top: 0; left: 0; width: 100%; z-index: 50;
+        }
+        #command-deck {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(17, 17, 17, 0.8); backdrop-filter: blur(20px);
+            z-index: 100; display: flex; justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.5s ease;
+        }
+        #command-deck.open { opacity: 1; pointer-events: auto; }
+        .nav-card {
+            background-color: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem; padding: 2rem; transition: all 0.3s ease;
+            width: 90%; max-width: 280px;
+        }
+        .nav-card:hover { transform: translateY(-5px); background-color: rgba(255, 255, 255, 0.1); border-color: rgba(238, 252, 151, 0.5); }
+        .nav-card h3 { color: #EEFC97; }
+
+        /* Contact Page Specific Styles */
+        .signal-relay-container {
+            max-width: 800px;
+            margin: auto;
+        }
+        .triage-card {
+            background-color: rgba(23, 23, 23, 0.5);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .triage-card:hover {
+            transform: translateY(-5px);
+            border-color: #A3E635;
+        }
+        .form-view {
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .form-input {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .form-input:focus {
+            border-color: #A3E635;
+            box-shadow: 0 0 15px rgba(163, 230, 53, 0.3);
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- Mission Control HUD -->
+    <header class="mission-control-hud">
+        <nav class="p-4 w-full max-w-7xl mx-auto flex justify-between items-center">
+            <a href="index.html" class="flex items-center space-x-3">
+                <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16 2.66663C8.63636 2.66663 2.66669 8.63632 2.66669 16C2.66669 23.3636 8.63636 29.3333 16 29.3333C23.3637 29.3333 29.3334 23.3636 29.3334 16C29.3334 8.63632 23.3637 2.66663 16 2.66663Z" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M21.3333 10.6667L10.6667 21.3334" stroke="#A3E635" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.6667 10.6667L21.3333 21.3334" stroke="#A3E635" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span class="font-bold text-xl text-white">CDH</span>
+            </a>
+            <button id="command-deck-toggle" class="p-2 rounded-md hover:bg-white/10" aria-label="Open navigation menu">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Command Deck Navigation Overlay -->
+    <div id="command-deck">
+        <button id="command-deck-close" class="absolute top-8 right-8 p-2 text-gray-400 hover:text-white" aria-label="Close navigation menu"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></button>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 p-8 max-w-7xl mx-auto text-center">
+            <a href="blog.html" class="nav-card"><h3 class="text-xl font-bold mb-2">Blog</h3><p class="text-gray-300 text-sm">Insights and strategies from the forefront of the creator economy.</p></a>
+            <a href="pricing.html" class="nav-card"><h3 class="text-xl font-bold mb-2">Pricing</h3><p class="text-gray-300 text-sm">Simple, transparent plans that scale with your success.</p></a>
+            <a href="about.html" class="nav-card"><h3 class="text-xl font-bold mb-2">About Us</h3><p class="text-gray-300 text-sm">Learn about our mission to empower professional creators.</p></a>
+            <a href="login.html" class="nav-card"><h3 class="text-xl font-bold mb-2">Login</h3><p class="text-gray-300 text-sm">Access your Creator's Deal Hub account.</p></a>
+        </div>
+    </div>
+    
+    <!-- The canvas for our Three.js scene -->
+    <canvas id="bg-canvas" aria-hidden="true"></canvas>
+
+    <!-- Main Page Content -->
+    <div class="content-container">
+        <div class="min-h-[80vh] flex flex-col justify-center items-center">
+            <div class="signal-relay-container text-center p-6">
+                
+                <!-- Initial Triage View -->
+                <div id="triage-view" class="form-view">
+                    <h1 class="text-4xl md:text-5xl font-extrabold text-white">Establish Comms</h1>
+                    <p class="text-lg text-gray-400 mt-4 max-w-2xl mx-auto">What is the nature of your transmission? Select a channel to route your signal to the correct command center.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
+                        <div class="triage-card p-8" data-form="demo">
+                            <h3 class="text-xl font-bold text-lime-300">Request a Private Demo</h3>
+                            <p class="text-sm text-gray-400 mt-2">Get a personalized tour of the CDH platform.</p>
+                        </div>
+                        <div class="triage-card p-8" data-form="press">
+                             <h3 class="text-xl font-bold text-lime-300">Press & Media Inquiry</h3>
+                            <p class="text-sm text-gray-400 mt-2">For interviews, assets, and media partnerships.</p>
+                        </div>
+                        <div class="triage-card p-8" data-form="general">
+                            <h3 class="text-xl font-bold text-lime-300">General Question</h3>
+                            <p class="text-sm text-gray-400 mt-2">For feedback or any other inquiries.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dynamic Form View -->
+                <div id="form-container-view" class="form-view hidden opacity-0">
+                    <button id="back-to-triage" class="text-gray-400 hover:text-white mb-8 flex items-center group">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 transition-transform duration-300 group-hover:-translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+                        Select a different channel
+                    </button>
+                    <div class="bg-gray-900/50 p-8 rounded-2xl">
+                        <h2 id="form-title" class="text-3xl font-bold text-white mb-6"></h2>
+                        <form id="contact-form" class="space-y-4"></form>
+                    </div>
+                </div>
+
+                 <!-- Success View -->
+                <div id="success-view" class="form-view hidden opacity-0 text-center">
+                     <svg class="w-16 h-16 mx-auto text-[#EEFC97]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                     <h2 class="text-3xl font-bold text-white mt-4 mb-2">Transmission Received</h2>
+                     <p id="success-message" class="text-gray-300"></p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    
+    <!-- Three.js and GSAP Libraries -->
+    <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
+    <script type="importmap"> { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.151.3/build/three.module.js" } } </script>
+    
+    <script type="module">
+        import * as THREE from 'three';
+        
+        function main() {
+            runExperience();
+
+            const commandDeck = document.getElementById('command-deck');
+            const openBtn = document.getElementById('command-deck-toggle');
+            const closeBtn = document.getElementById('command-deck-close');
+            if (openBtn) openBtn.addEventListener('click', () => commandDeck.classList.add('open'));
+            if (closeBtn) closeBtn.addEventListener('click', () => commandDeck.classList.remove('open'));
+            
+            const triageView = document.getElementById('triage-view');
+            const formContainerView = document.getElementById('form-container-view');
+            const successView = document.getElementById('success-view');
+
+            const formTitle = document.getElementById('form-title');
+            const contactForm = document.getElementById('contact-form');
+            const successMessage = document.getElementById('success-message');
+            
+            const forms = {
+                demo: {
+                    title: "Request a Private Demo",
+                    fields: `
+                        <input type="text" name="name" placeholder="Full Name" required class="form-input w-full p-3 rounded-lg text-white">
+                        <input type="email" name="email" placeholder="Work Email" required class="form-input w-full p-3 rounded-lg text-white">
+                        <input type="text" name="company" placeholder="Company / Channel Name" required class="form-input w-full p-3 rounded-lg text-white">
+                        <button type="submit" class="w-full bg-lime-400 text-lime-900 font-bold p-4 rounded-lg hover:bg-lime-300 transition-colors">Submit Request</button>
+                    `,
+                    success: "Your request has been routed to our strategy team. Stand by for contact."
+                },
+                press: {
+                    title: "Press & Media Inquiry",
+                    fields: `
+                        <input type="text" name="name" placeholder="Full Name" required class="form-input w-full p-3 rounded-lg text-white">
+                        <input type="email" name="email" placeholder="Work Email" required class="form-input w-full p-3 rounded-lg text-white">
+                        <input type="text" name="publication" placeholder="Publication" required class="form-input w-full p-3 rounded-lg text-white">
+                        <textarea name="message" rows="4" placeholder="Briefly describe your inquiry..." required class="form-input w-full p-3 rounded-lg text-white"></textarea>
+                        <button type="submit" class="w-full bg-lime-400 text-lime-900 font-bold p-4 rounded-lg hover:bg-lime-300 transition-colors">Send Inquiry</button>
+                    `,
+                    success: "Your inquiry has been routed to our comms channel. We'll be in touch shortly."
+                },
+                general: {
+                    title: "General Question or Feedback",
+                    fields: `
+                        <input type="email" name="email" placeholder="Your Email" required class="form-input w-full p-3 rounded-lg text-white">
+                        <textarea name="message" rows="5" placeholder="Your message..." required class="form-input w-full p-3 rounded-lg text-white"></textarea>
+                        <button type="submit" class="w-full bg-lime-400 text-lime-900 font-bold p-4 rounded-lg hover:bg-lime-300 transition-colors">Send Transmission</button>
+                    `,
+                    success: "Your signal has been received. Thank you for your feedback."
+                }
+            };
+            
+            document.querySelectorAll('.triage-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const formType = card.dataset.form;
+                    formTitle.textContent = forms[formType].title;
+                    contactForm.innerHTML = forms[formType].fields;
+                    successMessage.textContent = forms[formType].success;
+
+                    triageView.style.opacity = '0';
+                    setTimeout(() => {
+                        triageView.classList.add('hidden');
+                        formContainerView.classList.remove('hidden');
+                        setTimeout(() => formContainerView.style.opacity = '1', 50);
+                    }, 300);
+                });
+            });
+
+            document.getElementById('back-to-triage').addEventListener('click', () => {
+                formContainerView.style.opacity = '0';
+                setTimeout(() => {
+                    formContainerView.classList.add('hidden');
+                    successView.classList.add('hidden'); // Also hide success view if it was shown
+                    triageView.classList.remove('hidden');
+                     setTimeout(() => triageView.style.opacity = '1', 50);
+                }, 300);
+            });
+
+            contactForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                formContainerView.style.opacity = '0';
+                 setTimeout(() => {
+                    formContainerView.classList.add('hidden');
+                    successView.classList.remove('hidden');
+                    setTimeout(() => successView.style.opacity = '1', 50);
+                }, 300);
+            });
+        }
+
+        function runExperience() {
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 10;
+            const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('bg-canvas'), antialias: true, alpha: true });
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            
+            const group = new THREE.Group();
+            scene.add(group);
+            
+            const geometry = new THREE.TorusKnotGeometry( 10, 3, 100, 16 );
+            const material = new THREE.MeshStandardMaterial({
+                color: 0x555555,
+                emissive: 0x1a1a1a,
+                metalness: 0.9,
+                roughness: 0.1,
+                wireframe: true,
+            });
+            const mainObject = new THREE.Mesh(geometry, material);
+            mainObject.scale.set(0.5, 0.5, 0.5);
+            group.add(mainObject);
+
+            const clock = new THREE.Clock();
+            function animate() {
+                requestAnimationFrame(animate);
+                const elapsedTime = clock.getElapsedTime();
+                group.rotation.x = elapsedTime * 0.05;
+                group.rotation.y = elapsedTime * 0.05;
+                renderer.render(scene, camera);
+            }
+            animate();
+            
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', main);
+        } else {
+            main();
+        }
+    </script>
+</body>
+</html>

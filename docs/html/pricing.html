@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creator's Deal Hub - Pricing</title>
+    
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter for typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for social icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    
+    <style>
+        /* Base styles consistent with the "Catalyst" theme */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #111111;
+            color: #F3F3F4;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        /* The canvas is the fixed background for the 3D scene */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        
+        /* This container holds all the scrollable 2D content */
+        .content-container {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            padding-top: 112px; /* 7rem */
+        }
+        
+        /* Mission Control HUD */
+        .mission-control-hud {
+            background-color: rgba(17, 17, 17, 0.5);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 50;
+        }
+        .hud-item {
+            cursor: pointer;
+            padding: 1rem 1.5rem;
+            transition: all 0.2s ease-in-out;
+            border-radius: 0.5rem;
+            border: 1px solid transparent;
+        }
+        .hud-item:hover { background-color: rgba(255, 255, 255, 0.05); }
+        .hud-item.active { border-color: #A3E635; background-color: rgba(163, 230, 53, 0.1);}
+        .hud-label { font-size: 0.75rem; color: #a1a1aa; }
+        .hud-value { font-size: 1rem; font-weight: 600; color: #e4e4e7; }
+        
+        /* Command Deck Navigation */
+        #command-deck {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(17, 17, 17, 0.8); backdrop-filter: blur(20px);
+            z-index: 100; display: flex; justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.5s ease;
+        }
+        #command-deck.open { opacity: 1; pointer-events: auto; }
+        .nav-card {
+            background-color: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem; padding: 2rem; transition: all 0.3s ease;
+            width: 90%; max-width: 280px;
+        }
+        .nav-card:hover { transform: translateY(-5px); background-color: rgba(255, 255, 255, 0.1); border-color: rgba(238, 252, 151, 0.5); }
+        .nav-card h3 { color: #EEFC97; }
+
+        /* Pricing Page Specific Styles */
+        .pricing-card {
+            background-color: rgba(23, 23, 23, 0.5);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .pricing-card.popular {
+            border-color: #A3E635;
+            box-shadow: 0 0 30px rgba(163, 230, 53, 0.2);
+        }
+        .pricing-card:hover {
+            transform: translateY(-10px);
+        }
+        .feature-item i {
+            color: #A3E635;
+        }
+        .billing-toggle button.active {
+            background-color: #EEFC97;
+            color: #1D1F04;
+        }
+        
+        /* Founder's Key Offer Block */
+        .founders-key-card {
+            background: linear-gradient(145deg, rgba(30, 30, 30, 0.5), rgba(50, 50, 50, 0.5));
+            backdrop-filter: blur(20px);
+            border: 1px solid #A3E635;
+            box-shadow: 0 0 40px rgba(163, 230, 53, 0.3), inset 0 0 20px rgba(163, 230, 53, 0.1);
+        }
+        .countdown-timer {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: rgba(0,0,0,0.3);
+            border-radius: 0.5rem;
+            padding: 0.5rem 1rem;
+        }
+        .cta-glow {
+           box-shadow: 0 0 15px rgba(238, 252, 151, 0.3), 0 0 30px rgba(238, 252, 151, 0.2);
+           transition: all 0.3s ease-in-out;
+        }
+        .cta-glow:hover, .cta-glow:focus-visible {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(238, 252, 151, 0.5), 0 0 50px rgba(238, 252, 151, 0.3);
+            outline: none;
+        }
+        
+        /* Early Access Modal Styles */
+        #early-access-modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(17, 17, 17, 0.8);
+            z-index: 200; display: flex; justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.5s ease;
+        }
+        #early-access-modal.open {
+            opacity: 1; pointer-events: auto;
+        }
+        .modal-content {
+            background-color: rgba(23, 23, 23, 0.7);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1.5rem;
+            padding: 3rem;
+            width: 90%; max-width: 480px;
+            transform: scale(0.95);
+            transition: transform 0.5s ease;
+            position: relative;
+        }
+        #early-access-modal.open .modal-content {
+            transform: scale(1);
+        }
+        .form-input {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: border-color 0.3s ease;
+        }
+        .form-input:focus {
+            border-color: #EEFC97;
+            outline: none;
+            box-shadow: 0 0 15px rgba(238, 252, 151, 0.3);
+        }
+        .success-message {
+            transition: opacity 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- Mission Control HUD -->
+    <header class="mission-control-hud">
+        <nav class="p-4 w-full max-w-7xl mx-auto flex justify-between items-center">
+            <a href="index.html" class="flex items-center space-x-3">
+                <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M16 2.66663C8.63636 2.66663 2.66669 8.63632 2.66669 16C2.66669 23.3636 8.63636 29.3333 16 29.3333C23.3637 29.3333 29.3334 23.3636 29.3334 16C29.3334 8.63632 23.3637 2.66663 16 2.66663Z" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M21.3333 10.6667L10.6667 21.3334" stroke="#A3E635" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M10.6667 10.6667L21.3333 21.3334" stroke="#A3E635" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span class="font-bold text-xl text-white">CDH</span>
+            </a>
+            
+            <div class="hidden md:flex items-center space-x-4">
+                <a href="deals.html" id="hud-deals" class="hud-item" data-type="Deal">
+                    <div class="hud-label">Deals</div>
+                </a>
+                 <a href="invoices.html" id="hud-invoices" class="hud-item" data-type="Invoice">
+                    <div class="hud-label">Invoices</div>
+                </a>
+                 <a href="contacts.html" id="hud-contacts" class="hud-item" data-type="Contact">
+                    <div class="hud-label">Contacts</div>
+                </a>
+            </div>
+            
+            <button id="command-deck-toggle" class="p-2 rounded-md hover:bg-white/10" aria-label="Open navigation menu">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Command Deck Navigation Overlay -->
+    <div id="command-deck">
+        <button id="command-deck-close" class="absolute top-8 right-8 p-2 text-gray-400 hover:text-white" aria-label="Close navigation menu">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 p-8 max-w-7xl mx-auto text-center">
+            <a href="blog.html" class="nav-card">
+                <h3 class="text-xl font-bold mb-2">Blog</h3>
+                <p class="text-gray-300 text-sm">Insights and strategies from the forefront of the creator economy.</p>
+            </a>
+            <a href="pricing.html" class="nav-card">
+                <h3 class="text-xl font-bold mb-2">Pricing</h3>
+                <p class="text-gray-300 text-sm">Simple, transparent plans that scale with your success.</p>
+            </a>
+            <a href="about.html" class="nav-card">
+                <h3 class="text-xl font-bold mb-2">About Us</h3>
+                <p class="text-gray-300 text-sm">Learn about our mission to empower professional creators.</p>
+            </a>
+            <a href="login.html" class="nav-card">
+                <h3 class="text-xl font-bold mb-2">Login</h3>
+                <p class="text-gray-300 text-sm">Access your Creator's Deal Hub account.</p>
+            </a>
+        </div>
+    </div>
+    
+    
+
+
+    <!-- The canvas for our Three.js scene -->
+    <canvas id="bg-canvas" aria-hidden="true"></canvas>
+
+    <div id="early-access-modal-root"></div>
+
+    <!-- Main Page Content -->
+    <div class="content-container">
+        <div class="max-w-5xl mx-auto p-6 lg:p-8 text-center">
+            
+            <!-- Founder's Key Offer Block -->
+            <div class="founders-key-card p-8 rounded-2xl mb-16">
+                 <h2 class="text-3xl md:text-4xl font-extrabold text-white">Join the <span class="text-lime-300">Founder's Circle</span></h2>
+                 <p class="text-lg text-gray-300 mt-2">A one-time offer for the pioneers.</p>
+                 <div class="my-6">
+                    <p class="text-xl font-semibold">Get <strong class="text-white">50% OFF</strong> the Business Plan. <strong class="text-white">Forever.</strong></p>
+                 </div>
+                 <div class="flex justify-center items-center space-x-4">
+                    <p class="text-gray-400 font-semibold">Offer ends in:</p>
+                    <div id="countdown" class="countdown-timer text-2xl font-bold text-lime-300">
+                        <span>71:59:55</span>
+                    </div>
+                 </div>
+                 <button class="early-access-trigger mt-8 w-full max-w-sm mx-auto cta-glow bg-[#EEFC97] text-[#1D1F04] font-bold text-lg p-4 rounded-lg">
+                    Claim My Founder's Key
+                </button>
+            </div>
+
+            <h2 class="text-4xl md:text-5xl font-extrabold text-white">Choose Your Command Center</h2>
+            <p class="text-lg text-gray-400 mt-4 max-w-2xl mx-auto">Simple, transparent pricing that grows with you. No hidden fees. Ever.</p>
+            
+            <div class="billing-toggle flex justify-center items-center my-10 bg-gray-800 p-1 rounded-full w-max mx-auto">
+                <button data-period="monthly" class="px-6 py-2 text-sm font-semibold rounded-full active">Monthly</button>
+                <button data-period="annually" class="px-6 py-2 text-sm font-semibold rounded-full relative">
+                    Annually <span class="absolute -top-2 -right-2 bg-green-400 text-green-900 text-xs font-bold px-2 py-0.5 rounded-full">Save 20%</span>
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                <!-- Creator Plan -->
+                <div class="pricing-card p-8 text-left">
+                    <h3 class="text-2xl font-bold">Creator</h3>
+                    <p class="text-gray-400 mb-6">For individuals ready to professionalize.</p>
+                    <div class="text-5xl font-extrabold mb-6">
+                        <span data-monthly="$29" data-annually="$23">$29</span>
+                        <span class="text-lg font-medium text-gray-400">/mo</span>
+                    </div>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-start feature-item"><i class="fas fa-check-circle mt-1 mr-3"></i><span><strong>AI-Powered Insights:</strong> Turn your data into actionable advice.</span></li>
+                        <li class="flex items-start feature-item"><i class="fas fa-check-circle mt-1 mr-3"></i><span><strong>Deal & Contact Management:</strong> Track every pitch, negotiation, and relationship.</span></li>
+                        <li class="flex items-start feature-item"><i class="fas fa-check-circle mt-1 mr-3"></i><span><strong>Invoicing & Payments:</strong> Automate billing and get paid faster.</span></li>
+                         <li class="flex items-start feature-item"><i class="fas fa-check-circle mt-1 mr-3"></i><span><strong>Up to 100 Contacts:</strong> Build your professional network.</span></li>
+                    </ul>
+                    <button class="early-access-trigger w-full bg-white/10 border border-white/20 font-semibold py-3 rounded-lg hover:bg-white/20 transition-colors">Choose Creator</button>
+                </div>
+                <!-- Business Plan -->
+                <div class="pricing-card popular p-8 text-left relative">
+                    <div class="absolute top-0 -translate-y-1/2 left-1/2 -translate-x-1/2 bg-lime-400 text-black text-sm font-bold px-4 py-1 rounded-full">MOST POPULAR</div>
+                    <h3 class="text-2xl font-bold">Business</h3>
+                    <p class="text-gray-400 mb-6">For established creators & small teams.</p>
+                    <div class="text-5xl font-extrabold mb-6">
+                        <span data-monthly="$79" data-annually="$63">$79</span>
+                        <span class="text-lg font-medium text-gray-400">/mo</span>
+                    </div>
+                     <ul class="space-y-4 mb-8">
+                        <li class="flex items-start feature-item"><i class="fas fa-check-circle mt-1 mr-3"></i><span>Everything in Creator, plus:</span></li>
+                        <li class="flex items-start feature-item"><i class="fas fa-check-circle mt-1 mr-3"></i><span><strong>Advanced Analytics & Reporting:</strong> Deep dive into your business performance.</span></li>
+                        <li class="flex items-start feature-item"><i class="fas fa-check-circle mt-1 mr-3"></i><span><strong>Multi-user Support:</strong> Collaborate with up to 3 team members.</span></li>
+                        <li class="flex items-start feature-item"><i class="fas fa-check-circle mt-1 mr-3"></i><span><strong>Priority Support:</strong> Get faster help when you need it.</span></li>
+                         <li class="flex items-start feature-item"><i class="fas fa-check-circle mt-1 mr-3"></i><span><strong>Unlimited Contacts:</strong> Scale your network without limits.</span></li>
+                    </ul>
+                    <button class="early-access-trigger w-full bg-lime-400 text-black font-bold py-3 rounded-lg hover:bg-lime-300 transition-colors">Choose Business</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Three.js and GSAP Libraries -->
+    <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
+    <script type="importmap"> { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.151.3/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.151.3/examples/jsm/" } } </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import React, { useState } from 'react';
+        import ReactDOM from 'react-dom/client';
+        import EarlyAccessModal from './src/components/EarlyAccessModal.tsx';
+        
+        function App() {
+            const [isModalOpen, setIsModalOpen] = useState(false);
+
+            const openModal = () => setIsModalOpen(true);
+            const closeModal = () => setIsModalOpen(false);
+
+            React.useEffect(() => {
+                const ctaButtons = document.querySelectorAll('.early-access-trigger');
+                ctaButtons.forEach(btn => btn.addEventListener('click', openModal));
+
+                return () => {
+                    ctaButtons.forEach(btn => btn.removeEventListener('click', openModal));
+                };
+            }, []);
+
+            return (
+                <EarlyAccessModal isOpen={isModalOpen} onClose={closeModal} />
+            );
+        }
+
+        function main() {
+            runExperience();
+
+            const commandDeck = document.getElementById('command-deck');
+            const openBtn = document.getElementById('command-deck-toggle');
+            const closeBtn = document.getElementById('command-deck-close');
+            if (openBtn) openBtn.addEventListener('click', () => commandDeck.classList.add('open'));
+            if (closeBtn) closeBtn.addEventListener('click', () => commandDeck.classList.remove('open'));
+
+            // Billing Toggle Logic
+            const billingToggle = document.querySelector('.billing-toggle');
+            const priceElements = document.querySelectorAll('[data-monthly]');
+            if (billingToggle) {
+                billingToggle.addEventListener('click', (e) => {
+                    if (e.target.tagName === 'BUTTON') {
+                        const period = e.target.dataset.period;
+                        billingToggle.querySelector('.active').classList.remove('active');
+                        e.target.classList.add('active');
+                        priceElements.forEach(el => {
+                            el.textContent = el.dataset[period];
+                        });
+                    }
+                });
+            }
+            
+            // Countdown Timer Logic
+            const countdownElement = document.getElementById('countdown');
+            if(countdownElement){
+                let
+         time = 72 * 3600; // 72 hours in seconds
+                setInterval(() => {
+                    if (time <= 0) return;
+                    time--;
+                    const hours = Math.floor(time / 3600);
+                    const minutes = Math.floor((time % 3600) / 60);
+                    const seconds = time % 60;
+                    countdownElement.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                }, 1000);
+            }
+
+            const root = ReactDOM.createRoot(document.getElementById('early-access-modal-root'));
+            root.render(<App />);
+        }
+
+        function runExperience() {
+            let motion_enabled = true;
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 18; // Start slightly further back
+            const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('bg-canvas'), antialias: true, alpha: true });
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            const controls = new OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.enableZoom = false; 
+            controls.enablePan = false;
+            controls.autoRotate = true;
+            controls.autoRotateSpeed = 0.2;
+
+            scene.add(new THREE.AmbientLight(0xffffff, 0.1));
+            const dirLight = new THREE.DirectionalLight(0xffffff, 0.5);
+            dirLight.position.set(5, 5, 5);
+            scene.add(dirLight);
+
+            // Create a subtle starfield
+            const starGeometry = new THREE.BufferGeometry();
+            const starVertices = [];
+            for (let i = 0; i < 10000; i++) {
+                const x = (Math.random() - 0.5) * 2000;
+                const y = (Math.random() - 0.5) * 2000;
+                const z = (Math.random() - 0.5) * 2000;
+                starVertices.push(x, y, z);
+            }
+            starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starVertices, 3));
+            const starMaterial = new THREE.PointsMaterial({ color: 0x555555, size: 0.7 });
+            const stars = new THREE.Points(starGeometry, starMaterial);
+            scene.add(stars);
+            
+            const clock = new THREE.Clock();
+            function animate() {
+                requestAnimationFrame(animate);
+                controls.update();
+                renderer.render(scene, camera);
+            }
+            animate();
+            
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', main);
+        } else {
+            main();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creator's Deal Hub - Interactive Demo</title>
+    <!-- Core Dependencies -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Base & Animation Styles */
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Inter', sans-serif; background-color: #0A0A0A; color: #E5E7EB; overflow-y: auto; overflow-x: hidden; }
+        #particle-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
+        
+        /* --- UPDATED: Gobsmacking Header Styles --- */
+        .main-header { 
+            opacity: 0; 
+            transform: translateY(-100%) scale(0.98); 
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out; 
+            border-bottom: 1px solid transparent;
+            background-size: 200% 200%;
+        }
+        .main-header.visible { 
+            opacity: 1; 
+            transform: translateY(0) scale(1);
+            border-image: linear-gradient(90deg, rgba(255,255,255,0.1), rgba(163, 230, 53, 0.5), rgba(255,255,255,0.1)) 1;
+            animation: animate-gradient 5s linear infinite;
+        }
+        @keyframes animate-gradient {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        .nav-link { position: relative; padding-bottom: 4px; }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 5px;
+            height: 5px;
+            background-color: #A3E635;
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            transform: translateX(-50%) scale(0);
+        }
+        .nav-link:hover::after {
+            opacity: 1;
+            transform: translateX(-50%) scale(1);
+        }
+        /* --- End Header Styles --- */
+
+        .hero-content, .content-section { position: relative; z-index: 1; }
+        .scroll-indicator { animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; transform: translateY(0); } 50% { opacity: 0.3; transform: translateY(8px); } }
+        .reveal { opacity: 0; transform: translateY(30px) scale(0.98); transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .reveal.visible { opacity: 1; transform: translateY(0) scale(1); }
+        .prompt-chip { transition: all 0.2s ease-in-out; }
+        .prompt-chip:hover { background-color: rgba(255, 255, 255, 0.1); transform: translateY(-2px); }
+        .typing-cursor { display: inline-block; width: 8px; height: 1.2em; background-color: #A3E635; animation: blink 1s step-end infinite; }
+        @keyframes blink { from, to { background-color: transparent } 50% { background-color: #A3E635; } }
+        #aiResponseChart { display: none; }
+        .thinking-animation { width: 40px; height: 40px; position: relative; }
+        .thinking-animation .dot { width: 100%; height: 100%; position: absolute; left: 0; top: 0; animation: thinking-rotate 2s infinite linear; }
+        .thinking-animation .dot::before { content: ''; display: block; width: 25%; height: 25%; background-color: #A3E635; border-radius: 100%; animation: thinking-bounce 2s infinite ease-in-out; }
+        @keyframes thinking-rotate { 100% { transform: rotate(360deg); } }
+        @keyframes thinking-bounce { 0%, 100% { transform: scale(0.0); } 50% { transform: scale(1.0); } }
+        .testimonial-container { -ms-overflow-style: none; scrollbar-width: none; }
+        .testimonial-container::-webkit-scrollbar { display: none; }
+        .pricing-card-popular { border-color: #A3E635; box-shadow: 0 0 30px rgba(163, 230, 53, 0.2); }
+        
+        .deal-popover { position: absolute; opacity: 0; pointer-events: none; transition: opacity 0.2s ease-in-out; z-index: 50; }
+        .deal-bar-container:hover .deal-popover { opacity: 1; pointer-events: auto; }
+        .popover-top { bottom: 100%; left: 50%; transform: translateX(-50%) translateY(-8px); }
+        .popover-bottom { top: 100%; left: 50%; transform: translateX(-50%) translateY(8px); }
+        .chart-container canvas { transition: opacity 0.3s ease-in-out; }
+
+        .modal-backdrop, .modal-container { transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        #waitlist-modal.hidden .modal-backdrop { opacity: 0; }
+        #waitlist-modal.hidden .modal-container { opacity: 0; transform: scale(0.95); }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #A3E635;
+            box-shadow: 0 0 0 2px rgba(163, 230, 53, 0.5);
+        }
+
+        .success-checkmark { width: 100px; height: 100px; }
+        .success-checkmark__circle { stroke-dasharray: 166; stroke-dashoffset: 166; stroke-width: 3; stroke-miterlimit: 10; stroke: #A3E635; fill: none; animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards; }
+        .success-checkmark__check { transform-origin: 50% 50%; stroke-dasharray: 48; stroke-dashoffset: 48; stroke-width: 4; animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards; }
+        @keyframes stroke { 100% { stroke-dashoffset: 0; } }
+    </style>
+</head>
+<body>
+
+    <canvas id="particle-canvas"></canvas>
+
+    <header id="main-header" class="fixed top-0 left-0 right-0 p-4 z-50 main-header bg-black/20 backdrop-blur-xl">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <a href="#" class="flex items-center space-x-2">
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16 2.66663C8.63636 2.66663 2.66669 8.63632 2.66669 16C2.66669 23.3636 8.63636 29.3333 16 29.3333C23.3637 29.3333 29.3334 23.3636 29.3334 16C29.3334 8.63632 23.3637 2.66663 16 2.66663Z" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M21.3333 10.6667L10.6667 21.3334" stroke="#A3E635" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.6667 10.6667L21.3333 21.3334" stroke="#A3E635" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span class="font-bold text-xl text-white">CDH</span>
+            </a>
+            <nav class="hidden md:flex items-center space-x-8">
+                <a href="#features-section" class="nav-link text-gray-300 hover:text-white transition-colors">Features</a>
+                <a href="#testimonials-section" class="nav-link text-gray-300 hover:text-white transition-colors">Testimonials</a>
+                <a href="#pricing-section" class="nav-link text-gray-300 hover:text-white transition-colors">Pricing</a>
+            </nav>
+            <a href="#" class="waitlist-trigger hidden md:inline-block bg-lime-400 text-black font-bold text-sm px-6 py-2.5 rounded-lg hover:bg-lime-300 transition-colors">
+                Join Waitlist
+            </a>
+        </div>
+    </header>
+
+    <main class="relative h-screen flex flex-col justify-center items-center p-4 md:p-8 hero-content">
+        <div class="w-full max-w-4xl text-center">
+            <div class="bg-black/20 border border-white/10 backdrop-blur-xl rounded-2xl p-8 md:p-12 shadow-2xl inline-block">
+                <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-4">Overwhelmed is Over.</h1>
+                <p class="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto mb-8">Creator's Deal Hub is the AI-powered partner that turns administrative chaos into strategic clarity and revenue growth.</p>
+                <button class="waitlist-trigger bg-lime-400 text-black font-bold text-lg px-8 py-4 rounded-xl shadow-[0_0_20px_rgba(192,252,50,0.4)] transition-all duration-300 ease-in-out hover:bg-lime-300 hover:shadow-[0_0_30px_rgba(192,252,50,0.6)] hover:scale-105 active:scale-100 active:bg-lime-500">Request Early Access</button>
+            </div>
+        </div>
+        <a href="#features-section" class="absolute bottom-10 left-1/2 -translate-x-1/2"><div class="flex flex-col items-center space-y-2 scroll-indicator"><span class="text-sm text-gray-400">Scroll to explore</span><div class="w-6 h-6 text-gray-400"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 5.25l-7.5 7.5-7.5-7.5m15 6l-7.5 7.5-7.5-7.5" /></svg></div></div></a>
+    </main>
+    
+    <section id="features-section" class="py-20 px-4 md:px-8 content-section">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 reveal">Everything, in one intelligent place.</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                 <div class="md:col-span-2 bg-black/20 border border-white/10 backdrop-blur-xl rounded-2xl p-8 reveal" id="ai-copilot-feature">
+                    <h3 class="text-2xl font-bold mb-2">Ask anything. Understand everything.</h3>
+                    <p class="text-gray-300 mb-6">Our AI co-pilot analyzes your deals, contacts, and finances to give you instant strategic insights. Click a prompt below.</p>
+                    <div id="interactive-ai-demo" class="bg-black/30 rounded-lg p-4"><div id="promptContainer" class="flex flex-wrap justify-center gap-4 mb-8"><button data-prompt="roi" class="prompt-chip bg-white/5 border border-white/10 text-white px-5 py-3 rounded-lg">Which brand deal had the best ROI?</button><button data-prompt="income" class="prompt-chip bg-white/5 border border-white/10 text-white px-5 py-3 rounded-lg">What's my projected income next month?</button><button data-prompt="followup" class="prompt-chip bg-white/5 border border-white/10 text-white px-5 py-3 rounded-lg">Who needs a follow-up?</button></div><div id="aiResponseArea" class="bg-black/30 min-h-[250px] rounded-lg p-6 text-left flex items-center justify-center transition-all duration-500"><div id="responsePlaceholder" class="text-gray-500">Click a prompt to see the magic happen.</div><div id="thinkingIndicator" class="hidden"><div class="thinking-animation"><div class="dot"></div><div class="dot" style="animation-delay: -1.0s;"></div></div></div><div id="responseText" class="hidden w-full"><p id="typedText" class="text-lg text-gray-200 font-mono"></p><div class="mt-8"><canvas id="aiResponseChart" height="150"></canvas></div></div></div></div>
+                </div>
+                <div class="bg-black/20 border border-white/10 backdrop-blur-xl rounded-2xl p-8 reveal">
+                    <h3 class="text-2xl font-bold mb-2">Command your deals.</h3><p class="text-gray-300 mb-6">Track every pitch, negotiation, and contract from a single, beautiful timeline. Hover over the bars for details.</p>
+                    <div class="bg-black/30 rounded-lg p-4 overflow-x-auto"><div id="landing-timeline-container" class="min-w-[800px]"><div id="timeline-header" class="sticky top-0 py-2 z-10 bg-black/30"></div><div id="timeline-body" class="relative mt-4"></div></div></div>
+                </div>
+                <div class="bg-black/20 border border-white/10 backdrop-blur-xl rounded-2xl p-8 reveal">
+                    <h3 class="text-2xl font-bold mb-2">Get paid. Get smarter.</h3><p class="text-gray-300 mb-6">Automate invoicing and unlock insights into your business performance with dynamic, scroll-animated charts.</p>
+                    <div class="bg-black/30 rounded-lg p-4"><div class="h-64 chart-container"><canvas id="landing-cashflow-chart"></canvas></div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="testimonials-section" class="py-20 content-section overflow-hidden">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex justify-between items-center px-4 md:px-8 mb-8">
+                <div class="text-left"><h2 class="text-4xl md:text-5xl font-bold reveal">Trusted by top creators.</h2><p class="text-lg text-gray-400 mt-2 reveal">Real results from professionals who've leveled up.</p></div>
+                <div class="flex space-x-4 reveal"><button id="scroll-left" class="bg-white/10 border border-white/20 p-3 rounded-full hover:bg-white/20 transition-colors"><i class="fa-solid fa-arrow-left"></i></button><button id="scroll-right" class="bg-white/10 border border-white/20 p-3 rounded-full hover:bg-white/20 transition-colors"><i class="fa-solid fa-arrow-right"></i></button></div>
+            </div>
+            <div id="testimonial-container" class="flex overflow-x-auto snap-x snap-mandatory space-x-6 py-4 px-4 md:px-8 testimonial-container scroll-smooth">
+                <div class="flex-shrink-0 w-11/12 md:w-1/3 snap-center bg-black/20 border border-white/10 backdrop-blur-xl rounded-2xl p-8 reveal"><p class="text-xl font-medium text-gray-200 mb-6">"CDH didn't just organize my business—it gave me back my time. What used to be 10 hours of weekly admin is now 30 minutes. The AI insights are like having a seasoned CFO on call 24/7."</p><div class="flex items-center"><img src="https://placehold.co/50x50/1A1A1A/E5E7EB?text=AV" class="w-12 h-12 rounded-full object-cover" alt="Creator Portrait"><div class="ml-4"><p class="font-bold">Aria Vance</p><p class="text-sm text-gray-400 flex items-center"><i class="fa-brands fa-youtube mr-2 text-red-500"></i> Tech Unboxed</p></div></div></div>
+                <div class="flex-shrink-0 w-11/12 md:w-1/3 snap-center bg-black/20 border border-white/10 backdrop-blur-xl rounded-2xl p-8 reveal"><p class="text-xl font-medium text-gray-200 mb-6">"Scaling from 100k to 1M followers was chaotic. CDH was the calm in the storm. It scaled with me, making sure no deal or payment slipped through the cracks. It's the most professional tool in my arsenal."</p><div class="flex items-center"><img src="https://placehold.co/50x50/1A1A1A/E5E7EB?text=JD" class="w-12 h-12 rounded-full object-cover" alt="Creator Portrait"><div class="ml-4"><p class="font-bold">Javier Diaz</p><p class="text-sm text-gray-400 flex items-center"><i class="fa-brands fa-instagram mr-2 text-pink-500"></i> Style Ascend</p></div></div></div>
+                <div class="flex-shrink-0 w-11/12 md:w-1/3 snap-center bg-black/20 border border-white/10 backdrop-blur-xl rounded-2xl p-8 reveal"><p class="text-xl font-medium text-gray-200 mb-6">"As a numbers guy, the analytics dashboard is a dream. I can finally see which sponsorships are actually profitable and forecast my income with confidence. This isn't just a tool, it's a financial advantage."</p><div class="flex items-center"><img src="https://placehold.co/50x50/1A1A1A/E5E7EB?text=KW" class="w-12 h-12 rounded-full object-cover" alt="Creator Portrait"><div class="ml-4"><p class="font-bold">Kenji Watanabe</p><p class="text-sm text-gray-400 flex items-center"><i class="fa-solid fa-podcast mr-2 text-purple-500"></i> The Audio Analyst</p></div></div></div>
+                <div class="flex-shrink-0 w-11/12 md:w-1/3 snap-center bg-black/20 border border-white/10 backdrop-blur-xl rounded-2xl p-8 reveal"><p class="text-xl font-medium text-gray-200 mb-6">"I juggle brand deals across three different platforms. Before CDH, it was a nightmare of spreadsheets and missed emails. Now, everything is unified. I can see my entire business pipeline at a glance. It's revolutionary."</p><div class="flex items-center"><img src="https://placehold.co/50x50/1A1A1A/E5E7EB?text=SL" class="w-12 h-12 rounded-full object-cover" alt="Creator Portrait"><div class="ml-4"><p class="font-bold">Simone Lau</p><p class="text-sm text-gray-400 flex items-center"><i class="fa-brands fa-tiktok mr-2"></i> Simmering Styles</p></div></div></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="pricing-section" class="py-20 px-4 md:px-8 content-section">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-4xl md:text-5xl font-bold mb-12 reveal">Choose your co-pilot.</h2>
+            <div class="flex flex-col md:flex-row justify-center items-center gap-8">
+                <div class="w-full md:w-1/2 bg-black/20 border border-white/10 backdrop-blur-xl rounded-2xl p-8 reveal">
+                    <h3 class="text-2xl font-bold text-gray-200 mb-4">Creator</h3>
+                    <p class="text-5xl font-extrabold mb-2">$29<span class="text-lg font-medium text-gray-400">/mo</span></p>
+                    <p class="text-gray-400 mb-6">For individuals ready to professionalize.</p>
+                    <ul class="text-left space-y-3 text-gray-300"><li class="flex items-center"><i class="fa-solid fa-check text-lime-400 mr-3"></i> AI-Powered Insights</li><li class="flex items-center"><i class="fa-solid fa-check text-lime-400 mr-3"></i> Deal & Contact Management</li><li class="flex items-center"><i class="fa-solid fa-check text-lime-400 mr-3"></i> Invoicing & Payments</li><li class="flex items-center"><i class="fa-solid fa-check text-lime-400 mr-3"></i> Up to 100 Contacts</li></ul>
+                    <button class="waitlist-trigger mt-8 w-full bg-white/10 border border-white/20 text-white font-bold py-3 rounded-lg hover:bg-white/20 transition-colors">Join the Waitlist</button>
+                </div>
+                <div class="w-full md:w-1/2 bg-black/20 border backdrop-blur-xl rounded-2xl p-8 reveal pricing-card-popular relative">
+                    <div class="absolute top-0 -translate-y-1/2 left-1/2 -translate-x-1/2 bg-lime-400 text-black text-sm font-bold px-4 py-1 rounded-full">MOST POPULAR</div>
+                    <h3 class="text-2xl font-bold text-white mb-4">Business</h3>
+                    <p class="text-5xl font-extrabold mb-2 text-white">$79<span class="text-lg font-medium text-gray-300">/mo</span></p>
+                    <p class="text-gray-300 mb-6">For established creators & small teams.</p>
+                     <ul class="text-left space-y-3"><li class="flex items-center"><i class="fa-solid fa-check text-lime-400 mr-3"></i> Everything in Creator, plus:</li><li class="flex items-center"><i class="fa-solid fa-check text-lime-400 mr-3"></i> Advanced Analytics & Reporting</li><li class="flex items-center"><i class="fa-solid fa-check text-lime-400 mr-3"></i> Multi-user Support (3 seats)</li><li class="flex items-center"><i class="fa-solid fa-check text-lime-400 mr-3"></i> Priority Support</li></ul>
+                    <button class="waitlist-trigger mt-8 w-full bg-lime-400 text-black font-bold py-3 rounded-lg hover:bg-lime-300 transition-colors">Join the Waitlist</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer id="final-cta" class="py-20 px-4 md:px-8 content-section text-center border-t border-white/10">
+        <div class="max-w-2xl mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold reveal">Your AI co-pilot is ready.</h2>
+            <p class="text-gray-400 mt-4 mb-8 reveal">Stop managing, start commanding. Transform your creator business in minutes.</p>
+            <button class="waitlist-trigger bg-lime-400 text-black font-bold text-xl px-10 py-5 rounded-xl shadow-[0_0_20px_rgba(192,252,50,0.4)] transition-all duration-300 ease-in-out hover:bg-lime-300 hover:shadow-[0_0_30px_rgba(192,252,50,0.6)] hover:scale-105 active:scale-100 active:bg-lime-500 reveal">Get Early Access</button>
+            <p class="text-gray-500 text-sm mt-4 reveal">Be the first to know when we launch.</p>
+        </div>
+        <div class="mt-16 text-gray-500 text-sm reveal">&copy; 2025 Creator's Deal Hub. All rights reserved.</div>
+    </footer>
+    
+    <div id="waitlist-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
+        <div class="modal-backdrop fixed inset-0 bg-black/70 backdrop-blur-sm"></div>
+        <div class="modal-container bg-black/50 border border-white/10 rounded-2xl w-full max-w-md z-10 text-center shadow-2xl overflow-hidden">
+            <div id="modal-form-view" class="p-8 space-y-6">
+                <div>
+                    <h3 class="text-3xl font-bold text-white">Secure Your Spot</h3>
+                    <p class="text-gray-400 mt-2">Join the exclusive waitlist for Creator's Deal Hub and be the first to get access.</p>
+                </div>
+                <form id="waitlist-form" class="space-y-4">
+                    <input type="text" placeholder="Your Name" class="form-input w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 transition-colors duration-200" required>
+                    <input type="email" placeholder="Your Email Address" class="form-input w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 transition-colors duration-200" required>
+                    <button type="submit" class="w-full bg-lime-400 text-black font-bold py-3 rounded-lg hover:bg-lime-300 transition-colors">Claim My Spot</button>
+                </form>
+            </div>
+            <div id="modal-success-view" class="p-8 space-y-6 hidden">
+                 <div class="flex justify-center">
+                     <svg class="success-checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                        <circle class="success-checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
+                        <path class="success-checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                    </svg>
+                 </div>
+                 <div>
+                    <h3 class="text-3xl font-bold text-white">You're In.</h3>
+                    <p class="text-gray-400 mt-2">Welcome to the future of the creator economy. Keep an eye on your inbox.</p>
+                </div>
+                <button id="modal-close-btn" class="w-full bg-white/10 border border-white/20 text-white font-bold py-3 rounded-lg hover:bg-white/20 transition-colors">Close</button>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Mock Data ---
+            const dealsData = [ { name: 'TechFlow Series', start: 3, end: 25, status: 'active', value: 2500, next_deadline: 'Video 1 Script (June 20)' }, { name: 'Nomad Campaign', start: 5, end: 28, status: 'active', value: 4000, next_action: 'Awaiting Final Payment', icon: 'dollar-sign' }, { name: 'AudioLux Ad', start: 1, end: 12, status: 'completed', value: 1200 }, { name: 'Skincare Stories', start: 22, end: 30, status: 'negotiation', value: 800, next_action: 'Send updated contract' } ];
+
+            // --- Particle Animation ---
+            const canvas = document.getElementById('particle-canvas'); const ctx = canvas.getContext('2d'); let particles = []; const numParticles = window.innerWidth > 768 ? 100 : 30; function setCanvasSize() { canvas.width = window.innerWidth; canvas.height = document.documentElement.scrollHeight; } class Particle { constructor(x, y, radius, color, velocity) { this.x = x; this.y = y; this.radius = radius; this.color = color; this.velocity = velocity; } draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false); ctx.fillStyle = this.color; ctx.fill(); } update() { this.x += this.velocity.x; this.y += this.velocity.y; if (this.x - this.radius <= 0 || this.x + this.radius >= canvas.width) { this.velocity.x = -this.velocity.x; } if (this.y - this.radius <= 0 || this.y + this.radius >= canvas.height) { this.velocity.y = -this.velocity.y; } this.draw(); } } function initParticles() { setCanvasSize(); particles = []; for (let i = 0; i < numParticles; i++) { const radius = Math.random() * 1.5 + 0.5; const x = Math.random() * (canvas.width - radius * 2) + radius; const y = Math.random() * (canvas.height - radius * 2) + radius; const color = 'rgba(255, 255, 255, 0.2)'; const velocity = { x: (Math.random() - 0.5) * 0.3, y: (Math.random() - 0.5) * 0.3 }; particles.push(new Particle(x, y, radius, color, velocity)); } } function connect() { let opacityValue = 1; for (let a = 0; a < particles.length; a++) { for (let b = a; b < particles.length; b++) { let distance = ((particles[a].x - particles[b].x) * (particles[a].x - particles[b].x)) + ((particles[a].y - particles[b].y) * (particles[a].y - particles[b].y)); if (distance < (canvas.width / 7) * (canvas.height / 7)) { opacityValue = 1 - (distance / 20000); ctx.strokeStyle = `rgba(192, 252, 50, ${opacityValue * 0.1})`; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(particles[a].x, particles[a].y); ctx.lineTo(particles[b].x, particles[b].y); ctx.stroke(); } } } } function animateParticles() { requestAnimationFrame(animateParticles); ctx.clearRect(0, 0, canvas.width, canvas.height); particles.forEach(p => p.update()); connect(); } window.addEventListener('resize', () => { clearTimeout(window.resizeLag); window.resizeLag = setTimeout(() => { initParticles(); }, 250); });
+            
+            // --- Header Visibility ---
+            const header = document.getElementById('main-header'); window.addEventListener('scroll', () => { if (window.scrollY > 50) { header.classList.add('visible'); } else { header.classList.remove('visible'); } });
+
+            // --- Interactive AI Demo ---
+            const promptButtons = document.querySelectorAll('.prompt-chip');
+            const aiResponseArea = document.getElementById('aiResponseArea');
+            const responsePlaceholder = document.getElementById('responsePlaceholder');
+            const thinkingIndicator = document.getElementById('thinkingIndicator');
+            const responseTextContainer = document.getElementById('responseText');
+            const typedTextElement = document.getElementById('typedText');
+            const chartCanvas = document.getElementById('aiResponseChart');
+            let aiChartInstance;
+            const responses = { roi: { text: "Your partnership with 'Quantum Gaming' was your most effective deal last quarter, generating a 450% ROI. Your 'Vivid Cosmetics' deal, while high-value, had higher associated costs and a lower ROI of 210%.", chartData: { labels: ['Quantum Gaming', 'Vivid Cosmetics', 'Zenith Fitness', 'Gourmet Grinds'], datasets: [{ label: 'Deal ROI (%)', data: [450, 210, 150, 95], backgroundColor: ['#A3E635', '#4A5568', '#4A5568', '#4A5568'], borderColor: '#A3E635', borderWidth: 1 }] } }, income: { text: "Based on your active deals and average monthly earnings, your projected income for next month is $18,500. This includes a projected $6,000 from the upcoming 'Starlight App' campaign.", chartData: { labels: ['Last Month', 'This Month', 'Next Month (Projected)'], datasets: [{ label: 'Monthly Income ($)', data: [15200, 16800, 18500], backgroundColor: ['#4A5568', '#4A5568', '#A3E635'], borderColor: '#A3E635', borderWidth: 1 }] } }, followup: { text: "You have 3 high-priority contacts needing follow-up. 'Anna Petrova' from 'Starlight App' is awaiting a draft proposal. 'Marcus Cole' from 'Quantum Gaming' is past due on an invoice.", chartData: null } };
+            promptButtons.forEach(button => { button.addEventListener('click', () => { const promptKey = button.dataset.prompt; startAiResponse(promptKey); }); });
+            function startAiResponse(key) { if (aiChartInstance) aiChartInstance.destroy(); chartCanvas.style.display = 'none'; responseTextContainer.classList.add('hidden'); responsePlaceholder.classList.add('hidden'); thinkingIndicator.classList.remove('hidden'); promptButtons.forEach(b => b.disabled = true); setTimeout(() => { thinkingIndicator.classList.add('hidden'); responseTextContainer.classList.remove('hidden'); typeResponse(responses[key]); }, 1500); }
+            function typeResponse(response) { let i = 0; const text = response.text; typedTextElement.innerHTML = ''; const typingSpeed = 30; function typeWriter() { if (i < text.length) { typedTextElement.innerHTML += text.charAt(i); i++; setTimeout(typeWriter, typingSpeed); } else { typedTextElement.innerHTML += '<span class="typing-cursor"></span>'; if (response.chartData) { setTimeout(() => renderAiChart(response.chartData), 500); } promptButtons.forEach(b => b.disabled = false); } } typeWriter(); }
+            function renderAiChart(data) { chartCanvas.style.display = 'block'; Chart.defaults.color = '#9CA3AF'; Chart.defaults.font.family = "'Inter', sans-serif"; aiChartInstance = new Chart(chartCanvas, { type: 'bar', data: data, options: { responsive: true, plugins: { legend: { display: false }, tooltip: { backgroundColor: '#1F2937', titleFont: { size: 14 }, bodyFont: { size: 12 }, } }, scales: { y: { beginAtZero: true, grid: { color: 'rgba(255, 255, 255, 0.1)' }, ticks: { color: '#9CA3AF' } }, x: { grid: { display: false }, ticks: { color: '#9CA3AF' } } }, animation: { duration: 1000, easing: 'easeInOutCubic' } } }); }
+
+            // --- Testimonial Scroll ---
+            const scrollContainer = document.getElementById('testimonial-container'); const scrollLeftBtn = document.getElementById('scroll-left'); const scrollRightBtn = document.getElementById('scroll-right'); scrollLeftBtn.addEventListener('click', () => { const cardWidth = scrollContainer.querySelector('div').offsetWidth; scrollContainer.scrollBy({ left: -cardWidth - 24, behavior: 'smooth' }); }); scrollRightBtn.addEventListener('click', () => { const cardWidth = scrollContainer.querySelector('div').offsetWidth; scrollContainer.scrollBy({ left: cardWidth + 24, behavior: 'smooth' }); });
+
+            // --- Deals Timeline Logic ---
+            function generateTimeline() { const timelineHeader = document.getElementById('timeline-header'); const timelineBody = document.getElementById('timeline-body'); if (!timelineHeader || !timelineBody) return; const daysInView = 30; const now = new Date(); const monthName = now.toLocaleString('default', { month: 'long' }); const year = now.getFullYear(); let daysHTML = ''; for (let i = 1; i <= daysInView; i++) { daysHTML += `<div class="flex-1 text-center border-r border-white/10 py-1">${i}</div>`; } const headerHTML = `<div class="flex items-center"><div class="w-1/6 text-sm font-bold text-gray-200 text-right pr-4">${monthName} ${year}</div><div class="flex-1 flex text-xs font-semibold text-gray-400">${daysHTML}</div></div>`; timelineHeader.innerHTML = headerHTML; timelineBody.innerHTML = ''; dealsData.forEach((deal, index) => { const startPercent = (deal.start - 1) / daysInView * 100; const widthPercent = (deal.end - deal.start + 1) / daysInView * 100; const statusClasses = { active: 'bg-lime-400 text-black', negotiation: 'bg-purple-500 text-white', completed: 'bg-gray-500 text-white' }; const popoverStatusTextClass = { active: 'text-lime-400', negotiation: 'text-purple-400', completed: 'text-gray-400' }; const barHTML = `<div class="flex items-center deal-bar-container" style="padding-top: ${index === 0 ? '0' : '0.75rem'}"><div class="w-1/6 text-sm font-semibold pr-4 text-right truncate text-gray-300">${deal.name}</div><div class="flex-1 h-8 rounded-lg relative"><div class="absolute top-0 h-full ${statusClasses[deal.status]} rounded-lg flex items-center justify-start px-2 text-xs font-bold" style="left: ${startPercent}%; width: ${widthPercent}%;" title="${deal.name}">${deal.icon ? `<i data-feather="${deal.icon}" class="h-4 w-4 opacity-70"></i>` : ''}${deal.status === 'active' && !deal.icon ? `<i data-feather="check-square" class="h-4 w-4 opacity-70"></i>` : ''}</div><div class="deal-popover w-64 bg-gray-900 border border-white/10 text-white rounded-lg shadow-2xl p-3"><p class="font-bold text-base">${deal.name}</p><p class="text-sm text-gray-300">Status: <span class="font-semibold ${popoverStatusTextClass[deal.status]}">${deal.status.charAt(0).toUpperCase() + deal.status.slice(1)}</span></p><p class="text-sm text-gray-300">Value: <span class="font-semibold text-white">$${deal.value.toLocaleString()}</span></p>${(deal.next_deadline || deal.next_action) ? `<div class="border-t border-gray-700 my-2"></div><p class="text-xs text-gray-400">${deal.next_deadline ? 'Next Deadline:' : 'Next Action:'}</p><p class="text-sm font-semibold text-white">${deal.next_deadline || deal.next_action}</p>` : ''}</div></div></div>`; timelineBody.innerHTML += barHTML; }); const dealBarContainers = timelineBody.querySelectorAll('.deal-bar-container'); dealBarContainers.forEach(bar => { bar.addEventListener('mouseenter', (e) => { const popover = e.currentTarget.querySelector('.deal-popover'); if (!popover) return; popover.style.transform = ''; popover.classList.remove('popover-top', 'popover-bottom'); const barRect = e.currentTarget.getBoundingClientRect(); popover.classList.add('popover-top'); const popoverRect = popover.getBoundingClientRect(); if (barRect.top - popoverRect.height < 10) { popover.classList.remove('popover-top'); popover.classList.add('popover-bottom'); } const finalPopoverRect = popover.getBoundingClientRect(); const viewportWidth = window.innerWidth; const margin = 16; let translateX = -50; if (finalPopoverRect.right > viewportWidth - margin) { const overflow = finalPopoverRect.right - (viewportWidth - margin); const overflowPercent = (overflow / popoverRect.width) * 100; translateX -= overflowPercent; } else if (finalPopoverRect.left < margin) { const overflow = margin - finalPopoverRect.left; const overflowPercent = (overflow / popoverRect.width) * 100; translateX += overflowPercent; } const verticalTranslate = popover.classList.contains('popover-top') ? -8 : 8; popover.style.transform = `translateX(${translateX}%) translateY(${verticalTranslate}px)`; }); }); feather.replace(); }
+
+            // --- Cashflow Chart Logic ---
+            let cashflowChartInstance; function generateFeatureChart() { const ctx = document.getElementById('landing-cashflow-chart'); if (!ctx) return; if (cashflowChartInstance) cashflowChartInstance.destroy(); const gridColor = 'rgba(255, 255, 255, 0.1)'; const textColor = '#9CA3AF'; const data = { labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'], datasets: [ { label: 'Pending', data: [4000, 2500, 1000, 3000], backgroundColor: '#8B5CF6' }, { label: 'Paid', data: [1200, 3000, 1500, 2200], backgroundColor: '#A3E635' }, { label: 'Overdue', data: [0, 0, 2500, 0], backgroundColor: '#F97316' } ] }; cashflowChartInstance = new Chart(ctx, { type: 'bar', data: data, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { stacked: true, ticks: { color: textColor }, grid: { color: 'transparent' } }, y: { stacked: true, ticks: { color: textColor }, grid: { color: gridColor } } }, animation: { duration: 1500, easing: 'easeInOutCubic' } } }); }
+            
+            // --- Intersection Observer ---
+            const revealElements = document.querySelectorAll('.reveal'); const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); if (entry.target.contains(document.getElementById('landing-cashflow-chart'))) { setTimeout(generateFeatureChart, 300); } } }); }, { threshold: 0.2 }); revealElements.forEach(elem => { observer.observe(elem); });
+
+            // --- Waitlist Modal Logic ---
+            const waitlistModal = document.getElementById('waitlist-modal');
+            const waitlistTriggers = document.querySelectorAll('.waitlist-trigger');
+            const waitlistForm = document.getElementById('waitlist-form');
+            const modalFormView = document.getElementById('modal-form-view');
+            const modalSuccessView = document.getElementById('modal-success-view');
+            const modalCloseBtn = document.getElementById('modal-close-btn');
+            const modalBackdrop = waitlistModal.querySelector('.modal-backdrop');
+
+            const openModal = () => {
+                waitlistModal.classList.remove('hidden');
+                modalFormView.classList.remove('hidden');
+                modalSuccessView.classList.add('hidden');
+            };
+
+            const closeModal = () => {
+                waitlistModal.classList.add('hidden');
+            };
+
+            waitlistTriggers.forEach(trigger => trigger.addEventListener('click', (e) => {
+                e.preventDefault();
+                openModal();
+            }));
+            
+            modalBackdrop.addEventListener('click', closeModal);
+            modalCloseBtn.addEventListener('click', closeModal);
+
+            waitlistForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                modalFormView.classList.add('hidden');
+                modalSuccessView.classList.remove('hidden');
+            });
+
+
+            // --- Final Initialization ---
+            initParticles();
+            animateParticles();
+            generateTimeline(); 
+            feather.replace();
+        });
+
+    </script>
+</body>
+</html>

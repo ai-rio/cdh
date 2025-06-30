@@ -1,0 +1,1182 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Creator's Deal Hub - The Living Business Constellation</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+    />
+
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: #111111;
+        color: #f3f3f4;
+        overflow-y: auto;
+        overflow-x: hidden;
+      }
+      #bg-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+      }
+      .scroll-container {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+      }
+      .hero-section {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding-top: 88px;
+      }
+      .content-section {
+        min-height: 100vh;
+        padding: 10rem 1.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .content-box {
+        max-width: 36rem;
+        background-color: rgba(17, 17, 17, 0.7);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 2rem;
+        border-radius: 1rem;
+        text-align: center;
+      }
+      .cta-glow {
+        box-shadow:
+          0 0 15px rgba(238, 252, 151, 0.3),
+          0 0 30px rgba(238, 252, 151, 0.2);
+        transition: all 0.3s ease-in-out;
+      }
+      .cta-glow:hover,
+      .cta-glow:focus-visible {
+        transform: scale(1.05);
+        box-shadow:
+          0 0 25px rgba(238, 252, 151, 0.5),
+          0 0 50px rgba(238, 252, 151, 0.3);
+        outline: none;
+      }
+
+      .mission-control-hud {
+        background-color: rgba(17, 17, 17, 0.5);
+        backdrop-filter: blur(12px);
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 50;
+        border-bottom: 1px solid transparent;
+        background-size: 400% 400%;
+        border-image: linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0.1),
+            rgba(163, 230, 53, 0.4),
+            rgba(255, 255, 255, 0.1)
+          )
+          1;
+        opacity: 0;
+        transform: translateY(-100%);
+        animation:
+          header-enter 1s 0.5s ease-out forwards,
+          animate-gradient 6s linear infinite;
+      }
+
+      @keyframes header-enter {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes animate-gradient {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      .hud-item {
+        cursor: pointer;
+        padding: 1rem 1.5rem;
+        transition: all 0.3s ease;
+        border-radius: 0.5rem;
+        will-change: transform;
+      }
+      .hud-item:hover {
+        background-color: rgba(255, 255, 255, 0.05);
+        transform: translateY(-3px);
+        filter: drop-shadow(0 0 8px rgba(238, 252, 151, 0.2));
+      }
+      .hud-label {
+        font-size: 0.75rem;
+        color: #a1a1aa;
+      }
+      .hud-value {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #e4e4e7;
+        transition: color 0.3s ease;
+      }
+      .hud-item:hover .hud-value {
+        color: #ffffff;
+      }
+      .hud-value.overdue {
+        color: #f97316;
+        animation: pulse-red 2s infinite;
+      }
+      @keyframes pulse-red {
+        0% {
+          text-shadow: 0 0 5px rgba(249, 115, 22, 0.5);
+        }
+        50% {
+          text-shadow: 0 0 15px rgba(249, 115, 22, 1);
+        }
+        100% {
+          text-shadow: 0 0 5px rgba(249, 115, 22, 0.5);
+        }
+      }
+
+      #logo-circle {
+        stroke-dasharray: 86;
+        stroke-dashoffset: 86;
+        animation: draw-logo 1.5s 1s ease-out forwards;
+      }
+      #logo-cross-1,
+      #logo-cross-2 {
+        stroke-dasharray: 15;
+        stroke-dashoffset: 15;
+        animation: draw-logo 1s 1.8s ease-out forwards;
+      }
+      @keyframes draw-logo {
+        to {
+          stroke-dashoffset: 0;
+        }
+      }
+
+      #command-deck {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(17, 17, 17, 0.8);
+        backdrop-filter: blur(20px);
+        z-index: 100;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.5s ease;
+      }
+      #command-deck.open {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .nav-card {
+        background-color: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 1rem;
+        padding: 2rem;
+        transition:
+          transform 0.3s ease,
+          background-color 0.3s ease;
+        width: 90%;
+        max-width: 280px;
+      }
+      .nav-card:hover {
+        transform: translateY(-5px);
+        background-color: rgba(255, 255, 255, 0.1);
+        border-color: rgba(238, 252, 151, 0.5);
+      }
+      .nav-card h3 {
+        color: #eefc97;
+      }
+      .site-footer {
+        background-color: #111111;
+        padding: 4rem 1.5rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .footer-grid {
+        padding-top: 0;
+        margin-top: 0;
+      }
+      .footer-link {
+        color: #a1a1aa;
+        transition: color 0.2s ease-in-out;
+      }
+      .footer-link:hover {
+        color: #ffffff;
+      }
+      .social-link {
+        color: #a1a1aa;
+        transition:
+          color 0.2s ease-in-out,
+          transform 0.2s ease-in-out;
+      }
+      .social-link:hover {
+        color: #eefc97;
+        transform: scale(1.1);
+      }
+      .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(17, 17, 17, 0.8);
+        z-index: 200;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.5s ease;
+      }
+      .modal.open {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .modal-content {
+        background-color: rgba(23, 23, 23, 0.7);
+        backdrop-filter: blur(25px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 1.5rem;
+        padding: 2.5rem;
+        width: 90%;
+        max-width: 420px;
+        transform: scale(0.95);
+        transition: transform 0.5s ease;
+        position: relative;
+      }
+      .modal.open .modal-content {
+        transform: scale(1);
+      }
+      .form-input {
+        background-color: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: border-color 0.3s ease;
+      }
+      .form-input:focus {
+        border-color: #eefc97;
+        outline: none;
+      }
+      .success-message {
+        transition: opacity 0.5s ease;
+      }
+      .auth-toggle-bg {
+        background-color: rgba(255, 255, 255, 0.05);
+      }
+      .auth-toggle-button {
+        transition: color 0.3s ease;
+      }
+      .auth-toggle-button.active {
+        color: #111111;
+      }
+      .auth-toggle-slider {
+        transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      }
+      .social-icon-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 52px;
+        height: 52px;
+        background-color: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        color: #e4e4e7;
+        transition: all 0.3s ease;
+      }
+      .social-icon-btn:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: #ffffff;
+        border-color: #eefc97;
+        transform: translateY(-3px);
+        box-shadow: 0 0 15px rgba(238, 252, 151, 0.2);
+      }
+      .auth-form-view {
+        transition:
+          opacity 0.3s,
+          transform 0.3s;
+        position: absolute;
+        width: calc(100% - 5rem);
+      }
+      .auth-form-view.hidden-form {
+        opacity: 0;
+        transform: translateX(-10px);
+        pointer-events: none;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="mission-control-hud">
+      <nav class="p-4 w-full max-w-7xl mx-auto flex justify-between items-center">
+        <a href="#" class="flex items-center space-x-3">
+          <svg
+            width="28"
+            height="28"
+            viewBox="0 0 32 32"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              id="logo-circle"
+              d="M16 2.66663C8.63636 2.66663 2.66669 8.63632 2.66669 16C2.66669 23.3636 8.63636 29.3333 16 29.3333C23.3637 29.3333 29.3334 23.3636 29.3334 16C29.3334 8.63632 23.3637 2.66663 16 2.66663Z"
+              stroke="white"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              id="logo-cross-1"
+              d="M21.3333 10.6667L10.6667 21.3334"
+              stroke="#A3E635"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              id="logo-cross-2"
+              d="M10.6667 10.6667L21.3333 21.3334"
+              stroke="#A3E635"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          <span class="font-bold text-xl text-white">CDH</span>
+        </a>
+        <div class="hidden md:flex items-center space-x-4">
+          <div id="hud-deals" class="hud-item" data-type="Deal" data-target="#deals-section">
+            <div class="hud-label">Active Deals</div>
+            <div class="hud-value">3</div>
+          </div>
+          <div
+            id="hud-invoices"
+            class="hud-item"
+            data-type="Invoice"
+            data-target="#finance-section"
+          >
+            <div class="hud-label">Overdue</div>
+            <div class="hud-value overdue">1</div>
+          </div>
+          <div
+            id="hud-contacts"
+            class="hud-item"
+            data-type="Contact"
+            data-target="#contacts-section"
+          >
+            <div class="hud-label">Key Contacts</div>
+            <div class="hud-value">1</div>
+          </div>
+        </div>
+        <button
+          id="command-deck-toggle"
+          class="p-2 rounded-md hover:bg-white/10"
+          aria-label="Open navigation menu"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6 text-white"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16m-7 6h7"
+            />
+          </svg>
+        </button>
+      </nav>
+    </header>
+
+    <div id="command-deck">
+      <button
+        id="command-deck-close"
+        class="absolute top-8 right-8 p-2 text-gray-400 hover:text-white"
+        aria-label="Close navigation menu"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-8 w-8"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 p-8 max-w-7xl mx-auto text-center"
+      >
+        <a href="/blog" class="nav-card"
+          ><h3 class="text-xl font-bold mb-2">Blog</h3>
+          <p class="text-gray-300 text-sm">
+            Insights and strategies from the forefront of the creator economy.
+          </p></a
+        >
+        <a href="/pricing" class="nav-card"
+          ><h3 class="text-xl font-bold mb-2">Pricing</h3>
+          <p class="text-gray-300 text-sm">
+            Simple, transparent plans that scale with your success.
+          </p></a
+        >
+        <a href="/about" class="nav-card"
+          ><h3 class="text-xl font-bold mb-2">About Us</h3>
+          <p class="text-gray-300 text-sm">
+            Learn about our mission to empower professional creators.
+          </p></a
+        >
+        <button id="auth-modal-trigger" class="nav-card text-left">
+          <h3 class="text-xl font-bold mb-2">Login</h3>
+          <p class="text-gray-300 text-sm">Access your Creator's Deal Hub account.</p>
+        </button>
+      </div>
+    </div>
+
+    <div id="early-access-modal" class="modal">
+      <div class="modal-content text-center">
+        <button
+          class="modal-close-btn absolute top-4 right-4 p-2 text-gray-500 hover:text-white"
+          aria-label="Close form"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+        <div id="form-content">
+          <h2 class="text-3xl font-bold text-white mb-2">Join the Waitlist</h2>
+          <p class="text-gray-400 mb-8">Be the first to get access and redefine your business.</p>
+          <form id="waitlist-form" class="space-y-4">
+            <div>
+              <input
+                type="text"
+                name="name"
+                placeholder="Your Name"
+                required
+                class="form-input w-full p-4 rounded-lg text-white"
+              />
+            </div>
+            <div>
+              <input
+                type="email"
+                name="email"
+                placeholder="Your Email Address"
+                required
+                class="form-input w-full p-4 rounded-lg text-white"
+              />
+            </div>
+            <button
+              type="submit"
+              class="w-full cta-glow bg-[#EEFC97] text-[#1D1F04] font-bold text-lg p-4 rounded-lg"
+            >
+              Secure My Spot
+            </button>
+          </form>
+        </div>
+        <div id="success-message" class="success-message hidden opacity-0">
+          <div class="p-6">
+            <svg
+              class="w-16 h-16 mx-auto text-[#EEFC97]"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+              ></path>
+            </svg>
+            <h2 class="text-3xl font-bold text-white mt-4 mb-2">Welcome to the Command Center.</h2>
+            <p class="text-gray-300">Your access is confirmed. We'll be in touch shortly.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="auth-modal" class="modal">
+      <div class="modal-content overflow-hidden">
+        <button
+          class="modal-close-btn absolute top-4 right-4 p-2 text-gray-500 hover:text-white"
+          aria-label="Close form"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+        <div class="relative auth-toggle-bg p-1 rounded-full flex items-center mb-6">
+          <div
+            class="auth-toggle-slider absolute top-1 left-1 h-[calc(100%-8px)] w-[calc(50%-4px)] bg-[#EEFC97] rounded-full"
+          ></div>
+          <button
+            data-auth-view="signin"
+            class="auth-toggle-button w-1/2 p-2 rounded-full relative z-10 font-semibold text-sm active"
+          >
+            Sign In
+          </button>
+          <button
+            data-auth-view="signup"
+            class="auth-toggle-button w-1/2 p-2 rounded-full relative z-10 font-semibold text-sm text-gray-300"
+          >
+            Sign Up
+          </button>
+        </div>
+        <div class="relative min-h-[360px]">
+          <div id="signin-view" class="auth-form-view">
+            <div class="text-center mb-6">
+              <h3 class="text-2xl font-bold text-white">Welcome Back, Commander</h3>
+              <p class="text-gray-400 text-sm mt-1">
+                Enter your credentials to access the constellation.
+              </p>
+            </div>
+            <form class="space-y-4">
+              <input
+                type="email"
+                placeholder="Email Address"
+                class="form-input w-full p-3 rounded-lg text-white text-sm"
+                required
+              />
+              <input
+                type="password"
+                placeholder="Password"
+                class="form-input w-full p-3 rounded-lg text-white text-sm"
+                required
+              />
+              <button
+                type="submit"
+                class="w-full cta-glow bg-[#EEFC97] text-[#1D1F04] font-bold p-3 rounded-lg mt-2"
+              >
+                Launch Command Center
+              </button>
+            </form>
+            <div class="flex items-center my-4">
+              <div class="flex-grow border-t border-white/10"></div>
+              <span class="flex-shrink mx-4 text-xs text-gray-500">OR</span>
+              <div class="flex-grow border-t border-white/10"></div>
+            </div>
+            <div class="flex items-center justify-center space-x-4">
+              <button class="social-icon-btn"><i class="fab fa-google text-xl"></i></button>
+              <button class="social-icon-btn"><i class="fab fa-apple text-2xl"></i></button>
+            </div>
+          </div>
+          <div id="signup-view" class="auth-form-view hidden-form">
+            <div class="text-center mb-6">
+              <h3 class="text-2xl font-bold text-white">Join the Constellation</h3>
+              <p class="text-gray-400 text-sm mt-1">
+                Create your account to map your business universe.
+              </p>
+            </div>
+            <form class="space-y-4">
+              <input
+                type="text"
+                placeholder="Your Name"
+                class="form-input w-full p-3 rounded-lg text-white text-sm"
+                required
+              />
+              <input
+                type="email"
+                placeholder="Email Address"
+                class="form-input w-full p-3 rounded-lg text-white text-sm"
+                required
+              />
+              <input
+                type="password"
+                placeholder="Password"
+                class="form-input w-full p-3 rounded-lg text-white text-sm"
+                required
+              />
+              <button
+                type="submit"
+                class="w-full cta-glow bg-[#EEFC97] text-[#1D1F04] font-bold p-3 rounded-lg mt-2"
+              >
+                Create My Account
+              </button>
+            </form>
+            <p class="text-xs text-center text-gray-500 mt-4">
+              By signing up, you agree to our Terms of Service.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <canvas id="bg-canvas" aria-hidden="true"></canvas>
+
+    <div class="scroll-container">
+      <section class="hero-section" id="hero-section">
+        <div class="flex-grow flex items-center justify-center text-center">
+          <div class="p-6">
+            <div
+              class="inline-block bg-black/20 backdrop-blur-md border border-white/10 rounded-2xl p-8 md:p-12 shadow-2xl"
+            >
+              <h2
+                class="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white mb-4"
+              >
+                This is your business.
+              </h2>
+              <p class="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto mb-8">
+                Stop chasing data. Start seeing the connections. CDH turns your entire operation
+                into one clear, interactive view.
+              </p>
+              <button
+                class="cta-glow bg-[#EEFC97] text-[#1D1F04] font-bold text-lg px-8 py-4 rounded-xl"
+              >
+                Request Early Access
+              </button>
+            </div>
+          </div>
+        </div>
+        <footer class="p-6 w-full text-center pb-12">
+          <a
+            href="#deals-section"
+            id="scroll-to-explore"
+            class="text-sm text-gray-500 hover:text-white transition-colors"
+            >Scroll to explore</a
+          >
+        </footer>
+      </section>
+      <section class="content-section" id="deals-section">
+        <div class="content-box">
+          <h3 class="text-3xl font-bold text-white mb-4">Command Your Deals</h3>
+          <p class="text-gray-300">
+            From pitch to payment, visualize your entire deal pipeline. See active negotiations,
+            track deliverable deadlines, and identify high-value partnerships at a glance.
+          </p>
+        </div>
+      </section>
+      <section class="content-section" id="finance-section">
+        <div class="content-box">
+          <h3 class="text-3xl font-bold text-white mb-4">Financial Clarity</h3>
+          <p class="text-gray-300">
+            Connect your income streams and watch your finances organize themselves. Instantly see
+            overdue invoices and track campaign performance against its value.
+          </p>
+        </div>
+      </section>
+      <section class="content-section" id="contacts-section">
+        <div class="content-box">
+          <h3 class="text-3xl font-bold text-white mb-4">Contact Intelligence</h3>
+          <p class="text-gray-300">
+            Your network is your net worth. See your key relationships in context, understanding who
+            your most valuable partners are and how they connect to your deals.
+          </p>
+        </div>
+      </section>
+      
+      <!-- DETACHED CTA SECTION -->
+      <section class="content-section" id="final-cta-section">
+        <div class="content-box w-full max-w-3xl">
+          <h3 class="text-3xl md:text-4xl font-bold text-white mb-4">
+            Ready for a Clearer View?
+          </h3>
+          <p class="text-gray-300 mb-8 max-w-2xl mx-auto">
+            Stop wrestling with spreadsheets and start commanding your business. Join the waitlist
+            and be the first to experience the future of creator management.
+          </p>
+          <button
+            class="cta-glow bg-[#EEFC97] text-[#1D1F04] font-bold text-lg px-8 py-4 rounded-xl"
+          >
+            Get Early Access
+          </button>
+        </div>
+      </section>
+
+      <!-- NEW CLEANER FOOTER -->
+      <footer class="site-footer">
+        <div class="max-w-5xl mx-auto">
+          <div class="footer-grid grid grid-cols-2 md:grid-cols-4 gap-8 text-center md:text-left">
+            <div>
+              <h4 class="font-bold text-white mb-4">Navigation</h4>
+              <ul class="space-y-3">
+                <li><a href="#hero-section" class="footer-link">Home</a></li>
+                <li><a href="#deals-section" class="footer-link">Deals</a></li>
+                <li><a href="/pricing" class="footer-link">Pricing</a></li>
+                <li><a href="/blog" class="footer-link">Blog</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4 class="font-bold text-white mb-4">Company</h4>
+              <ul class="space-y-3">
+                <li><a href="/about" class="footer-link">About Us</a></li>
+                <li><a href="/careers" class="footer-link">Careers</a></li>
+                <li><a href="/contact" class="footer-link">Contact</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4 class="font-bold text-white mb-4">Legal</h4>
+              <ul class="space-y-3">
+                <li><a href="/privacy" class="footer-link">Privacy Policy</a></li>
+                <li><a href="/terms" class="footer-link">Terms of Service</a></li>
+              </ul>
+            </div>
+            <div class="text-center md:text-right col-span-2 md:col-span-1">
+              <h4 class="font-bold text-white mb-4">Join the Community</h4>
+              <div class="flex justify-center md:justify-end space-x-6 text-2xl">
+                <a href="#" class="social-link"><i class="fab fa-twitter"></i></a
+                ><a href="#" class="social-link"><i class="fab fa-youtube"></i></a
+                ><a href="#" class="social-link"><i class="fab fa-discord"></i></a>
+              </div>
+              <p class="text-xs text-gray-500 mt-8">
+                &copy; 2025 Creator's Deal Hub. All Rights Reserved.
+              </p>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.151.3/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.151.3/examples/jsm/"
+        }
+      }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
+
+    <script type="module">
+      import * as THREE from 'three'
+      import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
+
+      function main() {
+        gsap.registerPlugin(ScrollTrigger, ScrollToPlugin)
+        const isMobile = window.innerWidth <= 768
+        runExperience(isMobile)
+        const commandDeck = document.getElementById('command-deck')
+        const openBtn = document.getElementById('command-deck-toggle')
+        const closeBtn = document.getElementById('command-deck-close')
+        if (openBtn) openBtn.addEventListener('click', () => commandDeck.classList.add('open'))
+        if (closeBtn) closeBtn.addEventListener('click', () => commandDeck.classList.remove('open'))
+        const hudItems = document.querySelectorAll('.hud-item')
+        hudItems.forEach((item) => {
+          item.addEventListener('click', () => {
+            gsap.to(window, {
+              duration: 1,
+              scrollTo: { y: item.dataset.target, autoKill: false },
+              ease: 'power2.inOut',
+            })
+          })
+        })
+        const scrollLink = document.getElementById('scroll-to-explore')
+        if (scrollLink) {
+          scrollLink.addEventListener('click', (e) => {
+            e.preventDefault()
+            gsap.to(window, {
+              duration: 1,
+              scrollTo: { y: '#deals-section' },
+              ease: 'power2.inOut',
+            })
+          })
+        }
+
+        function setupModal(modalId, openTriggers, closeTriggers) {
+          const modal = document.getElementById(modalId)
+          if (!modal) return
+          const openBtns = document.querySelectorAll(openTriggers)
+          const closeBtns = modal.querySelectorAll(closeTriggers)
+          const open = () => modal.classList.add('open')
+          const close = () => modal.classList.remove('open')
+          openBtns.forEach((btn) => btn.addEventListener('click', open))
+          closeBtns.forEach((btn) => btn.addEventListener('click', close))
+        }
+
+        setupModal('early-access-modal', '.cta-glow', '.modal-close-btn')
+
+        const waitlistForm = document.getElementById('waitlist-form')
+        if (waitlistForm) {
+          waitlistForm.addEventListener('submit', (e) => {
+            e.preventDefault()
+            const formContent = document.getElementById('form-content')
+            const successMessage = document.getElementById('success-message')
+            formContent.style.opacity = '0'
+            setTimeout(() => {
+              formContent.classList.add('hidden')
+              successMessage.classList.remove('hidden')
+              setTimeout(() => {
+                successMessage.style.opacity = '1'
+              }, 50)
+            }, 500)
+          })
+        }
+
+        const authModal = document.getElementById('auth-modal')
+        const authModalTrigger = document.getElementById('auth-modal-trigger')
+        const authModalClose = authModal.querySelector('.modal-close-btn')
+
+        if (authModalTrigger) {
+          authModalTrigger.addEventListener('click', () => {
+            if (commandDeck.classList.contains('open')) {
+              commandDeck.classList.remove('open')
+            }
+            setTimeout(() => authModal.classList.add('open'), 100)
+          })
+        }
+        if (authModalClose)
+          authModalClose.addEventListener('click', () => authModal.classList.remove('open'))
+
+        const authToggleButtons = authModal.querySelectorAll('.auth-toggle-button')
+        const slider = authModal.querySelector('.auth-toggle-slider')
+        const signinView = document.getElementById('signin-view')
+        const signupView = document.getElementById('signup-view')
+
+        authToggleButtons.forEach((button) => {
+          button.addEventListener('click', () => {
+            const view = button.dataset.authView
+            authToggleButtons.forEach((btn) => {
+              btn.classList.remove('active')
+              btn.classList.add('text-gray-300')
+            })
+            button.classList.add('active')
+            button.classList.remove('text-gray-300')
+            if (view === 'signup') {
+              slider.style.transform = 'translateX(100%)'
+              signinView.classList.add('hidden-form')
+              signupView.classList.remove('hidden-form')
+            } else {
+              slider.style.transform = 'translateX(0%)'
+              signupView.classList.add('hidden-form')
+              signinView.classList.remove('hidden-form')
+            }
+          })
+        })
+      }
+
+      function runExperience(isMobile) {
+        let motion_enabled = true
+        const scene = new THREE.Scene()
+        const camera = new THREE.PerspectiveCamera(
+          75,
+          window.innerWidth / window.innerHeight,
+          0.1,
+          1000,
+        )
+        camera.position.z = 15
+        const renderer = new THREE.WebGLRenderer({
+          canvas: document.getElementById('bg-canvas'),
+          antialias: true,
+          alpha: true,
+        })
+        renderer.setPixelRatio(window.devicePixelRatio)
+        renderer.setSize(window.innerWidth, window.innerHeight)
+        const controls = new OrbitControls(camera, renderer.domElement)
+        controls.enableDamping = true
+        controls.enableZoom = false
+        controls.enablePan = false
+        scene.add(new THREE.AmbientLight(0xffffff, 0.2))
+        const dirLight = new THREE.DirectionalLight(0xffffff, 0.8)
+        dirLight.position.set(5, 5, 5)
+        scene.add(dirLight)
+
+        const colors = {
+          accent: 0xeefc97,
+          primary: 0x300c41,
+          secondary: 0xd0c6f0,
+          overdue: 0xf97316,
+        }
+        const group = new THREE.Group()
+        scene.add(group)
+        const desktopSatellites = [
+          {
+            type: 'Deal',
+            name: 'Nomad Goods Campaign',
+            details: '$4,000 - Active',
+            color: colors.accent,
+            size: 0.8,
+            distance: 5,
+            speed: 0.005,
+          },
+          {
+            type: 'Deal',
+            name: 'AudioLux Podcast Ad',
+            details: '$1,200 - Completed',
+            color: colors.primary,
+            size: 0.5,
+            distance: 6,
+            speed: 0.004,
+          },
+          {
+            type: 'Deal',
+            name: 'D2C Skincare Stories',
+            details: '$800 - Negotiation',
+            color: colors.secondary,
+            size: 0.4,
+            distance: 7,
+            speed: 0.006,
+          },
+          {
+            type: 'Invoice',
+            name: 'TechFlow #0011',
+            details: '$2,500 - Overdue',
+            color: colors.overdue,
+            size: 0.6,
+            distance: 5.5,
+            speed: -0.003,
+          },
+          {
+            type: 'Contact',
+            name: 'Marcus (Manager)',
+            details: 'Key Partner',
+            color: 0xffffff,
+            size: 0.3,
+            distance: 4.5,
+            speed: 0.008,
+          },
+        ]
+        const mobileSatellites = [
+          {
+            type: 'Deal',
+            name: 'Nomad Goods Campaign',
+            details: '$4,000 - Active',
+            color: colors.accent,
+            size: 0.8,
+            distance: 5,
+            speed: 0.005,
+          },
+          {
+            type: 'Invoice',
+            name: 'TechFlow #0011',
+            details: '$2,500 - Overdue',
+            color: colors.overdue,
+            size: 0.6,
+            distance: 5.5,
+            speed: -0.003,
+          },
+        ]
+        const satellitesData = isMobile ? mobileSatellites : desktopSatellites
+        const interactive_objects = []
+        const orbital_pivots = []
+        const creatorOrb = new THREE.Mesh(
+          new THREE.IcosahedronGeometry(1.5, isMobile ? 0 : 1),
+          new THREE.MeshStandardMaterial({
+            color: 0xffffff,
+            emissive: 0xd0c6f0,
+            emissiveIntensity: 0.3,
+            metalness: 0.1,
+            roughness: 0.3,
+          }),
+        )
+        creatorOrb.userData = {
+          id: 'item-0',
+          type: 'Creator',
+          name: 'You',
+          details: 'The center of your business.',
+        }
+        group.add(creatorOrb)
+        interactive_objects.push(creatorOrb)
+        satellitesData.forEach((data, i) => {
+          const mesh = new THREE.Mesh(
+            new THREE.SphereGeometry(data.size, isMobile ? 16 : 32, isMobile ? 16 : 32),
+            new THREE.MeshStandardMaterial({
+              color: data.color,
+              emissive: data.color,
+              emissiveIntensity: 0.5,
+              metalness: 0.2,
+              roughness: 0.5,
+            }),
+          )
+          mesh.userData = { id: `item-${i + 1}`, ...data }
+          const pivot = new THREE.Group()
+          pivot.userData.speed = data.speed
+          pivot.rotation.x = Math.random() * Math.PI
+          pivot.rotation.y = Math.random() * Math.PI
+          mesh.position.set(data.distance, 0, 0)
+          pivot.add(mesh)
+          creatorOrb.add(pivot)
+          interactive_objects.push(mesh)
+          orbital_pivots.push(pivot)
+        })
+
+        const clock = new THREE.Clock()
+        function animate() {
+          requestAnimationFrame(animate)
+          // NEW: Breathing animation for the central orb
+          const elapsedTime = clock.getElapsedTime()
+          creatorOrb.material.emissiveIntensity = 0.3 + Math.sin(elapsedTime * 1.5) * 0.1
+
+          if (motion_enabled) {
+            controls.update()
+            orbital_pivots.forEach((pivot) => {
+              pivot.rotation.y += pivot.userData.speed * 0.5
+            })
+            interactive_objects.forEach((mesh) => {
+              if (mesh.userData.type !== 'Creator') {
+                mesh.rotation.x += 0.002
+                mesh.rotation.y += 0.002
+              }
+            })
+          }
+          renderer.render(scene, camera)
+        }
+        animate()
+
+        if (isMobile) {
+          // NEW: Gyroscope controls for mobile
+          if (window.DeviceOrientationEvent) {
+            window.addEventListener('deviceorientation', (event) => {
+              // Clamp and map the values
+              const beta = Math.max(-45, Math.min(45, event.beta)) // Front-back tilt
+              const gamma = Math.max(-45, Math.min(45, event.gamma)) // Left-right tilt
+
+              // Convert degrees to radians and apply a multiplier for sensitivity
+              const targetRotationX = ((beta * Math.PI) / 180) * 0.25
+              const targetRotationY = ((gamma * Math.PI) / 180) * 0.25
+
+              // Use GSAP for smooth animation
+              gsap.to(group.rotation, {
+                x: targetRotationX,
+                y: targetRotationY,
+                duration: 1,
+                ease: 'power2.out',
+              })
+            })
+          } else {
+            // Fallback for devices without gyroscope
+            gsap.to(group.rotation, { y: Math.PI * 2, duration: 40, repeat: -1, ease: 'none' })
+          }
+        } else {
+          // Desktop scroll controls
+          const tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: '.scroll-container',
+              start: 'top top',
+              end: 'bottom bottom',
+              scrub: 1,
+            },
+          })
+          tl.to(group.position, { x: 0, y: 0, z: 0 }, 0)
+          tl.to(camera.position, { x: 0, y: 0, z: 15 }, 0)
+          tl.to(group.rotation, {
+            x: 0,
+            y: -Math.PI / 4,
+            z: Math.PI / 8,
+            scrollTrigger: {
+              trigger: '#deals-section',
+              start: 'top bottom',
+              end: 'top top',
+              scrub: 1,
+            },
+          })
+          tl.to(group.rotation, {
+            x: Math.PI / 8,
+            y: Math.PI / 4,
+            z: -Math.PI / 8,
+            scrollTrigger: {
+              trigger: '#finance-section',
+              start: 'top bottom',
+              end: 'top top',
+              scrub: 1,
+            },
+          })
+          tl.to(group.rotation, {
+            x: -Math.PI / 8,
+            y: 0,
+            z: 0,
+            scrollTrigger: {
+              trigger: '#contacts-section',
+              start: 'top bottom',
+              end: 'top top',
+              scrub: 1,
+            },
+          })
+          tl.to(group.rotation, {
+            x: 0,
+            y: 0,
+            z: 0,
+            scrollTrigger: {
+              trigger: '#final-cta-section',
+              start: 'top bottom',
+              end: 'top top',
+              scrub: 1,
+            },
+          })
+          const hudItems = document.querySelectorAll('.hud-item')
+          hudItems.forEach((item) => {
+            item.addEventListener('mouseenter', () =>
+              interactive_objects.forEach(
+                (obj) =>
+                  obj.userData.type === item.dataset.type && (obj.material.emissiveIntensity = 1.2),
+              ),
+            )
+            item.addEventListener('mouseleave', () =>
+              interactive_objects.forEach(
+                (obj) =>
+                  (obj.material.emissiveIntensity = obj.userData.type === 'Creator' ? 0.3 : 0.5),
+              ),
+            )
+          })
+        }
+        window.addEventListener('resize', () => {
+          camera.aspect = window.innerWidth / window.innerHeight
+          camera.updateProjectionMatrix()
+          renderer.setSize(window.innerWidth, window.innerHeight)
+        })
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', main)
+      } else {
+        main()
+      }
+    </script>
+  </body>
+</html>
