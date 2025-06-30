@@ -1,6 +1,6 @@
 # Story 1.3: Implement Starfield Background Component
 
-## Status: Implemented
+## Status: Not Implemented
 
 ## Story
 

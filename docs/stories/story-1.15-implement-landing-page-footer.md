@@ -1,6 +1,6 @@
 # Story 1.15: Implement Landing Page Footer (`LandingFooter`)
 
-## Status: Implemented
+## Status: Not Implemented
 
 ## Story
 

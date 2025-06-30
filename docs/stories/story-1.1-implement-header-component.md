@@ -1,6 +1,6 @@
 # Story 1.1: Implement Header Component
 
-## Status: Implemented
+## Status: Not Implemented
 
 ## Story
 

@@ -1,6 +1,6 @@
 # Story 1.12: Implement Cashflow Chart (`CashflowChart`)
 
-## Status: Implemented
+## Status: Not Implemented
 
 ## Story
 

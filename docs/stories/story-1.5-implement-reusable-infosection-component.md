@@ -1,6 +1,6 @@
 # Story 1.5: Implement Reusable InfoSection Component
 
-## Status: Implemented
+## Status: Not Implemented
 
 ## Story
 

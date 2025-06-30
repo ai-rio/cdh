@@ -1,6 +1,6 @@
 # Story 1.7: Implement AuthModal Component
 
-## Status: Implemented
+## Status: Not Implemented
 
 ## Story
 

@@ -1,6 +1,6 @@
 # Story 1.10: Implement AI Co-Pilot Feature (`AITypingDemo`)
 
-## Status: Implemented
+## Status: Not Implemented
 
 ## Story
 

@@ -1,6 +1,6 @@
 # Story 1.23: Implement 404 Signal Lost Page (`/404_Signal_Lost`)
 
-## Status: Implemented
+## Status: Not Implemented
 
 ## Story
 

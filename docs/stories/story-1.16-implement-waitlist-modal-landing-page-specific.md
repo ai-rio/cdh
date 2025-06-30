@@ -1,6 +1,6 @@
 # Story 1.16: Implement Waitlist Modal (Landing Page Specific) (`WaitlistModalLanding`)
 
-## Status: Implemented
+## Status: Not Implemented
 
 ## Story
 

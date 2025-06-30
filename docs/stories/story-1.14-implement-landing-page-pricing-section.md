@@ -1,6 +1,6 @@
 # Story 1.14: Implement Landing Page Pricing Section (`LandingPricingSection`)
 
-## Status: Implemented
+## Status: Not Implemented
 
 ## Story
 

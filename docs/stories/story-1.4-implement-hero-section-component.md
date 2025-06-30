@@ -1,6 +1,6 @@
 # Story 1.4: Implement Hero Section Component
 
-## Status: Implemented
+## Status: Not Implemented
 
 ## Story
 

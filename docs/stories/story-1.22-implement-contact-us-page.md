@@ -1,6 +1,6 @@
 # Story 1.22: Implement Contact Us Page (`/contact`)
 
-## Status: Implemented
+## Status: Not Implemented
 
 ## Story
 

@@ -1,6 +1,6 @@
 # Story 1.11: Implement Deals Timeline (`DealsTimeline`)
 
-## Status: Implemented
+## Status: Not Implemented
 
 ## Story
 

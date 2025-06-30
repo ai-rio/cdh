@@ -1,6 +1,6 @@
 # Story 1.9: Implement Landing Page Main Components and Layout (`/landing`)
 
-## Status: Implemented
+## Status: Not Implemented
 
 ## Story
 

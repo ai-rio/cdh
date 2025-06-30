@@ -1,6 +1,6 @@
 # Story 1.8: Implement CommandDeck Component
 
-## Status: Implemented
+## Status: Not Implemented
 
 ## Story
 

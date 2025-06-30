@@ -1,6 +1,6 @@
 # Story 1.2: Implement Footer Component
 
-## Status: Implemented
+## Status: Not Implemented
 
 ## Story
 

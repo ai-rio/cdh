@@ -1,6 +1,6 @@
 # Story 1.6: Implement EarlyAccessModal Component
 
-## Status: Implemented
+## Status: Not Implemented
 
 ## Story
 

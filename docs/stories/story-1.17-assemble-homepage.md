@@ -1,6 +1,6 @@
 # Story 1.17: Assemble Homepage (`page.tsx`)
 
-## Status: Implemented
+## Status: Not Implemented
 
 ## Story
 

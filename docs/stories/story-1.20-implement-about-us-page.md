@@ -1,6 +1,6 @@
 # Story 1.20: Implement About Us Page (`/about`)
 
-## Status: Implemented
+## Status: Not Implemented
 
 ## Story
 

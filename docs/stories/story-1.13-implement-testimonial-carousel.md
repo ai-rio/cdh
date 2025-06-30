@@ -1,6 +1,6 @@
 # Story 1.13: Implement Testimonial Carousel (`TestimonialCarousel`)
 
-## Status: Implemented
+## Status: Not Implemented
 
 ## Story
 
