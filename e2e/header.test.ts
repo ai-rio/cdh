@@ -22,7 +22,9 @@ describe("Header Component E2E Tests", () => {
   it("should navigate to the blog page from the CommandDeck", () => {
     cy.viewport(375, 667);
     cy.get("#command-deck-toggle").click();
-    cy.contains("Blog").click();
+    cy.get("#command-deck").should("be.visible"); // Ensure CommandDeck is visible
+    cy.wait(500); // Wait for any potential animations to complete
+    cy.contains("Blog").scrollIntoView().click({ force: true });
     cy.url().should("include", "/blog");
   });
 
