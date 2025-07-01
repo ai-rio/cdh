@@ -39,6 +39,8 @@ Dev Note: Story Requires the following tests:
 - [ ] Vitest with in memory db Integration Test (Test Location): location: `/tests/components/authmodal.spec.ts`
 - [ ] Cypress E2E: location: `/e2e/authmodal.test.ts`
 
+Dev Note: Upon completion, consider running targeted E2E tests as per `docs/testing/e2e-strategy.md`.
+
 Manual Test Steps:
 - Verify clicking "Login" in the mobile navigation opens the AuthModal.
 - Verify toggling between "Sign In" and "Sign Up" tabs displays the correct form fields.

@@ -37,6 +37,8 @@ Dev Note: Story Requires the following tests:
 - [ ] Vitest with in memory db Integration Test (Test Location): location: `/tests/pages/homepage.spec.ts`
 - [ ] Cypress E2E: location: `/e2e/homepage.test.ts`
 
+Dev Note: Upon completion, consider running targeted E2E tests as per `docs/testing/e2e-strategy.md`.
+
 Manual Test Steps:
 - Verify the homepage (`/`) loads without errors and matches `home.html` visually.
 - Verify all interactive elements on the homepage are fully functional.

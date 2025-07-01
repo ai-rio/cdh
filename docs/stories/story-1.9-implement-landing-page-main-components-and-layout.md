@@ -40,7 +40,7 @@ Dev Note: Story Requires the following tests:
 
 - [ ] Vitest Unit Tests: (nextToFile: true), coverage requirement: 80%
 - [ ] Vitest with in memory db Integration Test (Test Location): location: `/tests/pages/landing.spec.ts`
-- [ ] Cypress E2E: location: `/e2e/landing.test.ts`
+
 
 Manual Test Steps:
 - Verify the `/landing` page loads without errors and its initial view matches `landing.html`.

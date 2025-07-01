@@ -34,7 +34,7 @@ Dev Note: Story Requires the following tests:
 
 - [ ] Vitest Unit Tests: (nextToFile: true), coverage requirement: 80%
 - [ ] Vitest with in memory db Integration Test (Test Location): location: `/tests/components/dealstimeline.spec.ts`
-- [ ] Cypress E2E: location: `/e2e/dealstimeline.test.ts`
+
 
 Manual Test Steps:
 - Verify the deals timeline is visible and interactive on the landing page.

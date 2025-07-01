@@ -31,7 +31,7 @@ Dev Note: Story Requires the following tests:
 
 - [x] Vitest Unit Tests: (nextToFile: true), coverage requirement: 80%
 - [x] Vitest with in memory db Integration Test (Test Location): location: `/tests/components/header.spec.ts`
-- [x] Cypress E2E: location: `/e2e/header.test.ts`
+
 
 Manual Test Steps:
 - Verify the header appears correctly on the homepage.

@@ -36,6 +36,8 @@ Dev Note: Story Requires the following tests:
 - [ ] Vitest with in memory db Integration Test (Test Location): location: `/tests/components/earlyaccessmodal.spec.ts`
 - [ ] Cypress E2E: location: `/e2e/earlyaccessmodal.test.ts`
 
+Dev Note: Upon completion, consider running targeted E2E tests as per `docs/testing/e2e-strategy.md`.
+
 Manual Test Steps:
 - Verify clicking the "Request Early Access" button opens the modal.
 - Verify submitting the form displays the success message.

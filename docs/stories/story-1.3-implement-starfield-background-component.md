@@ -33,7 +33,6 @@ Dev Note: Story Requires the following tests:
 
 **Note:** E2E testing for `StarfieldCanvas.tsx` has been explicitly excluded from the scope of this story.
 
-
 Manual Test Steps:
 - Verify the animated background is visible behind the content on the homepage.
 - Verify scrolling the page does not interfere with the background animation.

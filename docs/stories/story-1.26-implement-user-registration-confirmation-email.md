@@ -41,6 +41,8 @@ Dev Note: Story Requires the following tests:
 - [ ] Vitest with in memory db Integration Test (Test Location): location: `/tests/email/registration.spec.ts`
 - [ ] Cypress E2E: location: `/e2e/email/registration.test.ts`
 
+Dev Note: Upon completion, consider running targeted E2E tests as per `docs/testing/e2e-strategy.md`, focusing on successful form submission and display of confirmation messages.
+
 Manual Test Steps:
 - Register a new user account.
 - Verify that a confirmation email with a verification link is received in the provided inbox.

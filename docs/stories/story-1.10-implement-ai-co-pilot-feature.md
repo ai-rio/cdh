@@ -36,7 +36,7 @@ Dev Note: Story Requires the following tests:
 
 - [ ] Vitest Unit Tests: (nextToFile: true), coverage requirement: 80%
 - [ ] Vitest with in memory db Integration Test (Test Location): location: `/tests/components/aitypingdemo.spec.ts`
-- [ ] Cypress E2E: location: `/e2e/aitypingdemo.test.ts`
+
 
 Manual Test Steps:
 - Verify clicking prompt chips on the landing page activates the AI demo.

@@ -32,7 +32,7 @@ Dev Note: Story Requires the following tests:
 
 - [ ] Vitest Unit Tests: (nextToFile: true), coverage requirement: 80%
 - [ ] Vitest with in memory db Integration Test (Test Location): location: `/tests/components/testimonialcarousel.spec.ts`
-- [ ] Cypress E2E: location: `/e2e/testimonialcarousel.test.ts`
+
 
 Manual Test Steps:
 - Verify testimonials are visible and horizontally scrollable.
