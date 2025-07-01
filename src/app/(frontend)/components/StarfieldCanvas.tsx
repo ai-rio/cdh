@@ -17,6 +17,8 @@ export function StarfieldCanvas({ variant = 'home', className = '' }: StarfieldC
     renderer: THREE.WebGLRenderer
     group: THREE.Group
     animationId: number
+    fallbackTimeout?: NodeJS.Timeout
+    autoRotateInterval?: NodeJS.Timeout
     cleanup: () => void
   } | null>(null)
 
@@ -38,10 +40,19 @@ export function StarfieldCanvas({ variant = 'home', className = '' }: StarfieldC
 
     const renderer = new THREE.WebGLRenderer({
       canvas,
-      antialias: true,
+      antialias: !isMobile, // Disable antialiasing on mobile for better performance
       alpha: true,
+      powerPreference: isMobile ? 'low-power' : 'high-performance',
     })
-    renderer.setPixelRatio(window.devicePixelRatio)
+    
+    // Check if WebGL is supported
+    const gl = renderer.getContext()
+    if (!gl) {
+      console.warn('WebGL not supported, StarfieldCanvas will not render')
+      return
+    }
+    
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 2 : 3))
     renderer.setSize(window.innerWidth, window.innerHeight)
 
     // Lighting
@@ -141,7 +152,7 @@ export function StarfieldCanvas({ variant = 'home', className = '' }: StarfieldC
 
       // Central creator orb
       const creatorOrb = new THREE.Mesh(
-        new THREE.IcosahedronGeometry(1.5, isMobile ? 0 : 1),
+        new THREE.IcosahedronGeometry(1.5, isMobile ? 1 : 2),
         new THREE.MeshStandardMaterial({
           color: 0xffffff,
           emissive: 0xd0c6f0,
@@ -177,30 +188,78 @@ export function StarfieldCanvas({ variant = 'home', className = '' }: StarfieldC
         orbitalPivots.push(pivot)
       })
 
-      // Mobile gyroscope controls
-      if (isMobile && window.DeviceOrientationEvent) {
-        const handleDeviceOrientation = (event: DeviceOrientationEvent) => {
-          const beta = Math.max(-45, Math.min(45, event.beta || 0))
-          const gamma = Math.max(-45, Math.min(45, event.gamma || 0))
-          const targetRotationX = ((beta * Math.PI) / 180) * 0.25
-          const targetRotationY = ((gamma * Math.PI) / 180) * 0.25
+      // Mobile gyroscope controls with fallback
+      let gyroscopeEnabled = false
+      if (isMobile && typeof window !== 'undefined') {
+        // Check for DeviceOrientationEvent support
+        if (window.DeviceOrientationEvent) {
+          const handleDeviceOrientation = (event: DeviceOrientationEvent) => {
+            if (!gyroscopeEnabled && (event.beta !== null || event.gamma !== null)) {
+              gyroscopeEnabled = true
+            }
+            
+            const beta = Math.max(-45, Math.min(45, event.beta || 0))
+            const gamma = Math.max(-45, Math.min(45, event.gamma || 0))
+            const targetRotationX = ((beta * Math.PI) / 180) * 0.25
+            const targetRotationY = ((gamma * Math.PI) / 180) * 0.25
 
-          gsap.to(group.rotation, {
-            x: targetRotationX,
-            y: targetRotationY,
-            duration: 1,
-            ease: 'power2.out',
-          })
+            gsap.to(group.rotation, {
+              x: targetRotationX,
+              y: targetRotationY,
+              duration: 1,
+              ease: 'power2.out',
+            })
+          }
+          
+          window.addEventListener('deviceorientation', handleDeviceOrientation)
+          
+          // Fallback: if no gyroscope data after 2 seconds, enable touch controls
+          const fallbackTimeout = setTimeout(() => {
+            if (!gyroscopeEnabled) {
+              // Add subtle auto-rotation for devices without gyroscope
+              const autoRotate = () => {
+                const time = Date.now() * 0.0005
+                gsap.to(group.rotation, {
+                  x: Math.sin(time) * 0.1,
+                  y: Math.cos(time * 0.7) * 0.1,
+                  duration: 2,
+                  ease: 'power2.inOut',
+                })
+              }
+              const autoRotateInterval = setInterval(autoRotate, 2000)
+              
+              // Store interval for cleanup
+              sceneRef.current = {
+                ...sceneRef.current!,
+                autoRotateInterval,
+              }
+            }
+          }, 2000)
+          
+          // Store timeout for cleanup
+          sceneRef.current = {
+            ...sceneRef.current!,
+            fallbackTimeout,
+          }
         }
-        window.addEventListener('deviceorientation', handleDeviceOrientation)
       }
     }
 
     const clock = new THREE.Clock()
     let animationId: number = 0
+    let lastFrameTime = 0
+    const targetFPS = isMobile ? 30 : 60
+    const frameInterval = 1000 / targetFPS
     
-    function animate() {
+    function animate(currentTime: number = 0) {
       animationId = requestAnimationFrame(animate)
+      
+      // Throttle frame rate for mobile performance
+      if (isMobile && currentTime - lastFrameTime < frameInterval) {
+        return
+      }
+      lastFrameTime = currentTime
+      
       const elapsedTime = clock.getElapsedTime()
 
       if (variant === '404') {
@@ -217,19 +276,21 @@ export function StarfieldCanvas({ variant = 'home', className = '' }: StarfieldC
         // Orbital animation
         creatorOrb.children.forEach((child) => {
           if (child instanceof THREE.Group && child.userData.speed) {
-            child.rotation.y += child.userData.speed * 0.5
+            child.rotation.y += child.userData.speed * (isMobile ? 0.3 : 0.5)
           }
         })
 
-        // Individual object rotation
-        const rotateObjects = (obj: THREE.Object3D) => {
-          if (obj instanceof THREE.Mesh && obj !== creatorOrb) {
-            obj.rotation.x += 0.002
-            obj.rotation.y += 0.002
+        // Individual object rotation (reduced for mobile)
+        if (!isMobile || elapsedTime % 0.1 < 0.05) { // Skip some frames on mobile
+          const rotateObjects = (obj: THREE.Object3D) => {
+            if (obj instanceof THREE.Mesh && obj !== creatorOrb) {
+              obj.rotation.x += isMobile ? 0.001 : 0.002
+              obj.rotation.y += isMobile ? 0.001 : 0.002
+            }
+            obj.children.forEach(rotateObjects)
           }
-          obj.children.forEach(rotateObjects)
+          group.children.forEach(rotateObjects)
         }
-        group.children.forEach(rotateObjects)
       }
 
       renderer.render(scene, camera)
@@ -255,6 +316,12 @@ export function StarfieldCanvas({ variant = 'home', className = '' }: StarfieldC
       cleanup: () => {
         window.removeEventListener('resize', handleResize)
         cancelAnimationFrame(animationId)
+        if (sceneRef.current?.fallbackTimeout) {
+          clearTimeout(sceneRef.current.fallbackTimeout)
+        }
+        if (sceneRef.current?.autoRotateInterval) {
+          clearInterval(sceneRef.current.autoRotateInterval)
+        }
         renderer.dispose()
         scene.clear()
       },

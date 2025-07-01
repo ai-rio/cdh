@@ -37,6 +37,7 @@ vi.mock('three', () => {
     setSize: vi.fn(),
     render: vi.fn(),
     dispose: vi.fn(),
+    getContext: vi.fn(() => ({})), // Mock WebGL context
   }
 
   const mockClock = {
@@ -82,11 +83,25 @@ Object.defineProperty(window, 'devicePixelRatio', {
   value: 1,
 })
 
+// Mock requestAnimationFrame and cancelAnimationFrame
+Object.defineProperty(window, 'requestAnimationFrame', {
+  writable: true,
+  configurable: true,
+  value: vi.fn((callback) => {
+    setTimeout(callback, 16)
+    return 1
+  }),
+})
+
+Object.defineProperty(window, 'cancelAnimationFrame', {
+  writable: true,
+  configurable: true,
+  value: vi.fn(),
+})
+
 describe('StarfieldCanvas', () => {
   beforeEach(() => {
     vi.clearAllMocks()
-    vi.spyOn(window, 'requestAnimationFrame');
-    vi.spyOn(window, 'cancelAnimationFrame');
   })
 
   afterEach(() => {
@@ -191,5 +206,41 @@ describe('StarfieldCanvas', () => {
     
     rerender(<StarfieldCanvas variant="404" />)
     expect(window.requestAnimationFrame).toHaveBeenCalled()
+  })
+
+  it('optimizes performance for mobile devices', () => {
+    // Mock mobile viewport
+    Object.defineProperty(window, 'innerWidth', { value: 375 })
+    
+    render(<StarfieldCanvas variant="home" />)
+    
+    // Should still render on mobile
+    const canvas = screen.getByRole('img', { hidden: true })
+    expect(canvas).toBeInTheDocument()
+    
+    // Animation should still be requested
+    expect(window.requestAnimationFrame).toHaveBeenCalled()
+  })
+
+  it('handles WebGL context failure gracefully', async () => {
+    // Mock WebGL context failure
+    const mockRenderer = {
+      setPixelRatio: vi.fn(),
+      setSize: vi.fn(),
+      render: vi.fn(),
+      dispose: vi.fn(),
+      getContext: vi.fn(() => null), // Simulate WebGL failure
+    }
+    
+    const { WebGLRenderer } = await import('three')
+    vi.mocked(WebGLRenderer).mockImplementation(() => mockRenderer as any)
+    
+    const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    
+    render(<StarfieldCanvas />)
+    
+    expect(consoleSpy).toHaveBeenCalledWith('WebGL not supported, StarfieldCanvas will not render')
+    
+    consoleSpy.mockRestore()
   })
 })
