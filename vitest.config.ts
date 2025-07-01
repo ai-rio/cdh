@@ -6,7 +6,7 @@ export default defineConfig({
     globals: true,
     jsx: 'react-jsx',
     setupFiles: ['./vitest.setup.ts'],
-    include: ['src/**/*.test.{ts,tsx}'],
+    include: ['src/**/*.test.{ts,tsx}', 'tests/**/*.spec.{ts,tsx}'],
     exclude: ['e2e/**/*.test.{ts,tsx}'], // Exclude E2E tests
     transform: {
       '^.+\.tsx?$': 'esbuild',

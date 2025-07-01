@@ -4,7 +4,7 @@ import "@testing-library/jest-dom";
 import { Header } from "../../src/app/(frontend)/components/Header";
 
 // Mock Next.js Link component
-jest.mock('next/link', () => {
+vi.mock('next/link', () => {
   return function MockLink({ children, href, className }: { children: React.ReactNode; href: string; className?: string }) {
     return <a href={href} className={className}>{children}</a>;
   };

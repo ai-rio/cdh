@@ -85,6 +85,8 @@ Object.defineProperty(window, 'devicePixelRatio', {
 describe('StarfieldCanvas', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    vi.spyOn(window, 'requestAnimationFrame');
+    vi.spyOn(window, 'cancelAnimationFrame');
   })
 
   afterEach(() => {
@@ -144,7 +146,7 @@ describe('StarfieldCanvas', () => {
     unmount()
     
     // Cleanup should be called
-    expect(global.cancelAnimationFrame).toHaveBeenCalled()
+    expect(window.cancelAnimationFrame).toHaveBeenCalled()
   })
 
   it('handles mobile device orientation when available', () => {
@@ -180,14 +182,14 @@ describe('StarfieldCanvas', () => {
   it('starts animation loop on mount', () => {
     render(<StarfieldCanvas />)
     
-    expect(global.requestAnimationFrame).toHaveBeenCalled()
+    expect(window.requestAnimationFrame).toHaveBeenCalled()
   })
 
   it('handles different variants correctly', () => {
     const { rerender } = render(<StarfieldCanvas variant="home" />)
-    expect(global.requestAnimationFrame).toHaveBeenCalled()
+    expect(window.requestAnimationFrame).toHaveBeenCalled()
     
     rerender(<StarfieldCanvas variant="404" />)
-    expect(global.requestAnimationFrame).toHaveBeenCalled()
+    expect(window.requestAnimationFrame).toHaveBeenCalled()
   })
 })

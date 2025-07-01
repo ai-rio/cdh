@@ -1,4 +1,6 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
+import React from 'react'
+import { describe, it, expect, beforeEach, afterEach } from 'vitest'
+import { vi } from 'vitest'
 import { render, screen, cleanup } from '@testing-library/react'
 import { StarfieldCanvas } from '../../src/app/(frontend)/components/StarfieldCanvas'
 
@@ -90,21 +92,7 @@ vi.mock('gsap', () => ({
   },
 }))
 
-// Setup animation frame mocks
-let animationFrameId = 0
-const mockRequestAnimationFrame = vi.fn((callback) => {
-  animationFrameId++
-  setTimeout(callback, 16)
-  return animationFrameId
-})
-const mockCancelAnimationFrame = vi.fn()
 
-Object.defineProperty(window, 'requestAnimationFrame', {
-  value: mockRequestAnimationFrame,
-})
-Object.defineProperty(window, 'cancelAnimationFrame', {
-  value: mockCancelAnimationFrame,
-})
 
 // Mock window dimensions
 Object.defineProperty(window, 'innerWidth', {
@@ -126,11 +114,14 @@ Object.defineProperty(window, 'devicePixelRatio', {
 describe('StarfieldCanvas Integration Tests', () => {
   beforeEach(() => {
     vi.clearAllMocks()
-    animationFrameId = 0
+    vi.useFakeTimers()
+    vi.spyOn(window, 'requestAnimationFrame');
+    vi.spyOn(window, 'cancelAnimationFrame');
   })
 
   afterEach(() => {
     cleanup()
+    vi.useRealTimers()
     vi.clearAllTimers()
   })
 
@@ -143,11 +134,12 @@ describe('StarfieldCanvas Integration Tests', () => {
       expect(canvas).toBeInTheDocument()
       
       // Verify Three.js initialization
-      expect(mockRequestAnimationFrame).toHaveBeenCalled()
+      expect(window.requestAnimationFrame).toBeCalled()
+      vi.runOnlyPendingTimers()
       
       // Unmount and verify cleanup
       unmount()
-      expect(mockCancelAnimationFrame).toHaveBeenCalled()
+      expect(window.cancelAnimationFrame).toBeCalled()
     })
 
     it('should handle variant switching correctly', () => {
@@ -161,7 +153,8 @@ describe('StarfieldCanvas Integration Tests', () => {
       expect(screen.getByRole('img', { hidden: true })).toBeInTheDocument()
       
       // Verify animation frame is still running
-      expect(mockRequestAnimationFrame).toHaveBeenCalled()
+      expect(window.requestAnimationFrame).toBeCalled()
+      vi.runOnlyPendingTimers()
     })
 
     it('should handle responsive behavior', () => {
@@ -186,10 +179,11 @@ describe('StarfieldCanvas Integration Tests', () => {
       render(<StarfieldCanvas />)
       
       // Verify animation starts
-      expect(mockRequestAnimationFrame).toHaveBeenCalled()
+      expect(window.requestAnimationFrame).toBeCalled()
+      vi.runOnlyPendingTimers()
       
       // Simulate multiple animation frames
-      const callCount = mockRequestAnimationFrame.mock.calls.length
+      const callCount = window.requestAnimationFrame.mock.calls.length
       expect(callCount).toBeGreaterThan(0)
     })
 
@@ -212,13 +206,14 @@ describe('StarfieldCanvas Integration Tests', () => {
       const { unmount } = render(<StarfieldCanvas />)
       
       // Verify initial setup
-      expect(mockRequestAnimationFrame).toHaveBeenCalled()
+      expect(window.requestAnimationFrame).toBeCalled()
+      vi.runOnlyPendingTimers()
       
       // Unmount component
       unmount()
       
       // Verify cleanup
-      expect(mockCancelAnimationFrame).toHaveBeenCalled()
+      expect(window.cancelAnimationFrame).toBeCalled()
     })
   })
 

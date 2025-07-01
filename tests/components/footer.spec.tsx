@@ -4,15 +4,15 @@ import '@testing-library/jest-dom';
 import { Footer } from '../../src/app/(frontend)/components/Footer';
 
 // Mock Next.js Link component
-jest.mock('next/link', () => {
-  return function MockLink({ children, href, className }: { children: React.ReactNode; href: string; className?: string }) {
+vi.mock('next/link', () => ({
+  default: function MockLink({ children, href, className }: { children: React.ReactNode; href: string; className?: string }) {
     return <a href={href} className={className}>{children}</a>;
-  };
-});
+  },
+}));
 
 // Mock router for navigation testing
-const mockPush = jest.fn();
-jest.mock('next/navigation', () => ({
+const mockPush = vi.fn();
+vi.mock('next/navigation', () => ({
   useRouter: () => ({
     push: mockPush,
     pathname: '/',
@@ -21,7 +21,7 @@ jest.mock('next/navigation', () => ({
 
 describe('Footer Integration Tests', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('Footer Component Integration', () => {
