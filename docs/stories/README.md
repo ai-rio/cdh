@@ -40,19 +40,29 @@ Each story represents a self-contained unit of work, designed to be implemented 
     *   File: `story-1.14-implement-landing-page-pricing-section.md`
 *   **Story 1.15**: Implement Landing Page Footer (`LandingFooter`)
     *   File: `story-1.15-implement-landing-page-footer.md`
-*   **Story 1.16**: Implement Waitlist Modal (Landing Page Specific) (`WaitlistModalLanding`)
-    *   File: `story-1.16-implement-waitlist-modal-landing-page-specific.md`
-*   **Story 1.17**: Assemble Homepage (`page.tsx`)
-    *   File: `story-1.17-assemble-homepage.md`
-*   **Story 1.18**: Assemble Landing Page (`/landing/page.tsx`)
-    *   File: `story-1.18-assemble-landing-page.md`
-*   **Story 1.19**: Implement Pricing Page (`/pricing`)
-    *   File: `story-1.19-implement-pricing-page.md`
-*   **Story 1.20**: Implement About Us Page (`/about`)
-    *   File: `story-1.20-implement-about-us-page.md`
-*   **Story 1.21**: Implement Careers Page (`/careers`)
-    *   File: `story-1.21-implement-careers-page.md`
-*   **Story 1.22**: Implement Contact Us Page (`/contact`)
-    *   File: `story-1.22-implement-contact-us-page.md`
-*   **Story 1.23**: Implement 404 Signal Lost Page (`/404_Signal_Lost`)
-    *   File: `story-1.23-implement-404-signal-lost-page.md`
+*   **Story 1.16**: Implement Login Modal
+    *   File: `story-1.16-implement-login-modal.md`
+*   **Story 1.17**: Implement Waitlist Modal (Landing Page Specific) (`WaitlistModalLanding`)
+    *   File: `story-1.17-implement-waitlist-modal-landing-page-specific.md`
+*   **Story 1.18**: Assemble Homepage (`page.tsx`)
+    *   File: `story-1.18-assemble-homepage.md`
+*   **Story 1.19**: Assemble Landing Page (`/landing/page.tsx`)
+    *   File: `story-1.19-assemble-landing-page.md`
+*   **Story 1.20**: Implement Pricing Page (`/pricing`)
+    *   File: `story-1.20-implement-pricing-page.md`
+*   **Story 1.21**: Implement About Us Page (`/about`)
+    *   File: `story-1.21-implement-about-us-page.md`
+*   **Story 1.22**: Implement Careers Page (`/careers`)
+    *   File: `story-1.22-implement-careers-page.md`
+*   **Story 1.23**: Implement Contact Us Page (`/contact`)
+    *   File: `story-1.23-implement-contact-us-page.md`
+*   **Story 1.24**: Implement 404 Signal Lost Page (`/404_Signal_Lost`)
+    *   File: `story-1.24-implement-404-signal-lost-page.md`
+*   **Story 1.25**: Implement Waitlist Confirmation Email
+    *   File: `story-1.25-implement-waitlist-confirmation-email.md`
+*   **Story 1.26**: Implement Contact Form Reply Email
+    *   File: `story-1.26-implement-contact-form-reply-email.md`
+*   **Story 1.27**: Implement User Registration Confirmation Email
+    *   File: `story-1.27-implement-user-registration-confirmation-email.md`
+*   **Story 1.28**: Implement Newsletter Subscription Confirmation Email
+    *   File: `story-1.28-implement-newsletter-subscription-confirmation-email.md`

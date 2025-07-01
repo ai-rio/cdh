@@ -1,4 +1,4 @@
-# Story 1.26: Implement User Registration Confirmation Email
+# Story 1.27: Implement User Registration Confirmation Email
 
 ## Status: Draft
 

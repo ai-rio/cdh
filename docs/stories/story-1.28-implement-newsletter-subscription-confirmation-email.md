@@ -1,4 +1,4 @@
-# Story 1.27: Implement Newsletter Subscription Confirmation Email
+# Story 1.28: Implement Newsletter Subscription Confirmation Email
 
 ## Status: Draft
 

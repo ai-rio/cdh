@@ -1,4 +1,4 @@
-# Story 1.18: Assemble Landing Page (`/landing/page.tsx`)
+# Story 1.19: Assemble Landing Page (`/landing/page.tsx`)
 
 ## Status: Not Implemented
 

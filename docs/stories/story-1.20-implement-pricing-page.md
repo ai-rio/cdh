@@ -1,4 +1,4 @@
-# Story 1.19: Implement Pricing Page (`/pricing`)
+# Story 1.20: Implement Pricing Page (`/pricing`)
 
 ## Status: Not Implemented
 

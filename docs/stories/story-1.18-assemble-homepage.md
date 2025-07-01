@@ -1,4 +1,4 @@
-# Story 1.17: Assemble Homepage (`page.tsx`)
+# Story 1.18: Assemble Homepage (`page.tsx`)
 
 ## Status: Not Implemented
 

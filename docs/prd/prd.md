@@ -420,7 +420,38 @@ As a user, I want to see the final call to action and copyright information on t
 * The footer section is present at the bottom of the landing page.
 * The "Get Early Access" button opens the waitlist modal.
 
-### Story 1.16: Implement Waitlist Modal (Landing Page Specific) (`WaitlistModalLanding`)
+### Story 1.16: Implement Login Modal
+
+As a user, I want to sign in or sign up for an account via a modal, so that I can access or register for the Creator's Deal Hub platform.
+
+#### Acceptance Criteria
+
+1.  The login modal can be opened from the "Login" button in the command deck.
+2.  The modal's overall appearance (background, blur effects, borders, text colors) matches the `auth-modal` styling defined in `docs/html/home.html`.
+3.  The "Sign In" view is displayed by default when the modal opens.
+4.  The "Sign In" form utilizes the `src/components/login.tsx` component as a base, with its elements (input fields, buttons, links) styled to align with the `home.html` aesthetic (dark background, light text, accent yellow/green for CTAs).
+5.  Email and password input fields are present and functional within the "Sign In" view.
+6.  The "Launch Command Center" button in the "Sign In" view is styled with the `cta-glow` effect and uses the `bg-[#EEFC97]` and `text-[#1D1F04]` colors.
+7.  Social login buttons (Google, Apple) are present in the "Sign In" view and are styled similarly to the `social-icon-btn` in `home.html`.
+8.  The "OR" separator in the "Sign In" view matches the `home.html` style.
+9.  The "Don't have an account?" link is present and correctly switches the modal to the "Sign Up" view.
+10. The "Sign Up" view can be toggled from the "Sign In" view and vice-versa.
+11. The "Sign Up" form utilizes the `src/components/login.tsx` component as a base, with its elements (input fields, buttons) styled to align with the `home.html` aesthetic.
+12. Name, email, and password input fields are present and functional within the "Sign Up" view.
+13. The "Create My Account" button in the "Sign Up" view is styled with the `cta-glow` effect and uses the `bg-[#EEFC97]` and `text-[#1D1F04]` colors.
+14. The "By signing up, you agree to our Terms of Service" text is present in the "Sign Up" view and styled appropriately.
+15. The modal can be closed via the close button from both "Sign In" and "Sign Up" views.
+
+#### Integration Verification
+
+* The login modal opens from the "Login" button.
+* The modal's appearance matches `home.html` styling.
+* "Sign In" view is default and functional.
+* "Sign Up" view toggles correctly and is functional.
+* All form fields and buttons are styled and functional.
+* Modal closes correctly.
+
+### Story 1.17: Implement Waitlist Modal (Landing Page Specific) (`WaitlistModalLanding`)
 
 As a user, I want to join the waitlist from the landing page, so that I can be informed about the platform's launch.
 
@@ -438,7 +469,7 @@ As a user, I want to join the waitlist from the landing page, so that I can be i
 * Submitting the form displays the success message with animation.
 * The modal closes when the close button or backdrop is clicked.
 
-### Story 1.17: Assemble Homepage (`page.tsx`)
+### Story 1.18: Assemble Homepage (`page.tsx`)
 
 As a developer, I want to assemble the complete homepage, so that all core components are integrated into a final, functional page.
 
@@ -453,7 +484,7 @@ As a developer, I want to assemble the complete homepage, so that all core compo
 * The homepage (`/`) loads without errors and matches `home.html` visually.
 * All interactive elements on the homepage are fully functional.
 
-### Story 1.18: Assemble Landing Page (`/landing/page.tsx`)
+### Story 1.19: Assemble Landing Page (`/landing/page.tsx`)
 
 As a developer, I want to assemble the complete landing page, so that all its components are integrated into a final, functional page.
 
@@ -468,7 +499,7 @@ As a developer, I want to assemble the complete landing page, so that all its co
 * The landing page (`/landing`) loads without errors and matches `landing.html` visually.
 * All interactive elements on the landing page are fully functional.
 
-### Story 1.19: Implement Pricing Page (`/pricing`)
+### Story 1.20: Implement Pricing Page (`/pricing`)
 
 As a user, I want to view Creator's Deal Hub pricing plans, so that I can choose a subscription that fits my needs.
 
@@ -486,7 +517,7 @@ As a user, I want to view Creator's Deal Hub pricing plans, so that I can choose
 * The billing toggle accurately updates prices.
 * Clicking "Claim My Founder's Key" opens the `EarlyAccessModal`.
 
-### Story 1.20: Implement About Us Page (`/about`)
+### Story 1.21: Implement About Us Page (`/about`)
 
 As a user, I want to learn about Creator's Deal Hub's mission and team, so that I can understand its philosophy.
 
@@ -502,7 +533,7 @@ As a user, I want to learn about Creator's Deal Hub's mission and team, so that 
 * The `/about` page loads correctly and is visually identical to `about.html`.
 * Scrolling through the manifesto sections correctly triggers any associated Three.js particle animations.
 
-### Story 1.21: Implement Careers Page (`/careers`)
+### Story 1.22: Implement Careers Page (`/careers`)
 
 As a user, I want to view open job opportunities, so that I can potentially join the Creator's Deal Hub team.
 
@@ -521,7 +552,7 @@ As a user, I want to view open job opportunities, so that I can potentially join
 * Clicking a job card opens the mission briefing modal with relevant details.
 * The application form in the modal functions as expected.
 
-### Story 1.22: Implement Contact Us Page (`/contact`)
+### Story 1.23: Implement Contact Us Page (`/contact`)
 
 As a user, I want to contact Creator's Deal Hub for various inquiries, so that I can get specific assistance.
 
@@ -540,7 +571,7 @@ As a user, I want to contact Creator's Deal Hub for various inquiries, so that I
 * Selecting a triage card changes the displayed form.
 * Form submission leads to a success message.
 
-### Story 1.23: Implement 404 Signal Lost Page (`/404_Signal_Lost`)
+### Story 1.24: Implement 404 Signal Lost Page (`/404_Signal_Lost`)
 
 As a user, I want to be informed when a page is not found, so that I can re-establish my connection.
 

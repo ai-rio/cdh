@@ -1,4 +1,4 @@
-# Story 1.24: Implement Waitlist Confirmation Email
+# Story 1.25: Implement Waitlist Confirmation Email
 
 ## Status: Draft
 

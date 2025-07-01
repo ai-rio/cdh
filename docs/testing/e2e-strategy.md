@@ -45,13 +45,13 @@ To maintain development speed while ensuring application consistency, E2E tests 
     *   **Specific Triggers (Story Completion):** E2E tests should be considered for execution upon completion of the following stories, as they represent significant user-facing functionality or critical integrations:
         *   **Story 1.6: Implement EarlyAccessModal Component** (Validates initial lead capture flow)
         *   **Story 1.7: Implement AuthModal Component** (Validates user authentication flow)
-        *   **Story 1.17: Assemble Homepage (`page.tsx`)** (Validates the primary entry point and its core components)
-        *   **Story 1.18: Assemble Landing Page (`/landing/page.tsx`)** (Validates a major interactive marketing page)
-        *   **Story 1.19: Implement Pricing Page (`/pricing`)** (Validates a critical conversion page, including interactive elements like billing toggle)
-        *   **Story 1.21: Implement Careers Page (`/careers`)** (Validates a page with interactive modals and forms)
-        *   **Story 1.22: Implement Contact Us Page (`/contact`)** (Validates a page with dynamic forms and submissions)
-        *   **Story 1.23: Implement 404 Signal Lost Page (`/404_Signal_Lost`)** (Validates error handling and navigation)
-        *   **Stories involving email integration (1.24, 1.25, 1.26, 1.27):** While the email sending itself might be mocked in E2E, the successful submission and display of confirmation messages should be validated.
+        *   **Story 1.18: Assemble Homepage (`page.tsx`)** (Validates the primary entry point and its core components)
+        *   **Story 1.19: Assemble Landing Page (`/landing/page.tsx`)** (Validates a major interactive marketing page)
+        *   **Story 1.20: Implement Pricing Page (`/pricing`)** (Validates a critical conversion page, including interactive elements like billing toggle)
+        *   **Story 1.22: Implement Careers Page (`/careers`)** (Validates a page with interactive modals and forms)
+        *   **Story 1.23: Implement Contact Us Page (`/contact`)** (Validates a page with dynamic forms and submissions)
+        *   **Story 1.24: Implement 404 Signal Lost Page (`/404_Signal_Lost`)** (Validates error handling and navigation)
+        *   **Stories involving email integration (1.25, 1.26, 1.27, 1.28):** While the email sending itself might be mocked in E2E, the successful submission and display of confirmation messages should be validated.
 
 *   **Scheduled Regression Runs (Main/Develop Branch):**
     *   **Description:** A full E2E test suite will be executed on a nightly or weekly basis on a stable integration branch (e.g., `main` or `develop`).

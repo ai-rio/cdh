@@ -1,4 +1,4 @@
-# Story 1.21: Implement Careers Page (`/careers`)
+# Story 1.22: Implement Careers Page (`/careers`)
 
 ## Status: Not Implemented
 

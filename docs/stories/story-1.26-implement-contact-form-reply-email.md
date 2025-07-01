@@ -1,4 +1,4 @@
-# Story 1.25: Implement Contact Form Reply Email
+# Story 1.26: Implement Contact Form Reply Email
 
 ## Status: Draft
 
