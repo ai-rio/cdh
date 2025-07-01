@@ -6,21 +6,10 @@ export default defineConfig({
     globals: true,
     jsx: 'react-jsx',
     setupFiles: ['./vitest.setup.ts'],
-    include: ['src/**/*.test.{ts,tsx}', 'e2e/**/*.test.{ts,tsx}'],
+    include: ['src/**/*.test.{ts,tsx}'],
+    exclude: ['e2e/**/*.test.{ts,tsx}'], // Exclude E2E tests
     transform: {
-      '^.+\.tsx?
-      reporter: ['json', 'lcov', 'text', 'clover'],
-      thresholds: {
-        global: {
-          branches: 80,
-          functions: 80,
-          lines: 80,
-          statements: 80,
-        },
-      },
-    },
-  },
-});: 'esbuild',
+      '^.+\.tsx?$': 'esbuild',
     },
     coverage: {
       reporter: ['json', 'lcov', 'text', 'clover'],

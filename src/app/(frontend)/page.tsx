@@ -9,7 +9,7 @@ import './styles.css'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-
+import { Footer } from './components/Footer'
 
 export default async function HomePage() {
   const headers = await getHeaders()
@@ -20,7 +20,7 @@ export default async function HomePage() {
   const fileURL = `vscode://file/${fileURLToPath(import.meta.url)}`
 
   return (
-    <div className="flex items-center justify-center bg-gray-100 p-4 min-h-full">
+    <div className="flex items-center justify-center bg-gray-100 p-4">
       <Card className="w-full max-w-md p-6 shadow-lg rounded-lg">
         <CardContent className="flex flex-col items-center text-center">
           <picture>
@@ -69,7 +69,7 @@ export default async function HomePage() {
           </a>
         </CardFooter>
       </Card>
-
+      <Footer />
     </div>
   )
 }
