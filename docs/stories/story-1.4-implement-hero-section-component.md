@@ -31,7 +31,7 @@ Dev Note: Story Requires the following tests:
 
 - [ ] Vitest Unit Tests: (nextToFile: true), coverage requirement: 80%
 - [ ] Vitest with in memory db Integration Test (Test Location): location: `/tests/components/herosection.spec.ts`
-- [ ] Cypress E2E: location: `/e2e/herosection.test.ts`
+
 
 Manual Test Steps:
 - Verify the hero section displays correctly with all text and the CTA button.

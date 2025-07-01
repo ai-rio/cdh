@@ -39,6 +39,8 @@ Dev Note: Story Requires the following tests:
 - [ ] Vitest with in memory db Integration Test (Test Location): location: `/tests/email/contact.spec.ts`
 - [ ] Cypress E2E: location: `/e2e/email/contact.test.ts`
 
+Dev Note: Upon completion, consider running targeted E2E tests as per `docs/testing/e2e-strategy.md`, focusing on successful form submission and display of confirmation messages.
+
 Manual Test Steps:
 - Submit the contact form on the contact page.
 - Verify that a confirmation email is received in the provided inbox.

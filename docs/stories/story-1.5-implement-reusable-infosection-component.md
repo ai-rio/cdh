@@ -32,7 +32,7 @@ Dev Note: Story Requires the following tests:
 
 - [ ] Vitest Unit Tests: (nextToFile: true), coverage requirement: 80%
 - [ ] Vitest with in memory db Integration Test (Test Location): location: `/tests/components/infosection.spec.ts`
-- [ ] Cypress E2E: location: `/e2e/infosection.test.ts`
+
 
 Manual Test Steps:
 - Verify the "Deals," "Finance," and "Contacts" sections render correctly on the homepage using the `InfoSection` component.

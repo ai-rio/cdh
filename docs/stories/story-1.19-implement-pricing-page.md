@@ -40,6 +40,8 @@ Dev Note: Story Requires the following tests:
 - [ ] Vitest with in memory db Integration Test (Test Location): location: `/tests/pages/pricingpage.spec.ts`
 - [ ] Cypress E2E: location: `/e2e/pricingpage.test.ts`
 
+Dev Note: Upon completion, consider running targeted E2E tests as per `docs/testing/e2e-strategy.md`.
+
 Manual Test Steps:
 - Verify the `/pricing` page loads correctly and is visually identical to `pricing.html`.
 - Verify the billing toggle accurately updates prices.

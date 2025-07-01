@@ -32,7 +32,7 @@ Dev Note: Story Requires the following tests:
 
 - [ ] Vitest Unit Tests: (nextToFile: true), coverage requirement: 80%
 - [ ] Vitest with in memory db Integration Test (Test Location): location: `/tests/pages/aboutuspage.spec.ts`
-- [ ] Cypress E2E: location: `/e2e/aboutuspage.test.ts`
+
 
 Manual Test Steps:
 - Verify the `/about` page loads correctly and is visually identical to `about.html`.

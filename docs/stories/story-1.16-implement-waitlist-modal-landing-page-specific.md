@@ -36,6 +36,8 @@ Dev Note: Story Requires the following tests:
 - [ ] Vitest with in memory db Integration Test (Test Location): location: `/tests/components/waitlistmodallanding.spec.ts`
 - [ ] Cypress E2E: location: `/e2e/waitlistmodallanding.test.ts`
 
+Dev Note: Upon completion, consider running targeted E2E tests as per `docs/testing/e2e-strategy.md`.
+
 Manual Test Steps:
 - Verify clicking "Join Waitlist" or "Request Early Access" buttons on the landing page opens the modal.
 - Verify submitting the form displays the success message with animation.

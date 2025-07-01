@@ -40,6 +40,8 @@ Dev Note: Story Requires the following tests:
 - [ ] Vitest with in memory db Integration Test (Test Location): location: `/tests/pages/careerspage.spec.ts`
 - [ ] Cypress E2E: location: `/e2e/careerspage.test.ts`
 
+Dev Note: Upon completion, consider running targeted E2E tests as per `docs/testing/e2e-strategy.md`.
+
 Manual Test Steps:
 - Verify the `/careers` page loads correctly and is visually identical to `carreers.html`.
 - Verify clicking a job card opens the mission briefing modal with relevant details.

@@ -41,6 +41,8 @@ Dev Note: Story Requires the following tests:
 - [ ] Vitest with in memory db Integration Test (Test Location): location: `/tests/pages/contactuspage.spec.ts`
 - [ ] Cypress E2E: location: `/e2e/contactuspage.test.ts`
 
+Dev Note: Upon completion, consider running targeted E2E tests as per `docs/testing/e2e-strategy.md`.
+
 Manual Test Steps:
 - Verify the `/contact` page loads correctly and is visually identical to `contact.html`.
 - Verify selecting a triage card changes the displayed form.

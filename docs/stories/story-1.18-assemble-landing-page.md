@@ -41,6 +41,8 @@ Dev Note: Story Requires the following tests:
 - [ ] Vitest with in memory db Integration Test (Test Location): location: `/tests/pages/landingpage.spec.ts`
 - [ ] Cypress E2E: location: `/e2e/landingpage.test.ts`
 
+Dev Note: Upon completion, consider running targeted E2E tests as per `docs/testing/e2e-strategy.md`.
+
 Manual Test Steps:
 - Verify the landing page (`/landing`) loads without errors and matches `landing.html` visually.
 - Verify all interactive elements on the landing page are fully functional.

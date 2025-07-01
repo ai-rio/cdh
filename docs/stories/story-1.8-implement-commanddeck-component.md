@@ -35,7 +35,7 @@ Dev Note: Story Requires the following tests:
 
 - [ ] Vitest Unit Tests: (nextToFile: true), coverage requirement: 80%
 - [ ] Vitest with in memory db Integration Test (Test Location): location: `/tests/components/commanddeck.spec.ts`
-- [ ] Cypress E2E: location: `/e2e/commanddeck.test.ts`
+
 
 Manual Test Steps:
 - Verify clicking the hamburger icon in the header opens the `CommandDeck`.
