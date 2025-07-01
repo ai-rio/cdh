@@ -65,20 +65,6 @@ vi.mock('gsap', () => ({
   },
 }))
 
-// Mock requestAnimationFrame
-const mockRequestAnimationFrame = vi.fn((callback) => {
-  setTimeout(callback, 16)
-  return 1
-})
-const mockCancelAnimationFrame = vi.fn()
-
-Object.defineProperty(window, 'requestAnimationFrame', {
-  value: mockRequestAnimationFrame,
-})
-Object.defineProperty(window, 'cancelAnimationFrame', {
-  value: mockCancelAnimationFrame,
-})
-
 // Mock window properties
 Object.defineProperty(window, 'innerWidth', {
   writable: true,
@@ -158,7 +144,7 @@ describe('StarfieldCanvas', () => {
     unmount()
     
     // Cleanup should be called
-    expect(mockCancelAnimationFrame).toHaveBeenCalled()
+    expect(global.cancelAnimationFrame).toHaveBeenCalled()
   })
 
   it('handles mobile device orientation when available', () => {
@@ -194,14 +180,14 @@ describe('StarfieldCanvas', () => {
   it('starts animation loop on mount', () => {
     render(<StarfieldCanvas />)
     
-    expect(mockRequestAnimationFrame).toHaveBeenCalled()
+    expect(global.requestAnimationFrame).toHaveBeenCalled()
   })
 
   it('handles different variants correctly', () => {
     const { rerender } = render(<StarfieldCanvas variant="home" />)
-    expect(mockRequestAnimationFrame).toHaveBeenCalled()
+    expect(global.requestAnimationFrame).toHaveBeenCalled()
     
     rerender(<StarfieldCanvas variant="404" />)
-    expect(mockRequestAnimationFrame).toHaveBeenCalled()
+    expect(global.requestAnimationFrame).toHaveBeenCalled()
   })
 })
