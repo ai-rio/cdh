@@ -10,6 +10,7 @@ import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { StarfieldCanvas } from './components/StarfieldCanvas'
+import { Footer } from './components/Footer'
 
 export default async function HomePage() {
   const headers = await getHeaders()
