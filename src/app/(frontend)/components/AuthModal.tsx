@@ -107,19 +107,16 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
         
         .modal-content {
           background-color: #111111;
-          border-radius: 0;
+          border-radius: 1.5rem;
           padding: 1rem;
-          width: 100vw;
-          height: 100vh;
+          width: 90%;
+          max-width: 800px;
           transform: scale(0.95);
           transition: transform 0.5s ease;
           position: relative;
-          border: none;
+          border: 1px solid transparent;
           background-clip: padding-box;
           overflow: hidden;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
         }
         
         .modal-content::before {
@@ -205,8 +202,6 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
           align-items: center;
           max-width: 1000px;
           margin: 0 auto;
-          height: 100%;
-          max-height: calc(100vh - 2rem);
         }
         
         @media (min-width: 768px) {
@@ -222,39 +217,38 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
         
         @media (max-width: 767px) {
           .modal-content {
-            padding: 0.75rem;
+            padding: 1rem;
           }
           
           .auth-form-container {
-            gap: 0.75rem;
-            max-height: calc(100vh - 1.5rem);
+            gap: 1rem;
             grid-template-columns: 1fr;
           }
           
           .form-input {
-            height: 2.25rem;
-            font-size: 0.7rem;
-            padding: 0.4rem 0.6rem 0.4rem 2.25rem;
+            height: 2.5rem;
+            font-size: 0.75rem;
+            padding: 0.5rem 0.75rem 0.5rem 2.5rem;
           }
           
           .auth-toggle-bg {
-            height: 2.25rem;
-            margin-bottom: 0.75rem;
+            height: 2.5rem;
+            margin-bottom: 1rem;
           }
           
           .auth-toggle-button {
-            font-size: 0.7rem;
-            padding: 0.3rem;
+            font-size: 0.75rem;
+            padding: 0.4rem;
           }
           
           .form-input-icon {
-            left: 0.6rem;
-            font-size: 0.8rem;
+            left: 0.75rem;
+            font-size: 0.875rem;
           }
           
           .signin-view, .signup-view {
-            padding: 1rem;
-          }
+          padding: 2rem;
+        }
         }
         
         .signin-view, .signup-view {
@@ -524,19 +518,19 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
            }
            
            .social-section h3 {
-             font-size: 1rem;
-             margin-bottom: 1rem;
+             font-size: 1.125rem;
+             margin-bottom: 1.5rem;
            }
            
            .social-icons-grid {
-             grid-template-columns: repeat(4, 1fr);
-             gap: 0.75rem;
-             max-width: 100%;
+             grid-template-columns: 1fr 1fr;
+             gap: 1rem;
+             max-width: 200px;
            }
            
            .social-icon-btn {
-             padding: 0.75rem;
-             font-size: 1rem;
+             padding: 0.875rem;
+             font-size: 1.125rem;
            }
            
            .divider {
