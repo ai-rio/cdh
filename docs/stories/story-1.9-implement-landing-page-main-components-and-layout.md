@@ -1,303 +1,241 @@
-# Story 1.9: Implement Landing Page (Detailed Breakdown)
+# Story 1.9: Implement Landing Page (with Detailed Sub-Tasks & Shadcn UI Mapping)
 
 ## Status: Ready for Development
 
 ## Preamble
 
-This master story has been broken down into highly detailed sub-stories to guide an AI development agent in recreating the `landing.html` page with high fidelity in a Next.js/React environment using TypeScript and Tailwind CSS.
-
+# This master story has been broken down into highly detailed sub-stories to guide an AI development agent in recreating the `landing.html` page with high fidelity in a Next.js/React environment. This version includes specific `shadcn/ui` component mappings and granular sub-tasks to ensure consistency and accelerate development.****PO Contribution:**** I have added a detailed `Tasks / Subtasks` section to each story. This provides a clear, step-by-step implementation plan for the AI agent, minimizing guesswork and ensuring the final output aligns perfectly with the Acceptance Criteria and design specifications.
 
 ### Story 1.9.1: Implement Landing Page Route and Layout
 
-**Story:** As a developer, I need to set up the new landing page route and ensure it uses a unique layout that excludes the global `Header` and `Footer`, preparing it for its specific components.
+# ****Story:**** As a developer, I need to set up the new landing page route and ensure it uses a unique layout that excludes the global `Header` and `Footer`, preparing it for its specific components.****Acceptance Criteria (ACs):****1) A new route is accessible at `/landing`.
 
-**Acceptance Criteria (ACs):**
+2) The page `src/app/(frontend)/landing/page.tsx` is created.
 
-1. A new route is accessible at `/landing`.
+3) The standard site `Header` and `Footer` components are ****not**** rendered on the `/landing` route.
 
-2. The page `src/app/(frontend)/landing/page.tsx` is created.
+4) The page's root element has a `background-color: #0A0A0A` and `color: #E5E7EB` as a base.****Tasks / Subtasks:***** [ ] Create the directory `src/app/(frontend)/landing/`.
 
-3. The standard site `Header` and `Footer` components are **not** rendered on the `/landing` route.
+* [ ] Create the file `src/app/(frontend)/landing/page.tsx` with basic placeholder content.
 
-4. The page's root element has a `background-color: #0A0A0A` and `color: #E5E7EB` as a base.
+* [ ] Create the file `src/app/(frontend)/landing/layout.tsx`.
 
-**Tasks / Subtasks:**
+* [ ] In the new `layout.tsx`, define a root layout component that accepts `children` as props.
 
-- [ ] Create the directory `src/app/(frontend)/landing/`.
+* [ ] Ensure this layout does ****not**** import or render the global `Header` or `Footer` components.
 
-- [ ] Create `src/app/(frontend)/landing/page.tsx`.
-
-- [ ] Create `src/app/(frontend)/landing/layout.tsx` to provide a unique layout for this page.
-
-- [ ] In `layout.tsx`, ensure it does not include the global `Header` or `Footer`.
-
-- [ ] Set the base background and text colors in the layout.
-
+* [ ] Apply the base `bg-[#0A0A0A]` and `text-[#E5E7EB]` styles to the `<body>` tag within this layout.
 
 ### Story 1.9.2: Implement Particle Background
 
-**Story:** As a user, I want to see a dynamic, interactive particle animation in the background of the landing page to create a visually engaging and high-tech atmosphere.
+# ****Story:**** As a user, I want to see a dynamic, interactive particle animation in the background of the landing page to create a visually engaging and high-tech atmosphere.****Acceptance Criteria (ACs):****1) A new client-side component, `ParticleCanvas.tsx`, is created.
 
-**Acceptance Criteria (ACs):**
+2) The component renders a full-screen `<canvas>` element with `position: fixed` and `z-index: -1`.
 
-1. A new component, `ParticleCanvas`, is created.
+3) The particle animation from `landing.html`'s script is perfectly replicated.
 
-2. The component renders a full-screen `<canvas>` element with `position: fixed` and `z-index: -1`.
+4) The lines connecting nearby particles appear and are styled with a `rgba(192, 252, 50, ...)` color.
 
-3. The particle animation from `landing.html`'s script is perfectly replicated in the React component, including particle movement, density, and color.
+5) The canvas resizes correctly with the browser window.****Tasks / Subtasks:***** [ ] Create the component file `src/app/(frontend)/components/landing/ParticleCanvas.tsx`.
 
-4. The lines connecting nearby particles appear on hover and are styled with a `rgba(192, 252, 50, ...)`, with opacity based on distance.
+* [ ] Mark the component with `'use client'` at the top.
 
-5. The canvas resizes correctly with the browser window and document height changes.
+* [ ] Use a `useRef<HTMLCanvasElement>(null)` to get a reference to the canvas element.
 
-**Tasks / Subtasks:**
+* [ ] In a `useEffect` hook (with an empty dependency array `[]`), port the entire particle animation logic from `landing.html`, including the `Particle` class, `initParticles`, `animateParticles`, and `connect` functions.
 
-- [ ] Create `src/app/(frontend)/components/ParticleCanvas.tsx`.
+* [ ] Add a `resize` event listener within the `useEffect` hook to call `initParticles` on window resize, ensuring it's debounced to prevent performance issues.
 
-- [ ] Use a `useEffect` hook to initialize the canvas and particle system on mount.
+* [ ] Remember to return a cleanup function from `useEffect` to remove the event listener.
 
-- [ ] Port the `Particle` class and animation logic (`initParticles`, `animateParticles`, `connect`) into the component.
-
-- [ ] Manage canvas resizing with a `resize` event listener within `useEffect`.
-
-- [ ] Integrate the `ParticleCanvas` component into the `landing/layout.tsx`.
-
+* [ ] Integrate the `<ParticleCanvas />` component into `src/app/(frontend)/landing/layout.tsx`.
 
 ### Story 1.9.3: Implement Landing Page Header
 
-**Story:** As a user, I want a minimalist header that appears only when I scroll down, providing navigation without cluttering the initial view.
+# ****Story:**** As a user, I want a minimalist header that appears only when I scroll down, providing navigation without cluttering the initial view.****Acceptance Criteria (ACs):****1) A `LandingHeader` component is created.
 
-**Acceptance Criteria (ACs):**
+2) The header is fixed to the top and becomes visible on scroll with a smooth transition.
 
-1. A `LandingHeader` component is created.
+3) The header background is `bg-black/20` with a `backdrop-blur-xl`.
 
-2. The header is fixed to the top but is initially invisible (`opacity: 0`, `transform: translateY(-100%)`).
+4) The bottom border has the specified gradient animation.
 
-3. On scroll (e.g., > 50px), the header becomes visible with a smooth transition (`opacity: 1`, `transform: translateY(0)`).
+5) Navigation links have the hover effect with a small lime-green dot.****Shadcn UI Mapping:***** ****Join Waitlist Button:**** Use `Button` from `shadcn/ui`. Style it to match `landing.html` (`bg-lime-400 text-black hover:bg-lime-300`).****Tasks / Subtasks:***** [ ] Create the component file `src/app/(frontend)/components/landing/LandingHeader.tsx`.
 
-4. The header background is `bg-black/20` with a `backdrop-blur-xl`.
+* [ ] Use a `useState` hook to track the header's visibility state (e.g., `const [isVisible, setIsVisible] = useState(false)`).
 
-5. The bottom border has the specified gradient animation: `border-image: linear-gradient(90deg, rgba(255,255,255,0.1), rgba(163, 230, 53, 0.5), rgba(255,255,255,0.1)) 1;`.
+* [ ] In a `useEffect` hook, add a `scroll` event listener to the `window`.
 
-6. Navigation links ("Features", "Testimonials", "Pricing") have the hover effect where a small lime-green dot appears below the link.
+* [ ] Inside the scroll handler, check `window.scrollY`. If it's greater than 50, `setIsVisible(true)`; otherwise, `setIsVisible(false)`.
 
-7. The "Join Waitlist" button is a Shadcn `Button` styled to match `landing.html` (`bg-lime-400 text-black`).
+* [ ] Use the `isVisible` state to conditionally apply a CSS class (e.g., 'visible') that controls opacity and transform for the reveal animation.
 
-**Tasks / Subtasks:**
+* [ ] Define the gradient border animation in `globals.css`.
 
-- [ ] Create `src/app/(frontend)/components/LandingHeader.tsx`.
+* [ ] Implement the `nav-link` hover effect using CSS pseudo-elements (`::after`).
 
-- [ ] Implement the scroll detection logic in a `useEffect` hook to toggle visibility.
+* [ ] Use the Shadcn `Button` for the "Join Waitlist" CTA and apply the necessary custom classes.
 
-- [ ] Use Tailwind CSS to replicate the exact styling, including the gradient border animation.
-
-- [ ] Implement the `nav-link` hover effect using CSS pseudo-elements (`::after`).
-
-- [ ] Use Shadcn `Button` for the CTA and style it accordingly.
-
-- [ ] Add the `LandingHeader` component to `landing/layout.tsx`.
-
+* [ ] Add the `<LandingHeader />` component to `src/app/(frontend)/landing/layout.tsx`.
 
 ### Story 1.9.4: Implement Hero Section
 
-**Story:** As a user, I want to be greeted by a powerful, centered hero section that clearly communicates the product's main value proposition.
+# ****Story:**** As a user, I want to be greeted by a powerful, centered hero section that clearly communicates the product's main value proposition.****Acceptance Criteria (ACs):****1) A `HeroSection` component is created.
 
-**Acceptance Criteria (ACs):**
+2) The layout is a full-screen `flex` container, centering content.
 
-1. A `HeroSection` component is created.
+3) The content is wrapped in a container with `bg-black/20`, `border-white/10`, and `backdrop-blur-xl`.
 
-2. The layout is a full-screen `flex` container, centering content vertically and horizontally.
+4) The "Scroll to explore" indicator with its pulsing animation is present.****Shadcn UI Mapping:***** ****Content Container:**** Use `Card` from `shadcn/ui` as the base for the main content block, customizing its style (`Card`, `CardContent`).
 
-3. The content is wrapped in a `div` with `bg-black/20`, `border-white/10`, `backdrop-blur-xl`, `rounded-2xl`, and `shadow-2xl`.
+* ****Request Early Access Button:**** Use `Button` from `shadcn/ui`. Replicate the exact styling, including the custom shadow effect on hover.****Tasks / Subtasks:***** [ ] Create the component file `src/app/(frontend)/components/landing/HeroSection.tsx`.
 
-4. The `h1` ("Overwhelmed is Over.") and `p` tags are styled exactly as in `landing.html`.
+* [ ] Use Tailwind CSS for the full-screen `h-screen` and `flex` properties to center the content.
 
-5. The "Request Early Access" CTA is a Shadcn `Button` with the exact `bg-lime-400`, text color, font size, padding, and shadow/hover effects (`shadow-[0_0_20px_rgba(192,252,50,0.4)]`).
+* [ ] Implement the main content container using Shadcn `Card` and apply the specified background, border, and blur styles via `className`.
 
-6. The "Scroll to explore" indicator with its pulsing animation is present at the bottom.
+* [ ] Implement the "Request Early Access" button using Shadcn `Button`, ensuring the custom `shadow-[0_0_20px_rgba(192,252,50,0.4)]` and hover effects are applied.
 
-**Tasks / Subtasks:**
+* [ ] Define the `pulse` animation for the scroll indicator in `globals.css` and apply it to the indicator element.
 
-- [ ] Create `src/app/(frontend)/components/landing/HeroSection.tsx`.
-
-- [ ] Use Tailwind CSS to replicate the styling for the container and text elements.
-
-- [ ] Define the `pulse` animation for the scroll indicator in `globals.css`.
-
-- [ ] Implement the `HeroSection` in `landing/page.tsx`.
-
+* [ ] Add the `<HeroSection />` component to `src/app/(frontend)/landing/page.tsx`.
 
 ### Story 1.9.5: Implement "AI Co-Pilot" Feature Demo
 
-**Story:** As a user, I want to interact with the AI co-pilot demo to understand its capabilities through a simulated, dynamic experience.
+# ****Story:**** As a user, I want to interact with the AI co-pilot demo to understand its capabilities through a simulated, dynamic experience.****Acceptance Criteria (ACs):****1) An `AITypingDemo` component is created.
 
-**Acceptance Criteria (ACs):**
+2) It contains three interactive prompt chips.
 
-1. An `AITypingDemo` component is created.
+3) Clicking a chip triggers a "thinking" animation, followed by a typed-out text response.
 
-2. It contains three prompt chips (Shadcn `Button` components) styled as in `landing.html`.
+4) For applicable prompts, a Chart.js bar chart is rendered below the text.****Shadcn UI Mapping:***** ****Prompt Chips:**** Use `Button` from `shadcn/ui` with `variant="outline"` or custom styling to achieve the `bg-white/5 border border-white/10` look.
 
-3. Clicking a chip disables the buttons and shows a "thinking" animation.
+* ****AI Response Area:**** Use `Card` from `shadcn/ui` to frame the entire response area, including the placeholder, thinking indicator, and final text/chart.****Tasks / Subtasks:***** [ ] Create `src/app/(frontend)/components/landing/AITypingDemo.tsx`.
 
-4. After a delay, the response text is typed out character-by-character in a designated area.
+* [ ] Use `useState` to manage the demo's state: `idle`, `thinking`, `responding`.
 
-5. The typing animation includes a blinking cursor effect.
+* [ ] Implement the prompt chips using Shadcn `Button` and attach `onClick` handlers.
 
-6. For prompts with chart data ("roi", "income"), a Chart.js bar chart is rendered below the typed text after the typing is complete.
+* [ ] The `onClick` handler should set the state to `thinking`, then use a `setTimeout` to switch to `responding`.
 
-7. The component uses `useState` to manage the current state (idle, thinking, responding).
+* [ ] Implement the typing effect logic within a `useEffect` that triggers when the response text changes.
 
-**Tasks / Subtasks:**
+* [ ] Create a separate `ChartComponent.tsx` that takes chart data as props and renders a Chart.js instance. Conditionally render this component based on the response data.
 
-- [ ] Create `src/app/(frontend)/components/landing/AITypingDemo.tsx`.
-
-- [ ] Implement the state logic for the interactive demo.
-
-- [ ] Create the "thinking" animation CSS.
-
-- [ ] Implement the typing effect using `setTimeout` or `setInterval` within a `useEffect` hook.
-
-- [ ] Integrate Chart.js to render charts based on mock data.
-
-- [ ] Add the component to `landing/page.tsx`.
-
+* [ ] Add the `<AITypingDemo />` component to `landing/page.tsx`.
 
 ### Story 1.9.6: Implement "Deals Timeline" Feature
 
-**Story:** As a user, I want to visualize active brand deals on a timeline to understand how the platform helps manage collaborations.
+# ****Story:**** As a user, I want to visualize active brand deals on a timeline to understand how the platform helps manage collaborations.****Acceptance Criteria (ACs):****1) A `DealsTimeline` component is created.
 
-**Acceptance Criteria (ACs):**
+2) It dynamically renders a timeline with mock deal data.
 
-1. A `DealsTimeline` component is created.
+3) Hovering over a deal bar reveals a detailed popover.
 
-2. It dynamically renders a timeline with mock deal data (name, start/end date, status, value).
+4) The popover's positioning is dynamic to avoid going off-screen.****Shadcn UI Mapping:***** ****Deal Detail Popover:**** Use `Popover` from `shadcn/ui` (`Popover`, `PopoverTrigger`, `PopoverContent`) to display details on hover.****Tasks / Subtasks:***** [ ] Create `src/app/(frontend)/components/landing/DealsTimeline.tsx`.
 
-3. Each deal is represented as a colored horizontal bar on the timeline, with its position and width determined by the data.
+* [ ] Define a TypeScript interface and mock data array for the deals.
 
-4. Hovering over a deal bar reveals a detailed popover with additional information.
+* [ ] Map over the mock data to render the timeline rows.
 
-5. The popover's positioning is dynamic to prevent it from going off-screen.
+* [ ] For each row, wrap the deal bar element in `PopoverTrigger`.
 
-6. The component uses Shadcn `Popover` for the hover details.
+* [ ] Inside `PopoverContent`, render the detailed view of the deal.
 
-**Tasks / Subtasks:**
+* [ ] The popover positioning is handled by `shadcn/ui` by default, but you can pass props like `sideOffset` for fine-tuning.
 
-- [ ] Create `src/app/(frontend)/components/landing/DealsTimeline.tsx`.
-
-- [ ] Define the mock data structure for deals.
-
-- [ ] Implement the logic to render the timeline and deal bars based on the data.
-
-- [ ] Integrate Shadcn `Popover` and style it to match `landing.html`.
-
-- [ ] Implement the dynamic positioning logic for the popover.
-
-- [ ] Add the component to `landing/page.tsx`.
-
+* [ ] Add the `<DealsTimeline />` component to `landing/page.tsx`.
 
 ### Story 1.9.7: Implement "Cashflow Chart" Feature
 
-**Story:** As a user, I want to see a dynamic cashflow chart to understand the financial clarity provided by the platform.
+# ****Story:**** As a user, I want to see a dynamic cashflow chart to understand the financial clarity provided by the platform.****Acceptance Criteria (ACs):****1) A `CashflowChart` component is created.
 
-**Acceptance Criteria (ACs):**
+2) It contains a Chart.js bar chart with mock data.
 
-1. A `CashflowChart` component is created.
+3) The chart animates into view when the user scrolls to that section.****Shadcn UI Mapping:***** ****Chart Container:**** Use `Card` from `shadcn/ui` to wrap the chart canvas for consistent padding and background styling.****Tasks / Subtasks:***** [ ] Create `src/app/(frontend)/components/landing/CashflowChart.tsx`.
 
-2. It contains a Chart.js bar chart representing mock cashflow data (Pending, Paid, Overdue).
+* [ ] Use a `useRef` for the container element and an Intersection Observer to track its visibility.
 
-3. The chart is not visible initially but animates into view when the user scrolls to that section.
+* [ ] Use a `useState` flag (e.g., `hasBeenVisible`) to ensure the chart renders only once.
 
-4. The scroll-triggered animation is handled using an Intersection Observer.
+* [ ] In the `useEffect` for the observer, when the element is intersecting, set `hasBeenVisible` to `true`.
 
-**Tasks / Subtasks:**
+* [ ] Create a separate `useEffect` that depends on `hasBeenVisible`. When it becomes `true`, initialize and render the Chart.js instance.
 
-- [ ] Create `src/app/(frontend)/components/landing/CashflowChart.tsx`.
+* [ ] Wrap the canvas in a Shadcn `Card` and `CardContent`.
 
-- [ ] Set up an Intersection Observer in a `useEffect` hook to detect when the component is visible.
-
-- [ ] Trigger the Chart.js rendering and animation only when the component enters the viewport.
-
-- [ ] Add the component to `landing/page.tsx`.
-
+* [ ] Add the `<CashflowChart />` component to `landing/page.tsx`.
 
 ### Story 1.9.8: Implement Testimonial Carousel
 
-**Story:** As a user, I want to read testimonials in an interactive carousel to build trust in the platform.
+# ****Story:**** As a user, I want to read testimonials in an interactive carousel to build trust in the platform.****Acceptance Criteria (ACs):****1) A `TestimonialCarousel` component is created.
 
-**Acceptance Criteria (ACs):**
+2) It displays testimonials in a horizontally scrollable container.
 
-1. A `TestimonialCarousel` component is created.
+3) "Scroll left" and "Scroll right" buttons programmatically scroll the container.****Shadcn UI Mapping:***** ****Testimonial Cards:**** Use `Card` from `shadcn/ui` for each individual testimonial.
 
-2. It displays testimonials in a horizontally scrollable container (`overflow-x-auto`).
+* ****Scroll Buttons:**** Use `Button` from `shadcn/ui` with `variant="outline"` and size `icon`, containing arrow icons.
 
-3. "Scroll left" and "Scroll right" buttons (Shadcn `Button` with icons) programmatically scroll the container.
+* ****Carousel (Advanced):**** For a more robust implementation, use `Carousel` from `shadcn/ui` (`Carousel`, `CarouselContent`, `CarouselItem`, `CarouselPrevious`, `CarouselNext`).****Tasks / Subtasks:***** [ ] Create `src/app/(frontend)/components/landing/TestimonialCarousel.tsx`.
 
-4. The testimonial cards are styled exactly as in `landing.html`, including the creator's avatar, name, and social media handle.
+* [ ] Install `shadcn-ui/react-carousel` if not already present.
 
-5. The scroll behavior is smooth.
+* [ ] Implement the component using the Shadcn `Carousel` components as the primary structure.
 
-**Tasks / Subtasks:**
+* [ ] Map over mock testimonial data, rendering each item inside a `CarouselItem`.
 
-- [ ] Create `src/app/(frontend)/components/landing/TestimonialCarousel.tsx`.
+* [ ] Inside each `CarouselItem`, use a Shadcn `Card` to structure the testimonial content (quote, avatar, name, handle).
 
-- [ ] Use a `useRef` to get a reference to the scrollable container.
-
-- [ ] Implement the `onClick` handlers for the scroll buttons to manipulate `scrollLeft`.
-
-- [ ] Add the component to `landing/page.tsx`.
-
+* [ ] Add the `<TestimonialCarousel />` component to `landing/page.tsx`.
 
 ### Story 1.9.9: Implement Landing Page Pricing & Footer
 
-**Story:** As a user, I want to see the pricing and a final call-to-action to make an informed decision.
+# ****Story:**** As a user, I want to see the pricing and a final call-to-action to make an informed decision.****Acceptance Criteria (ACs):****1) A `LandingPricing` component is created, displaying the "Creator" and "Business" plans.
 
-**Acceptance Criteria (ACs):**
+2) A `LandingFooter` component is created with the final CTA.
 
-1. A `LandingPricing` component is created, displaying the "Creator" and "Business" plans.
+3) All "Join Waitlist" / "Get Early Access" buttons trigger the waitlist modal.****Shadcn UI Mapping:***** ****Pricing Cards:**** Use `Card` from `shadcn/ui` for each pricing tier.
 
-2. The "Most Popular" badge is correctly styled and positioned on the Business plan.
+* ****Feature List:**** Use a simple `ul` and `li` with checkmark icons.
 
-3. A `LandingFooter` component is created with the final "Get Early Access" CTA and copyright info.
+* ****CTA Buttons:**** Use `Button` from `shadcn/ui`.****Tasks / Subtasks:***** [ ] Create `src/app/(frontend)/components/landing/LandingPricing.tsx`.
 
-4. All "Join Waitlist" / "Get Early Access" buttons are styled correctly and trigger the waitlist modal.
+* [ ] Create `src/app/(frontend)/components/landing/LandingFooter.tsx`.
 
-**Tasks / Subtasks:**
+* [ ] Use Shadcn `Card` for the pricing tiers, applying the `pricing-card-popular` styles to the Business plan card.
 
-- [ ] Create `src/app/(frontend)/components/landing/LandingPricing.tsx`.
+* [ ] Implement the feature lists within each card.
 
-- [ ] Create `src/app/(frontend)/components/landing/LandingFooter.tsx`.
+* [ ] Ensure all CTA buttons (Shadcn `Button`) are wired up to open the waitlist modal (this will require a shared state, see next story).
 
-- [ ] Ensure all CTAs are wired up to open the yet-to-be-built modal.
-
-- [ ] Add both components to `landing/page.tsx`.
-
+* [ ] Add both components to `landing/page.tsx`.
 
 ### Story 1.9.10: Implement Waitlist Modal
 
-**Story:** As a user, I want to be able to sign up for the waitlist via a sleek, interactive modal.
+# **Story:** As a user, I want to be able to sign up for the waitlist via a sleek, interactive modal.**Acceptance Criteria (ACs):**1) A `WaitlistModal` component is created.
 
-**Acceptance Criteria (ACs):**
+2) The modal is initially hidden and can be triggered by any waitlist CTA.
 
-1. A `WaitlistModal` component is created using Shadcn `Dialog`.
+3) The form view contains "Your Name" and "Your Email" inputs.
 
-2. The modal is initially hidden and can be triggered by any "Join Waitlist" or "Request Early Access" button.
+4) On submission, the view transitions to a success message with an animated checkmark.
 
-3. The form view contains "Your Name" and "Your Email" inputs (Shadcn `Input`).
+5) The modal can be closed.**Shadcn UI Mapping:*** **Modal:** Use `Dialog` from `shadcn/ui` (`Dialog`, `DialogTrigger`, `DialogContent`, `DialogHeader`, `DialogTitle`, `DialogDescription`).
 
-4. On form submission, the view transitions to a success message.
+* **Form Inputs:** Use `Input` from `shadcn/ui`.
 
-5. The success view features an animated checkmark, replicated exactly from the CSS animations in `landing.html`.
+* **Form Labels:** Use `Label` from `shadcn/ui`.
 
-6. The modal can be closed with a "Close" button or by clicking the backdrop.
+* **Submit Button:** Use `Button` from `shadcn/ui`.**Tasks / Subtasks:*** [ ] Create a state management store (e.g., using Zustand or React Context) to handle the modal's open/closed state globally. The store should have `isOpen`, `openModal`, and `closeModal` properties/methods.
 
-**Tasks / Subtasks:**
+* [ ] Create `src/app/(frontend)/components/landing/WaitlistModal.tsx`.
 
-- [ ] Create `src/app/(frontend)/components/landing/WaitlistModal.tsx`.
+* [ ] Wrap the buttons in `LandingHeader`, `HeroSection`, etc., with the `DialogTrigger` and connect their `onClick` to the `openModal` action from your state store.
 
-- [ ] Use a global state management solution (like Zustand or React Context) to control the modal's open/closed state from any component.
+* [ ] Implement the modal content using Shadcn `DialogContent`.
 
-- [ ] Implement the form submission logic.
+* [ ] Use `useState` within the modal to toggle between the form view and the success view.
 
-- [ ] Re-create the SVG checkmark and its `stroke` animation in CSS.
+* [ ] Re-create the SVG checkmark and its `stroke` animation in `globals.css`.
 
-- [ ] Add the `WaitlistModal` to the `landing/layout.tsx` so it's available on the page.
+* [ ] Add the `<WaitlistModal />` component to `src/app/(frontend)/landing/layout.tsx` so it is available across the entire page.
