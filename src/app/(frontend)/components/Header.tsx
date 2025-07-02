@@ -3,9 +3,11 @@
 import React, { useState } from 'react';
 import Link from "next/link";
 import { CommandDeck } from "./CommandDeck";
+import AuthModal from "./AuthModal";
 
 export function Header() {
   const [isCommandDeckOpen, setIsCommandDeckOpen] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -105,6 +107,11 @@ export function Header() {
       <CommandDeck
         isOpen={isCommandDeckOpen}
         onClose={() => setIsCommandDeckOpen(false)}
+        onOpenAuthModal={() => setIsAuthModalOpen(true)}
+      />
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
       />
     </>
   );

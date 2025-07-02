@@ -1,6 +1,12 @@
 import React from 'react';
 
-export function CommandDeck({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+interface CommandDeckProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onOpenAuthModal?: () => void;
+}
+
+export function CommandDeck({ isOpen, onClose, onOpenAuthModal }: CommandDeckProps) {
   if (!isOpen) return null;
 
   return (
@@ -45,9 +51,16 @@ export function CommandDeck({ isOpen, onClose }: { isOpen: boolean; onClose: () 
               Learn about our mission to empower professional creators.
             </p>
           </a>
-          <button id="auth-modal-trigger" className="nav-card text-left">
+          <button 
+            id="auth-modal-trigger" 
+            className="nav-card text-left"
+            onClick={() => {
+              onOpenAuthModal?.();
+              onClose(); // Close command deck when opening auth modal
+            }}
+          >
             <h3 className="text-xl font-bold mb-2">Login</h3>
-            <p className="text-gray-300 text-sm">Access your Creator's Deal Hub account.</p>
+            <p className="text-gray-300 text-sm">Access your Creator&apos;s Deal Hub account.</p>
           </button>
         </div>
     </div>

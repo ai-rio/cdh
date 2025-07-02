@@ -264,9 +264,10 @@
       .modal-content {
         background-color: #111111;
         border-radius: 1.5rem;
-        padding: 2.5rem;
+        padding: 1rem; /* Reduced padding for the new layout */
         width: 90%;
-        max-width: 420px;
+        /* NEW: Wider modal for two-column layout */
+        max-width: 800px; 
         transform: scale(0.95);
         transition: transform 0.5s ease;
         position: relative;
@@ -301,7 +302,6 @@
         background-color: rgba(255, 255, 255, 0.05);
         border: 1px solid rgba(255, 255, 255, 0.1);
         transition: all 0.3s ease;
-        /* PIXEL-PERFECT REFINEMENT: Final adjustment for optimal spacing */
         padding-left: 3.25rem;
       }
       .form-input:focus {
@@ -327,32 +327,27 @@
       .auth-toggle-slider {
         transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
       }
-      .social-icon-btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 52px;
-        height: 52px;
-        background-color: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 50%;
-        color: #e4e4e7;
+      /* NEW: Social login button styles */
+      .social-login-btn {
+        background-color: rgba(255,255,255,0.05);
+        border: 1px solid rgba(255,255,255,0.1);
         transition: all 0.3s ease;
       }
-      .social-icon-btn:hover {
-        background-color: rgba(255, 255, 255, 0.1);
-        color: #ffffff;
+      .social-login-btn:hover {
+        background-color: rgba(255,255,255,0.1);
         border-color: #a3e635;
-        transform: translateY(-3px);
-        box-shadow: 0 0 15px rgba(163, 230, 53, 0.2);
       }
       .auth-form-container {
         display: grid;
-        min-height: 380px;
+        /* NEW: Responsive grid for horizontal layout */
+        grid-template-columns: 1fr;
+      }
+      @media (min-width: 768px) {
+        .auth-form-container {
+          grid-template-columns: 1fr 1px 1fr;
+        }
       }
       .auth-form-view {
-        grid-column: 1 / -1;
-        grid-row: 1 / -1;
         transition: opacity 0.4s ease, transform 0.4s ease;
         opacity: 1;
         transform: translateX(0);
@@ -361,6 +356,7 @@
         opacity: 0;
         transform: translateX(20px);
         pointer-events: none;
+        position: absolute;
       }
       .auth-form-view.hidden-form.from-left {
         transform: translateX(-20px);
@@ -577,133 +573,79 @@
       </div>
     </div>
 
+    <!-- NEW: Horizontal Auth Modal -->
     <div id="auth-modal" class="modal">
       <div class="modal-content">
         <button
-          class="modal-close-btn absolute top-4 right-4 p-2 text-gray-500 hover:text-white z-20"
+          class="modal-close-btn absolute top-6 right-6 p-2 text-gray-500 hover:text-white z-20"
           aria-label="Close form"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M6 18L18 6M6 6l12 12"
-            />
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
-        <div class="relative auth-toggle-bg p-1 rounded-full flex items-center mb-6">
-          <div
-            class="auth-toggle-slider absolute top-1 left-1 h-[calc(100%-8px)] w-[calc(50%-4px)] bg-[#a3e635] rounded-full"
-          ></div>
-          <button
-            data-auth-view="signin"
-            class="auth-toggle-button w-1/2 p-2 rounded-full relative z-10 font-semibold text-sm active"
-          >
-            Sign In
-          </button>
-          <button
-            data-auth-view="signup"
-            class="auth-toggle-button w-1/2 p-2 rounded-full relative z-10 font-semibold text-sm text-gray-300"
-          >
-            Sign Up
-          </button>
-        </div>
-        <div class="auth-form-container">
-          <div id="signin-view" class="auth-form-view">
-            <div class="text-center mb-6">
-              <h3 class="text-2xl font-bold text-white">Welcome Back, Commander</h3>
-              <p class="text-gray-400 text-sm mt-1">
-                Enter your credentials to access the constellation.
-              </p>
+        
+        <div class="auth-form-container gap-8">
+          <!-- Left Column -->
+          <div class="p-8 relative">
+            <div class="relative auth-toggle-bg p-1 rounded-full flex items-center mb-8 max-w-xs mx-auto">
+              <div class="auth-toggle-slider absolute top-1 left-1 h-[calc(100%-8px)] w-[calc(50%-4px)] bg-[#a3e635] rounded-full"></div>
+              <button data-auth-view="signin" class="auth-toggle-button w-1/2 p-2 rounded-full relative z-10 font-semibold text-sm active">Sign In</button>
+              <button data-auth-view="signup" class="auth-toggle-button w-1/2 p-2 rounded-full relative z-10 font-semibold text-sm text-gray-300">Sign Up</button>
             </div>
-            <form class="space-y-4">
-              <div class="form-input-container">
-                <input
-                  type="email"
-                  placeholder="Email Address"
-                  class="form-input w-full p-3 rounded-lg text-white text-sm"
-                  required
-                />
-                <i class="fas fa-envelope form-input-icon"></i>
+
+            <div class="relative min-h-[280px]">
+              <div id="signin-view" class="auth-form-view">
+                <form class="space-y-4">
+                  <div class="form-input-container">
+                    <input type="email" placeholder="Email Address" class="form-input w-full p-3 rounded-lg text-white text-sm" required />
+                    <i class="fas fa-envelope form-input-icon"></i>
+                  </div>
+                  <div class="form-input-container">
+                    <input type="password" placeholder="Password" class="form-input w-full p-3 rounded-lg text-white text-sm" required />
+                    <i class="fas fa-lock form-input-icon"></i>
+                  </div>
+                  <button type="submit" class="w-full cta-glow bg-[#a3e635] text-[#111] font-bold p-3 rounded-lg mt-2">Launch Command Center</button>
+                </form>
               </div>
-              <div class="form-input-container">
-                <input
-                  type="password"
-                  placeholder="Password"
-                  class="form-input w-full p-3 rounded-lg text-white text-sm"
-                  required
-                />
-                 <i class="fas fa-lock form-input-icon"></i>
+
+              <div id="signup-view" class="auth-form-view hidden-form from-left">
+                <form class="space-y-4">
+                  <div class="form-input-container">
+                    <input type="text" placeholder="Your Name" class="form-input w-full p-3 rounded-lg text-white text-sm" required />
+                    <i class="fas fa-user form-input-icon"></i>
+                  </div>
+                  <div class="form-input-container">
+                    <input type="email" placeholder="Email Address" class="form-input w-full p-3 rounded-lg text-white text-sm" required />
+                    <i class="fas fa-envelope form-input-icon"></i>
+                  </div>
+                  <div class="form-input-container">
+                    <input type="password" placeholder="Password" class="form-input w-full p-3 rounded-lg text-white text-sm" required />
+                    <i class="fas fa-lock form-input-icon"></i>
+                  </div>
+                  <button type="submit" class="w-full cta-glow bg-[#a3e635] text-[#111] font-bold p-3 rounded-lg mt-2">Create My Account</button>
+                </form>
               </div>
-              <button
-                type="submit"
-                class="w-full cta-glow bg-[#a3e635] text-[#111] font-bold p-3 rounded-lg mt-2"
-              >
-                Launch Command Center
-              </button>
-            </form>
-            <div class="flex items-center my-4">
-              <div class="flex-grow border-t border-white/10"></div>
-              <span class="flex-shrink mx-4 text-xs text-gray-500">OR</span>
-              <div class="flex-grow border-t border-white/10"></div>
-            </div>
-            <div class="flex items-center justify-center space-x-4">
-              <button class="social-icon-btn"><i class="fab fa-google text-xl"></i></button>
-              <button class="social-icon-btn"><i class="fab fa-apple text-2xl"></i></button>
             </div>
           </div>
-          <div id="signup-view" class="auth-form-view hidden-form from-left">
-            <div class="text-center mb-6">
-              <h3 class="text-2xl font-bold text-white">Join the Constellation</h3>
-              <p class="text-gray-400 text-sm mt-1">
-                Create your account to map your business universe.
-              </p>
-            </div>
-            <form class="space-y-4">
-               <div class="form-input-container">
-                <input
-                  type="text"
-                  placeholder="Your Name"
-                  class="form-input w-full p-3 rounded-lg text-white text-sm"
-                  required
-                />
-                <i class="fas fa-user form-input-icon"></i>
-              </div>
-              <div class="form-input-container">
-                <input
-                  type="email"
-                  placeholder="Email Address"
-                  class="form-input w-full p-3 rounded-lg text-white text-sm"
-                  required
-                />
-                <i class="fas fa-envelope form-input-icon"></i>
-              </div>
-              <div class="form-input-container">
-                <input
-                  type="password"
-                  placeholder="Password"
-                  class="form-input w-full p-3 rounded-lg text-white text-sm"
-                  required
-                />
-                <i class="fas fa-lock form-input-icon"></i>
-              </div>
-              <button
-                type="submit"
-                class="w-full cta-glow bg-[#a3e635] text-[#111] font-bold p-3 rounded-lg mt-2"
-              >
-                Create My Account
+
+          <!-- Separator -->
+          <div class="hidden md:block bg-white/10 w-px"></div>
+
+          <!-- Right Column -->
+          <div class="hidden md:flex flex-col justify-center p-8">
+            <h3 class="text-xl font-bold text-white mb-2 text-center">Sign in with one click.</h3>
+            <p class="text-gray-400 text-sm text-center mb-6">No password required.</p>
+            <div class="space-y-4">
+              <button class="w-full social-login-btn p-3 rounded-lg flex items-center justify-center space-x-3">
+                <i class="fab fa-google text-xl"></i>
+                <span class="font-semibold">Continue with Google</span>
               </button>
-            </form>
-            <p class="text-xs text-center text-gray-500 mt-4">
-              By signing up, you agree to our Terms of Service.
-            </p>
+              <button class="w-full social-login-btn p-3 rounded-lg flex items-center justify-center space-x-3">
+                <i class="fab fa-apple text-2xl"></i>
+                <span class="font-semibold">Continue with Apple</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
