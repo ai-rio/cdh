@@ -14,7 +14,8 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
     if (isSignUp) {
       console.log('Sign up:', { email, password, name });
     } else {
@@ -210,7 +211,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
         
         @media (min-width: 768px) {
           .auth-form-container {
-            grid-template-columns: 1fr 1px 1fr;
+            grid-template-columns: 1fr 1px 300px;
             gap: 2rem;
           }
           
@@ -227,6 +228,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
           .auth-form-container {
             gap: 0.75rem;
             max-height: calc(100vh - 1.5rem);
+            grid-template-columns: 1fr;
           }
           
           .form-input {
@@ -248,6 +250,10 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
           .form-input-icon {
             left: 0.6rem;
             font-size: 0.8rem;
+          }
+          
+          .signin-view, .signup-view {
+            padding: 1rem;
           }
         }
         
@@ -435,6 +441,108 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
         .terms-text a:hover {
           text-decoration: underline;
         }
+        
+        .social-section {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          padding: 2rem;
+          height: 100%;
+        }
+        
+        .mobile-social {
+          display: none;
+        }
+        
+        .desktop-social {
+          display: block;
+        }
+        
+        .social-section h3 {
+          color: white;
+          font-size: 1.125rem;
+          font-weight: 600;
+          margin-bottom: 1.5rem;
+          text-align: center;
+        }
+        
+        .social-icons-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 1rem;
+          width: 100%;
+          max-width: 200px;
+        }
+        
+        .social-icon-btn {
+          background-color: rgba(255,255,255,0.05);
+          border: 1px solid rgba(255,255,255,0.1);
+          border-radius: 0.75rem;
+          padding: 1rem;
+          color: white;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1.25rem;
+          aspect-ratio: 1;
+        }
+        
+        .social-icon-btn:hover {
+          background-color: rgba(255,255,255,0.1);
+          border-color: #a3e635;
+          transform: translateY(-2px);
+        }
+        
+        .social-icon-btn.google:hover {
+          border-color: #ea4335;
+        }
+        
+        .social-icon-btn.facebook:hover {
+          border-color: #1877f2;
+        }
+        
+        .social-icon-btn.twitter:hover {
+          border-color: #1da1f2;
+        }
+        
+        .social-icon-btn.apple:hover {
+          border-color: #ffffff;
+        }
+        
+        @media (max-width: 767px) {
+           .mobile-social {
+             display: block;
+             padding: 1rem;
+             margin-top: 1rem;
+           }
+           
+           .desktop-social {
+             display: none;
+           }
+           
+           .social-section h3 {
+             font-size: 1rem;
+             margin-bottom: 1rem;
+           }
+           
+           .social-icons-grid {
+             grid-template-columns: repeat(4, 1fr);
+             gap: 0.75rem;
+             max-width: 100%;
+           }
+           
+           .social-icon-btn {
+             padding: 0.75rem;
+             font-size: 1rem;
+           }
+           
+           .divider {
+             display: none;
+           }
+         }
       `}</style>
       
       <div className={`modal ${isOpen ? 'open' : ''}`}>
@@ -479,7 +587,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                 {/* Sign In Form */}
                 <div className={`signin-view ${isSignUp ? 'hidden-form from-left' : ''}`}>
                   <h2 style={{fontSize: '1.25rem', marginBottom: '1rem'}}>Welcome Back, Commander</h2>
-                  <form style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                  <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                     <div className="form-group">
                       <div className="form-input-container">
                         <i className="fas fa-envelope form-input-icon"></i>
@@ -508,16 +616,14 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                       </div>
                     </div>
                     
-                    <button type="submit" className="cta-glow" onClick={handleSubmit} style={{padding: '0.75rem', fontSize: '0.875rem', height: '2.75rem'}}>
+                    <button type="submit" className="cta-glow" style={{padding: '0.75rem', fontSize: '0.875rem', height: '2.75rem'}}>
                       Launch Command Center
                     </button>
                   </form>
                 </div>
-                
-                {/* Sign Up Form */}
                 <div className={`signup-view ${!isSignUp ? 'hidden-form' : ''}`}>
                   <h2 style={{fontSize: '1.25rem', marginBottom: '1rem'}}>Join the Constellation</h2>
-                  <form style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                  <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                     <div className="form-group">
                       <div className="form-input-container">
                         <i className="fas fa-user form-input-icon"></i>
@@ -560,7 +666,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                       </div>
                     </div>
                     
-                    <button type="submit" className="cta-glow" onClick={handleSubmit} style={{padding: '0.75rem', fontSize: '0.875rem', height: '2.75rem'}}>
+                    <button type="submit" className="cta-glow" style={{padding: '0.75rem', fontSize: '0.875rem', height: '2.75rem'}}>
                       Create My Account
                     </button>
                     
@@ -570,24 +676,45 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                   </form>
                 </div>
               </div>
+              
+              {/* Mobile Social Login - Below Forms */}
+              <div className="social-section mobile-social">
+                <h3>Quick Access</h3>
+                <div className="social-icons-grid">
+                  <button className="social-icon-btn google" title="Continue with Google">
+                    <i className="fab fa-google"></i>
+                  </button>
+                  <button className="social-icon-btn facebook" title="Continue with Facebook">
+                    <i className="fab fa-facebook-f"></i>
+                  </button>
+                  <button className="social-icon-btn twitter" title="Continue with Twitter">
+                    <i className="fab fa-twitter"></i>
+                  </button>
+                  <button className="social-icon-btn apple" title="Continue with Apple">
+                    <i className="fab fa-apple"></i>
+                  </button>
+                </div>
+              </div>
             </div>
             
             {/* Divider */}
             <div className="divider"></div>
             
-            {/* Right Column - Social Login */}
-            <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '1rem'}}>
-              <div style={{textAlign: 'center', marginBottom: '1rem'}}>
-                <h3 style={{color: 'white', fontSize: '1rem', fontWeight: '600', marginBottom: '0.25rem'}}>Quick Access</h3>
-                <p style={{color: '#9ca3af', fontSize: '0.75rem'}}>Social login</p>
-              </div>
-              
-              <div style={{display: 'flex', gap: '0.75rem', width: '100%', maxWidth: '200px'}}>
-                <button type="button" className="social-login-btn" onClick={() => console.log('Google login')} style={{display: 'flex', justifyContent: 'center', alignItems: 'center', flex: '1'}}>
-                  <i className="fab fa-google" style={{fontSize: '1.125rem'}}></i>
+            {/* Right Column - Social Login (Desktop) */}
+            <div className="social-section desktop-social">
+              <h3>Quick Access</h3>
+              <div className="social-icons-grid">
+                <button className="social-icon-btn google" title="Continue with Google">
+                  <i className="fab fa-google"></i>
                 </button>
-                <button type="button" className="social-login-btn" onClick={() => console.log('Apple login')} style={{display: 'flex', justifyContent: 'center', alignItems: 'center', flex: '1'}}>
-                  <i className="fab fa-apple" style={{fontSize: '1.25rem'}}></i>
+                <button className="social-icon-btn facebook" title="Continue with Facebook">
+                  <i className="fab fa-facebook-f"></i>
+                </button>
+                <button className="social-icon-btn twitter" title="Continue with Twitter">
+                  <i className="fab fa-twitter"></i>
+                </button>
+                <button className="social-icon-btn apple" title="Continue with Apple">
+                  <i className="fab fa-apple"></i>
                 </button>
               </div>
             </div>
