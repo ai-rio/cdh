@@ -1,7 +1,5 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import '@testing-library/jest-dom/extend-expect';
 import { vi } from 'vitest';
 import AuthModal from '@/app/(frontend)/components/AuthModal';
 

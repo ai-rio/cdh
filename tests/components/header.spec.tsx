@@ -1,6 +1,5 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom';
 import { Header } from '../../src/app/(frontend)/components/Header';
 
 describe('Header Integration Tests', () => {
@@ -21,11 +20,11 @@ describe('Header Integration Tests', () => {
   });
 
   it('displays HUD items with correct values', () => {
-    expect(screen.getByText('Active Deals')).toBeInTheDocument();
+    expect(screen.getByText('Deals')).toBeInTheDocument();
     expect(screen.getByText('12')).toBeInTheDocument();
-    expect(screen.getByText('Overdue')).toBeInTheDocument();
+    expect(screen.getByText('Finance')).toBeInTheDocument();
     expect(screen.getByText('3')).toBeInTheDocument();
-    expect(screen.getByText('Key Contacts')).toBeInTheDocument();
+    expect(screen.getByText('Contacts')).toBeInTheDocument();
     expect(screen.getByText('47')).toBeInTheDocument();
   });
 
@@ -37,13 +36,16 @@ describe('Header Integration Tests', () => {
 
   it('opens and closes the CommandDeck overlay when toggle is clicked', () => {
     const toggleButton = screen.getByRole('button', { name: /open navigation menu/i });
-    const commandDeck = screen.getByTestId('command-deck');
     
-    // Initially, CommandDeck should be closed
-    expect(commandDeck).not.toHaveClass('open');
+    // Initially, CommandDeck should not be visible
+    expect(screen.queryByText('Blog')).not.toBeInTheDocument();
     
     // Click to open
     fireEvent.click(toggleButton);
+    
+    // CommandDeck should now be visible with navigation items
+    const commandDeck = document.getElementById('command-deck');
+    expect(commandDeck).toBeInTheDocument();
     expect(commandDeck).toHaveClass('open');
     expect(screen.getByText('Blog')).toBeInTheDocument();
     expect(screen.getByText('Pricing')).toBeInTheDocument();
@@ -51,10 +53,10 @@ describe('Header Integration Tests', () => {
     expect(screen.getByText('Login')).toBeInTheDocument();
     
     // Click close button to close
-    const closeButton = screen.getByRole('button', { name: /close/i });
-    fireEvent.click(closeButton);
-    expect(commandDeck).not.toHaveClass('open');
-  });
+    const closeButton = screen.getByRole('button', { name: /close navigation menu/i });
+     fireEvent.click(closeButton);
+     expect(screen.queryByText('Blog')).not.toBeInTheDocument();
+   });
 
   it('displays navigation cards with correct content', () => {
     const toggleButton = screen.getByRole('button', { name: /open navigation menu/i });
