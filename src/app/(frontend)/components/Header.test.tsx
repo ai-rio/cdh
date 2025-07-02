@@ -2,18 +2,6 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Header } from './Header';
-import CommandDeck from '../../components/CommandDeck';
-
-// Mock the CommandDeck component as it's not the focus of these tests
-vi.mock('../../components/CommandDeck', () => ({
-  __esModule: true,
-  default: vi.fn((props) => (
-    <div data-testid="command-deck" className={props.isOpen ? 'open' : 'closed'}>
-      {props.children}
-      <button onClick={props.onClose} aria-label="Close navigation menu"></button>
-    </div>
-  )),
-}));
 
 describe('Header', () => {
   it('renders the header element with mission-control-hud class', () => {
@@ -24,24 +12,24 @@ describe('Header', () => {
   it('renders the CDH logo and text', () => {
     render(<Header />);
     expect(screen.getByText('CDH')).toBeInTheDocument();
-    expect(screen.getByText('CDH')).toBeInTheDocument();
   });
 
   it('renders HUD items with correct data', () => {
     render(<Header />);
-    expect(screen.getByText('Active Deals')).toBeInTheDocument();
-    expect(screen.getByText('Overdue')).toBeInTheDocument();
-    expect(screen.getByText('Key Contacts')).toBeInTheDocument();
+    expect(screen.getByText('Deals')).toBeInTheDocument();
+    expect(screen.getByText('Finance')).toBeInTheDocument();
+    expect(screen.getByText('Contacts')).toBeInTheDocument();
   });
 
   it('toggles the CommandDeck on navigation button click', () => {
     render(<Header />);
     const navButton = screen.getByLabelText('Open navigation menu');
     fireEvent.click(navButton);
-    expect(screen.getByTestId('command-deck')).toHaveClass('open');
+    // The CommandDeck is rendered in a portal, so we need to look for it in the body
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
 
-    const closeButton = screen.getByLabelText('Close navigation menu');
+        const closeButton = screen.getByRole('button', { name: /close/i });
     fireEvent.click(closeButton);
-    expect(screen.getByTestId('command-deck')).toHaveClass('closed');
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 });

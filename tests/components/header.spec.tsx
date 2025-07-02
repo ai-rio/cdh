@@ -2,6 +2,19 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { Header } from '../../src/app/(frontend)/components/Header';
 
+// Mock the next/link component
+import { vi } from 'vitest';
+
+// Mock the next/link component
+vi.mock('next/link', () => {
+    return {
+        __esModule: true,
+        default: ({children, href}) => {
+            return <a href={href}>{children}</a>
+        }
+    }
+});
+
 describe('Header Integration Tests', () => {
   beforeEach(() => {
     render(<Header />);
@@ -12,8 +25,8 @@ describe('Header Integration Tests', () => {
     expect(header).toHaveClass('mission-control-hud');
   });
 
-  it('displays the Creator\'s Deal Hub logo and title', () => {
-    const logoLink = screen.getByRole('link', { name: /cdh/i });
+  it("displays the Creator's Deal Hub logo and title", () => {
+    const logoLink = screen.getByRole('link', { name: /CDH/i });
     expect(logoLink).toBeInTheDocument();
     expect(logoLink).toHaveAttribute('href', '/');
     expect(screen.getByText('CDH')).toBeInTheDocument();
@@ -38,24 +51,22 @@ describe('Header Integration Tests', () => {
     const toggleButton = screen.getByRole('button', { name: /open navigation menu/i });
     
     // Initially, CommandDeck should not be visible
-    expect(screen.queryByText('Blog')).not.toBeInTheDocument();
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     
     // Click to open
     fireEvent.click(toggleButton);
     
     // CommandDeck should now be visible with navigation items
-    const commandDeck = document.getElementById('command-deck');
-    expect(commandDeck).toBeInTheDocument();
-    expect(commandDeck).toHaveClass('open');
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
     expect(screen.getByText('Blog')).toBeInTheDocument();
     expect(screen.getByText('Pricing')).toBeInTheDocument();
     expect(screen.getByText('About Us')).toBeInTheDocument();
     expect(screen.getByText('Login')).toBeInTheDocument();
     
     // Click close button to close
-    const closeButton = screen.getByRole('button', { name: /close navigation menu/i });
+    const closeButton = screen.getByRole('button', { name: /close/i });
      fireEvent.click(closeButton);
-     expect(screen.queryByText('Blog')).not.toBeInTheDocument();
+     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
    });
 
   it('displays navigation cards with correct content', () => {
@@ -76,20 +87,20 @@ describe('Header Integration Tests', () => {
     
     // Check Login card
     expect(screen.getByText('Login')).toBeInTheDocument();
-    expect(screen.getByText('Access your Creator\'s Deal Hub account.')).toBeInTheDocument();
+    expect(screen.getByText("Access your Creator's Deal Hub account.")).toBeInTheDocument();
   });
 
   it('has proper navigation links', () => {
     const toggleButton = screen.getByRole('button', { name: /open navigation menu/i });
     fireEvent.click(toggleButton);
     
-    const blogLink = screen.getByRole('link', { name: /blog/i });
+    const blogLink = screen.getByRole('link', { name: /Blog/i });
     expect(blogLink).toHaveAttribute('href', '/blog');
     
-    const pricingLink = screen.getByRole('link', { name: /pricing/i });
+    const pricingLink = screen.getByRole('link', { name: /Pricing/i });
     expect(pricingLink).toHaveAttribute('href', '/pricing');
     
-    const aboutLink = screen.getByRole('link', { name: /about us/i });
+    const aboutLink = screen.getByRole('link', { name: /About Us/i });
     expect(aboutLink).toHaveAttribute('href', '/about');
   });
 
