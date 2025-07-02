@@ -260,10 +260,9 @@
         opacity: 1;
         pointer-events: auto;
       }
+      
       .modal-content {
-        background-color: rgba(23, 23, 23, 0.7);
-        backdrop-filter: blur(25px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        background-color: #111111;
         border-radius: 1.5rem;
         padding: 2.5rem;
         width: 90%;
@@ -271,18 +270,47 @@
         transform: scale(0.95);
         transition: transform 0.5s ease;
         position: relative;
+        border: 1px solid transparent;
+        background-clip: padding-box;
+        overflow: hidden;
+      }
+      .modal-content::before {
+        content: '';
+        position: absolute;
+        top: 0; right: 0; bottom: 0; left: 0;
+        z-index: -1;
+        margin: -1px;
+        border-radius: inherit;
+        background: radial-gradient(ellipse at center, rgba(163, 230, 53, 0.3) 0%, transparent 70%);
       }
       .modal.open .modal-content {
         transform: scale(1);
       }
+      .form-input-container {
+        position: relative;
+      }
+      .form-input-icon {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #71717a;
+        transition: color 0.3s ease;
+      }
       .form-input {
         background-color: rgba(255, 255, 255, 0.05);
         border: 1px solid rgba(255, 255, 255, 0.1);
-        transition: border-color 0.3s ease;
+        transition: all 0.3s ease;
+        /* PIXEL-PERFECT REFINEMENT: Final adjustment for optimal spacing */
+        padding-left: 3.25rem;
       }
       .form-input:focus {
-        border-color: #eefc97;
+        border-color: #a3e635;
         outline: none;
+        box-shadow: 0 0 15px rgba(163, 230, 53, 0.2);
+      }
+      .form-input:focus + .form-input-icon {
+        color: #a3e635;
       }
       .success-message {
         transition: opacity 0.5s ease;
@@ -297,7 +325,7 @@
         color: #111111;
       }
       .auth-toggle-slider {
-        transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
       }
       .social-icon-btn {
         display: flex;
@@ -314,21 +342,28 @@
       .social-icon-btn:hover {
         background-color: rgba(255, 255, 255, 0.1);
         color: #ffffff;
-        border-color: #eefc97;
+        border-color: #a3e635;
         transform: translateY(-3px);
-        box-shadow: 0 0 15px rgba(238, 252, 151, 0.2);
+        box-shadow: 0 0 15px rgba(163, 230, 53, 0.2);
+      }
+      .auth-form-container {
+        display: grid;
+        min-height: 380px;
       }
       .auth-form-view {
-        transition:
-          opacity 0.3s,
-          transform 0.3s;
-        position: absolute;
-        width: calc(100% - 5rem);
+        grid-column: 1 / -1;
+        grid-row: 1 / -1;
+        transition: opacity 0.4s ease, transform 0.4s ease;
+        opacity: 1;
+        transform: translateX(0);
       }
       .auth-form-view.hidden-form {
         opacity: 0;
-        transform: translateX(-10px);
+        transform: translateX(20px);
         pointer-events: none;
+      }
+      .auth-form-view.hidden-form.from-left {
+        transform: translateX(-20px);
       }
     </style>
   </head>
@@ -491,7 +526,7 @@
           <h2 class="text-3xl font-bold text-white mb-2">Join the Waitlist</h2>
           <p class="text-gray-400 mb-8">Be the first to get access and redefine your business.</p>
           <form id="waitlist-form" class="space-y-4">
-            <div>
+            <div class="form-input-container">
               <input
                 type="text"
                 name="name"
@@ -499,8 +534,9 @@
                 required
                 class="form-input w-full p-4 rounded-lg text-white"
               />
+               <i class="fas fa-user form-input-icon"></i>
             </div>
-            <div>
+            <div class="form-input-container">
               <input
                 type="email"
                 name="email"
@@ -508,6 +544,7 @@
                 required
                 class="form-input w-full p-4 rounded-lg text-white"
               />
+              <i class="fas fa-envelope form-input-icon"></i>
             </div>
             <button
               type="submit"
@@ -541,9 +578,9 @@
     </div>
 
     <div id="auth-modal" class="modal">
-      <div class="modal-content overflow-hidden">
+      <div class="modal-content">
         <button
-          class="modal-close-btn absolute top-4 right-4 p-2 text-gray-500 hover:text-white"
+          class="modal-close-btn absolute top-4 right-4 p-2 text-gray-500 hover:text-white z-20"
           aria-label="Close form"
         >
           <svg
@@ -563,7 +600,7 @@
         </button>
         <div class="relative auth-toggle-bg p-1 rounded-full flex items-center mb-6">
           <div
-            class="auth-toggle-slider absolute top-1 left-1 h-[calc(100%-8px)] w-[calc(50%-4px)] bg-[#EEFC97] rounded-full"
+            class="auth-toggle-slider absolute top-1 left-1 h-[calc(100%-8px)] w-[calc(50%-4px)] bg-[#a3e635] rounded-full"
           ></div>
           <button
             data-auth-view="signin"
@@ -578,7 +615,7 @@
             Sign Up
           </button>
         </div>
-        <div class="relative min-h-[360px]">
+        <div class="auth-form-container">
           <div id="signin-view" class="auth-form-view">
             <div class="text-center mb-6">
               <h3 class="text-2xl font-bold text-white">Welcome Back, Commander</h3>
@@ -587,21 +624,27 @@
               </p>
             </div>
             <form class="space-y-4">
-              <input
-                type="email"
-                placeholder="Email Address"
-                class="form-input w-full p-3 rounded-lg text-white text-sm"
-                required
-              />
-              <input
-                type="password"
-                placeholder="Password"
-                class="form-input w-full p-3 rounded-lg text-white text-sm"
-                required
-              />
+              <div class="form-input-container">
+                <input
+                  type="email"
+                  placeholder="Email Address"
+                  class="form-input w-full p-3 rounded-lg text-white text-sm"
+                  required
+                />
+                <i class="fas fa-envelope form-input-icon"></i>
+              </div>
+              <div class="form-input-container">
+                <input
+                  type="password"
+                  placeholder="Password"
+                  class="form-input w-full p-3 rounded-lg text-white text-sm"
+                  required
+                />
+                 <i class="fas fa-lock form-input-icon"></i>
+              </div>
               <button
                 type="submit"
-                class="w-full cta-glow bg-[#EEFC97] text-[#1D1F04] font-bold p-3 rounded-lg mt-2"
+                class="w-full cta-glow bg-[#a3e635] text-[#111] font-bold p-3 rounded-lg mt-2"
               >
                 Launch Command Center
               </button>
@@ -616,7 +659,7 @@
               <button class="social-icon-btn"><i class="fab fa-apple text-2xl"></i></button>
             </div>
           </div>
-          <div id="signup-view" class="auth-form-view hidden-form">
+          <div id="signup-view" class="auth-form-view hidden-form from-left">
             <div class="text-center mb-6">
               <h3 class="text-2xl font-bold text-white">Join the Constellation</h3>
               <p class="text-gray-400 text-sm mt-1">
@@ -624,27 +667,36 @@
               </p>
             </div>
             <form class="space-y-4">
-              <input
-                type="text"
-                placeholder="Your Name"
-                class="form-input w-full p-3 rounded-lg text-white text-sm"
-                required
-              />
-              <input
-                type="email"
-                placeholder="Email Address"
-                class="form-input w-full p-3 rounded-lg text-white text-sm"
-                required
-              />
-              <input
-                type="password"
-                placeholder="Password"
-                class="form-input w-full p-3 rounded-lg text-white text-sm"
-                required
-              />
+               <div class="form-input-container">
+                <input
+                  type="text"
+                  placeholder="Your Name"
+                  class="form-input w-full p-3 rounded-lg text-white text-sm"
+                  required
+                />
+                <i class="fas fa-user form-input-icon"></i>
+              </div>
+              <div class="form-input-container">
+                <input
+                  type="email"
+                  placeholder="Email Address"
+                  class="form-input w-full p-3 rounded-lg text-white text-sm"
+                  required
+                />
+                <i class="fas fa-envelope form-input-icon"></i>
+              </div>
+              <div class="form-input-container">
+                <input
+                  type="password"
+                  placeholder="Password"
+                  class="form-input w-full p-3 rounded-lg text-white text-sm"
+                  required
+                />
+                <i class="fas fa-lock form-input-icon"></i>
+              </div>
               <button
                 type="submit"
-                class="w-full cta-glow bg-[#EEFC97] text-[#1D1F04] font-bold p-3 rounded-lg mt-2"
+                class="w-full cta-glow bg-[#a3e635] text-[#111] font-bold p-3 rounded-lg mt-2"
               >
                 Create My Account
               </button>
@@ -720,7 +772,6 @@
         </div>
       </section>
       
-      <!-- DETACHED CTA SECTION -->
       <section class="content-section" id="final-cta-section">
         <div class="content-box w-full max-w-3xl">
           <h3 class="text-3xl md:text-4xl font-bold text-white mb-4">
@@ -738,7 +789,6 @@
         </div>
       </section>
 
-      <!-- NEW CLEANER FOOTER -->
       <footer class="site-footer">
         <div class="max-w-5xl mx-auto">
           <div class="footer-grid grid grid-cols-2 md:grid-cols-4 gap-8 text-center md:text-left">
@@ -890,13 +940,13 @@
             button.classList.add('active')
             button.classList.remove('text-gray-300')
             if (view === 'signup') {
-              slider.style.transform = 'translateX(100%)'
-              signinView.classList.add('hidden-form')
-              signupView.classList.remove('hidden-form')
+              slider.style.transform = 'translateX(calc(100% - 8px))'
+              signinView.classList.add('hidden-form', 'from-left')
+              signupView.classList.remove('hidden-form', 'from-left')
             } else {
               slider.style.transform = 'translateX(0%)'
               signupView.classList.add('hidden-form')
-              signinView.classList.remove('hidden-form')
+              signinView.classList.remove('hidden-form', 'from-left')
             }
           })
         })
@@ -1050,7 +1100,6 @@
         const clock = new THREE.Clock()
         function animate() {
           requestAnimationFrame(animate)
-          // NEW: Breathing animation for the central orb
           const elapsedTime = clock.getElapsedTime()
           creatorOrb.material.emissiveIntensity = 0.3 + Math.sin(elapsedTime * 1.5) * 0.1
 
@@ -1071,18 +1120,14 @@
         animate()
 
         if (isMobile) {
-          // NEW: Gyroscope controls for mobile
           if (window.DeviceOrientationEvent) {
             window.addEventListener('deviceorientation', (event) => {
-              // Clamp and map the values
-              const beta = Math.max(-45, Math.min(45, event.beta)) // Front-back tilt
-              const gamma = Math.max(-45, Math.min(45, event.gamma)) // Left-right tilt
+              const beta = Math.max(-45, Math.min(45, event.beta)) 
+              const gamma = Math.max(-45, Math.min(45, event.gamma)) 
 
-              // Convert degrees to radians and apply a multiplier for sensitivity
               const targetRotationX = ((beta * Math.PI) / 180) * 0.25
               const targetRotationY = ((gamma * Math.PI) / 180) * 0.25
 
-              // Use GSAP for smooth animation
               gsap.to(group.rotation, {
                 x: targetRotationX,
                 y: targetRotationY,
@@ -1091,11 +1136,9 @@
               })
             })
           } else {
-            // Fallback for devices without gyroscope
             gsap.to(group.rotation, { y: Math.PI * 2, duration: 40, repeat: -1, ease: 'none' })
           }
         } else {
-          // Desktop scroll controls
           const tl = gsap.timeline({
             scrollTrigger: {
               trigger: '.scroll-container',
