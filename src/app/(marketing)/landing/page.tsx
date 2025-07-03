@@ -1,19 +1,18 @@
 import React from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import HeroSection from '../components/landing/HeroSection'
-import ParticleCanvas from '../components/landing/ParticleCanvas'
-import AITypingDemo from '../components/landing/AITypingDemo'
-import DealsTimeline from '../components/landing/DealsTimeline'
-import CashflowChart from '../components/landing/CashflowChart'
-import TestimonialCarousel from '../components/landing/TestimonialCarousel'
-import LandingPricing from '../components/landing/LandingPricing'
-import LandingFooter from '../components/landing/LandingFooter'
+import HeroSection from '@/components/landing/HeroSection'
+import AITypingDemo from '@/components/landing/AITypingDemo'
+import DealsTimeline from '@/components/landing/DealsTimeline'
+import CashflowChart from '@/components/landing/CashflowChart'
+import TestimonialCarousel from '@/components/landing/TestimonialCarousel'
+import LandingPricing from '@/components/landing/LandingPricing'
+import LandingFooter from '@/components/landing/LandingFooter'
 
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-black">
-      <ParticleCanvas />
+      
       <div className="relative z-10">
         <HeroSection />
 
