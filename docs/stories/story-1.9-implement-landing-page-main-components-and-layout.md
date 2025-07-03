@@ -201,47 +201,69 @@
 
 ### Story 1.9.8: Implement Testimonial Carousel
 
-# ****Story:**** As a user, I want to read testimonials in an interactive carousel to build trust in the platform.****Acceptance Criteria (ACs):****1) A `TestimonialCarousel` component is created.
+# ****Story:**** As a user, I want to read testimonials in an interactive carousel to build trust in the platform.
+
+## Status: Complete
+
+****Acceptance Criteria (ACs):****
+1) A `TestimonialCarousel` component is created.
 
 2) It displays testimonials in a horizontally scrollable container.
 
-3) "Scroll left" and "Scroll right" buttons programmatically scroll the container.****Shadcn UI Mapping:***** ****Testimonial Cards:**** Use `Card` from `shadcn/ui` for each individual testimonial.
+3) "Scroll left" and "Scroll right" buttons programmatically scroll the container.
+
+****Shadcn UI Mapping:****
+* ****Testimonial Cards:**** Use `Card` from `shadcn/ui` for each individual testimonial.
 
 * ****Scroll Buttons:**** Use `Button` from `shadcn/ui` with `variant="outline"` and size `icon`, containing arrow icons.
 
-* ****Carousel (Advanced):**** For a more robust implementation, use `Carousel` from `shadcn/ui` (`Carousel`, `CarouselContent`, `CarouselItem`, `CarouselPrevious`, `CarouselNext`).****Tasks / Subtasks:***** [ ] Create `src/app/(frontend)/components/landing/TestimonialCarousel.tsx`.
+* ****Carousel (Advanced):**** For a more robust implementation, use `Carousel` from `shadcn/ui` (`Carousel`, `CarouselContent`, `CarouselItem`, `CarouselPrevious`, `CarouselNext`).
 
-* [ ] Install `shadcn-ui/react-carousel` if not already present.
+****Tasks / Subtasks:****
+* [x] Create `src/app/(frontend)/components/landing/TestimonialCarousel.tsx`.
 
-* [ ] Implement the component using the Shadcn `Carousel` components as the primary structure.
+* [x] Install `shadcn-ui/react-carousel` if not already present.
 
-* [ ] Map over mock testimonial data, rendering each item inside a `CarouselItem`.
+* [x] Implement the component using the Shadcn `Carousel` components as the primary structure.
 
-* [ ] Inside each `CarouselItem`, use a Shadcn `Card` to structure the testimonial content (quote, avatar, name, handle).
+* [x] Map over mock testimonial data, rendering each item inside a `CarouselItem`.
 
-* [ ] Add the `<TestimonialCarousel />` component to `landing/page.tsx`.
+* [x] Inside each `CarouselItem`, use a Shadcn `Card` to structure the testimonial content (quote, avatar, name, handle).
+
+* [x] Add the `<TestimonialCarousel />` component to `landing/page.tsx`.
 
 ### Story 1.9.9: Implement Landing Page Pricing & Footer
 
-# ****Story:**** As a user, I want to see the pricing and a final call-to-action to make an informed decision.****Acceptance Criteria (ACs):****1) A `LandingPricing` component is created, displaying the "Creator" and "Business" plans.
+# ****Story:**** As a user, I want to see the pricing and a final call-to-action to make an informed decision.
+
+## Status: Complete
+
+****Acceptance Criteria (ACs):****
+1) A `LandingPricing` component is created, displaying the "Creator" and "Business" plans.
 
 2) A `LandingFooter` component is created with the final CTA.
 
-3) All "Join Waitlist" / "Get Early Access" buttons trigger the waitlist modal.****Shadcn UI Mapping:***** ****Pricing Cards:**** Use `Card` from `shadcn/ui` for each pricing tier.
+3) All "Join Waitlist" / "Get Early Access" buttons trigger the waitlist modal.
+
+****Shadcn UI Mapping:****
+* ****Pricing Cards:**** Use `Card` from `shadcn/ui` for each pricing tier.
 
 * ****Feature List:**** Use a simple `ul` and `li` with checkmark icons.
 
-* ****CTA Buttons:**** Use `Button` from `shadcn/ui`.****Tasks / Subtasks:***** [ ] Create `src/app/(frontend)/components/landing/LandingPricing.tsx`.
+* ****CTA Buttons:**** Use `Button` from `shadcn/ui`.
 
-* [ ] Create `src/app/(frontend)/components/landing/LandingFooter.tsx`.
+****Tasks / Subtasks:****
+* [x] Create `src/app/(frontend)/components/landing/LandingPricing.tsx`.
 
-* [ ] Use Shadcn `Card` for the pricing tiers, applying the `pricing-card-popular` styles to the Business plan card.
+* [x] Create `src/app/(frontend)/components/landing/LandingFooter.tsx`.
 
-* [ ] Implement the feature lists within each card.
+* [x] Use Shadcn `Card` for the pricing tiers, applying the `pricing-card-popular` styles to the Business plan card.
 
-* [ ] Ensure all CTA buttons (Shadcn `Button`) are wired up to open the waitlist modal (this will require a shared state, see next story).
+* [x] Implement the feature lists within each card.
 
-* [ ] Add both components to `landing/page.tsx`.
+* [x] Ensure all CTA buttons (Shadcn `Button`) are wired up to open the waitlist modal (this will require a shared state, see next story).
+
+* [x] Add both components to `landing/page.tsx`.
 
 ### Story 1.9.10: Implement Waitlist Modal
 
