@@ -6,6 +6,7 @@ import ParticleCanvas from '../components/landing/ParticleCanvas'
 import AITypingDemo from '../components/landing/AITypingDemo'
 import DealsTimeline from '../components/landing/DealsTimeline'
 import CashflowChart from '../components/landing/CashflowChart'
+import TestimonialCarousel from '../components/landing/TestimonialCarousel'
 
 export default function LandingPage() {
   return (
@@ -82,25 +83,7 @@ export default function LandingPage() {
 
         {/* Testimonials Section */}
         <section id="testimonials-section" className="min-h-screen flex items-center justify-center px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl font-bold mb-8 text-white">What Creators Say</h2>
-            <Card className="bg-black/20 border-white/10 backdrop-blur-xl">
-              <CardContent className="p-8">
-                <p className="text-xl text-gray-300 mb-6 italic">
-                  &ldquo;This platform has revolutionized how I manage my creator business. The insights are incredible!&rdquo;
-                </p>
-                <div className="flex items-center justify-center space-x-4">
-                  <div className="w-12 h-12 bg-lime-400 rounded-full flex items-center justify-center">
-                    <span className="text-black font-bold">JD</span>
-                  </div>
-                  <div>
-                    <p className="font-bold text-white">Jane Doe</p>
-                    <p className="text-gray-400">@janedoe</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+          <TestimonialCarousel />
         </section>
 
         {/* Pricing Section */}
