@@ -3,16 +3,24 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { useWaitlistModal } from '@/lib/stores/waitlist-modal-store';
 
 export default function HeroSection() {
+  const { openModal } = useWaitlistModal();
+  
   return (
     <main className="relative h-screen flex flex-col justify-center items-center p-4 md:p-8">
         <div className="text-center">
             <Card className="bg-black/10 border-white/10 backdrop-blur-2xl">
                 <CardContent className="p-8 md:p-12 text-center">
                     <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-4 text-blue-300">Overwhelmed is Over.</h1>
-                    <p className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-8">Creator's Deal Hub is the AI-powered partner that turns administrative chaos into strategic clarity and revenue growth.</p>
-                    <Button className="waitlist-trigger bg-lime-400 text-black font-bold text-lg px-8 py-4 rounded-xl shadow-[0_0_20px_rgba(192,252,50,0.4)] transition-all duration-300 ease-in-out hover:bg-lime-300 hover:shadow-[0_0_30px_rgba(192,252,50,0.6)] hover:scale-105 active:scale-100 active:bg-lime-500">Request Early Access</Button>
+                    <p className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-8">Creator&apos;s Deal Hub is the AI-powered partner that turns administrative chaos into strategic clarity and revenue growth.</p>
+                    <Button 
+                      onClick={openModal}
+                      className="waitlist-trigger bg-lime-400 text-black font-bold text-lg px-8 py-4 rounded-xl shadow-[0_0_20px_rgba(192,252,50,0.4)] transition-all duration-300 ease-in-out hover:bg-lime-300 hover:shadow-[0_0_30px_rgba(192,252,50,0.6)] hover:scale-105 active:scale-100 active:bg-lime-500"
+                    >
+                      Request Early Access
+                    </Button>
                 </CardContent>
             </Card>
         </div>

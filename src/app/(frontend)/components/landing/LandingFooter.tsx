@@ -3,17 +3,10 @@
 import React from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
+import { useWaitlistModal } from '@/lib/stores/waitlist-modal-store'
 
-interface LandingFooterProps {
-  onJoinWaitlist?: () => void
-}
-
-export default function LandingFooter({ onJoinWaitlist }: LandingFooterProps) {
-  const handleJoinWaitlist = () => {
-    if (onJoinWaitlist) {
-      onJoinWaitlist()
-    }
-  }
+export default function LandingFooter() {
+  const { openModal } = useWaitlistModal()
 
   return (
     <section className="min-h-screen flex items-center justify-center px-4 relative">
@@ -51,7 +44,7 @@ export default function LandingFooter({ onJoinWaitlist }: LandingFooterProps) {
             <Button 
               size="lg"
               className="bg-lime-400 text-black font-bold hover:bg-lime-300 transition-all duration-200 px-12 py-6 text-lg"
-              onClick={handleJoinWaitlist}
+              onClick={openModal}
             >
               Get Early Access
             </Button>

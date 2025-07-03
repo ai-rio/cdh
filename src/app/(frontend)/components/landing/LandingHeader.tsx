@@ -2,9 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
+import { useWaitlistModal } from '@/lib/stores/waitlist-modal-store';
 
 export default function LandingHeader() {
   const [isVisible, setIsVisible] = useState(false);
+  const { openModal } = useWaitlistModal();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -39,6 +41,7 @@ export default function LandingHeader() {
           <a href="#pricing-section" className="nav-link text-gray-300 hover:text-white transition-colors">Pricing</a>
         </nav>
         <Button
+          onClick={openModal}
           className="bg-lime-400 text-black font-bold text-sm px-6 py-2.5 rounded-lg hover:bg-lime-300 transition-colors"
         >
           Join Waitlist

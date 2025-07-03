@@ -26,3 +26,19 @@
 .scroll-indicator {
   animation: pulse 2s infinite;
 }
+
+/* Waitlist Modal Checkmark Animation */
+@keyframes checkmark {
+  0% {
+    stroke-dashoffset: 100;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.checkmark-animation {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: checkmark 0.8s ease-in-out forwards;
+}

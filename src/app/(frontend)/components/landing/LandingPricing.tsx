@@ -3,17 +3,10 @@
 import React from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
+import { useWaitlistModal } from '@/lib/stores/waitlist-modal-store'
 
-interface LandingPricingProps {
-  onJoinWaitlist?: () => void
-}
-
-export default function LandingPricing({ onJoinWaitlist }: LandingPricingProps) {
-  const handleJoinWaitlist = () => {
-    if (onJoinWaitlist) {
-      onJoinWaitlist()
-    }
-  }
+export default function LandingPricing() {
+  const { openModal } = useWaitlistModal()
 
   return (
     <section id="pricing-section" className="min-h-screen flex items-center justify-center px-4">
@@ -53,7 +46,7 @@ export default function LandingPricing({ onJoinWaitlist }: LandingPricingProps) 
               </ul>
               <Button 
                 className="w-full bg-lime-400 text-black font-bold hover:bg-lime-300 transition-colors duration-200"
-                onClick={handleJoinWaitlist}
+                onClick={openModal}
               >
                 Join Waitlist
               </Button>
@@ -101,7 +94,7 @@ export default function LandingPricing({ onJoinWaitlist }: LandingPricingProps) 
               </ul>
               <Button 
                 className="w-full bg-lime-400 text-black font-bold hover:bg-lime-300 transition-colors duration-200"
-                onClick={handleJoinWaitlist}
+                onClick={openModal}
               >
                 Join Waitlist
               </Button>
