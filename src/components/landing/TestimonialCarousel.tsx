@@ -23,12 +23,12 @@ interface Testimonial {
 const mockTestimonials: Testimonial[] = [
   {
     id: 1,
-    quote: "This platform has completely transformed how I manage my brand partnerships. The AI insights are incredible!",
-    name: "Sarah Chen",
-    handle: "@sarahcreates",
-    avatar: "SC",
-    platform: "YouTube",
-    followers: "2.3M"
+    quote: "Before this, my brand deal tracking was a nightmare of spreadsheets and forgotten follow-ups. Now, I've cut my admin time in half and look 10x more professional to my partners. It's the first tool that feels like it was actually built for me.",
+    name: "Dani Rojas",
+    handle: "@danilifestyle",
+    avatar: "DR",
+    platform: "Lifestyle Creator",
+    followers: "35K"
   },
   {
     id: 2,

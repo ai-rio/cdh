@@ -14,11 +14,10 @@ export default function LandingFooter() {
         {/* Final CTA Section */}
         <div className="mb-16">
           <h2 className="text-4xl md:text-6xl font-bold mb-8 text-white leading-tight">
-            Ready to Transform Your
-            <span className="text-lime-400 block">Creator Business?</span>
+            Ready to Run Your Business Like a Business?
           </h2>
           <p className="text-lg md:text-xl text-gray-400 mb-12 max-w-3xl mx-auto leading-relaxed">
-            Join thousands of creators who are already using our platform to streamline their business operations and maximize their revenue potential.
+            Stop being just a content creator. Become the CEO of your brand.
           </p>
           
           <Card className="bg-black/30 border-lime-400/30 backdrop-blur-xl p-8 mb-12">
@@ -46,7 +45,7 @@ export default function LandingFooter() {
               className="bg-lime-400 text-black font-bold hover:bg-lime-300 transition-all duration-200 px-12 py-6 text-lg"
               onClick={openModal}
             >
-              Get Early Access
+              Start My Free Trial
             </Button>
             <p className="text-sm text-gray-500">
               No credit card required • Launch in Q2 2024
