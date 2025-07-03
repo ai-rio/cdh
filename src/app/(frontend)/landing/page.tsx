@@ -5,6 +5,7 @@ import HeroSection from '../components/landing/HeroSection'
 import ParticleCanvas from '../components/landing/ParticleCanvas'
 import AITypingDemo from '../components/landing/AITypingDemo'
 import DealsTimeline from '../components/landing/DealsTimeline'
+import CashflowChart from '../components/landing/CashflowChart'
 
 export default function LandingPage() {
   return (
@@ -63,6 +64,19 @@ export default function LandingPage() {
               Visualize and manage all your active deals in one comprehensive timeline
             </p>
             <DealsTimeline />
+          </div>
+        </section>
+
+        {/* Cashflow Analytics Section */}
+        <section id="cashflow-section" className="min-h-screen flex items-center justify-center px-4">
+          <div className="max-w-6xl mx-auto text-center">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white leading-tight">
+              Visualize Your Revenue Growth
+            </h2>
+            <p className="text-lg md:text-xl text-gray-400 mb-16 max-w-3xl mx-auto leading-relaxed">
+              Get real-time insights into your earnings with interactive charts. Compare projected vs actual revenue and track your financial performance.
+            </p>
+            <CashflowChart />
           </div>
         </section>
 

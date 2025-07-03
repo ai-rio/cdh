@@ -137,45 +137,67 @@
 
 ### Story 1.9.6: Implement "Deals Timeline" Feature
 
-# ****Story:**** As a user, I want to visualize active brand deals on a timeline to understand how the platform helps manage collaborations.****Acceptance Criteria (ACs):****1) A `DealsTimeline` component is created.
+# ****Story:**** As a user, I want to visualize active brand deals on a timeline to understand how the platform helps manage collaborations.
+
+## Status: Complete
+
+****Acceptance Criteria (ACs):****
+1) A `DealsTimeline` component is created.
 
 2) It dynamically renders a timeline with mock deal data.
 
 3) Hovering over a deal bar reveals a detailed popover.
 
-4) The popover's positioning is dynamic to avoid going off-screen.****Shadcn UI Mapping:***** ****Deal Detail Popover:**** Use `Popover` from `shadcn/ui` (`Popover`, `PopoverTrigger`, `PopoverContent`) to display details on hover.****Tasks / Subtasks:***** [ ] Create `src/app/(frontend)/components/landing/DealsTimeline.tsx`.
+4) The popover's positioning is dynamic to avoid going off-screen.
 
-* [ ] Define a TypeScript interface and mock data array for the deals.
+****Shadcn UI Mapping:****
+* ****Deal Detail Popover:**** Use `Popover` from `shadcn/ui` (`Popover`, `PopoverTrigger`, `PopoverContent`) to display details on hover.
 
-* [ ] Map over the mock data to render the timeline rows.
+****Tasks / Subtasks:****
+* [x] Create `src/app/(frontend)/components/landing/DealsTimeline.tsx`.
 
-* [ ] For each row, wrap the deal bar element in `PopoverTrigger`.
+* [x] Define a TypeScript interface and mock data array for the deals.
 
-* [ ] Inside `PopoverContent`, render the detailed view of the deal.
+* [x] Map over the mock data to render the timeline rows.
 
-* [ ] The popover positioning is handled by `shadcn/ui` by default, but you can pass props like `sideOffset` for fine-tuning.
+* [x] For each row, wrap the deal bar element in `PopoverTrigger`.
 
-* [ ] Add the `<DealsTimeline />` component to `landing/page.tsx`.
+* [x] Inside `PopoverContent`, render the detailed view of the deal.
+
+* [x] The popover positioning is handled by `shadcn/ui` by default, but you can pass props like `sideOffset` for fine-tuning.
+
+* [x] Add the `<DealsTimeline />` component to `landing/page.tsx`.
 
 ### Story 1.9.7: Implement "Cashflow Chart" Feature
 
-# ****Story:**** As a user, I want to see a dynamic cashflow chart to understand the financial clarity provided by the platform.****Acceptance Criteria (ACs):****1) A `CashflowChart` component is created.
+# ****Story:**** As a user, I want to see a dynamic cashflow chart to understand the financial clarity provided by the platform.
+
+## Status: Complete
+
+****Acceptance Criteria (ACs):****
+1) A `CashflowChart` component is created.
 
 2) It contains a Chart.js bar chart with mock data.
 
-3) The chart animates into view when the user scrolls to that section.****Shadcn UI Mapping:***** ****Chart Container:**** Use `Card` from `shadcn/ui` to wrap the chart canvas for consistent padding and background styling.****Tasks / Subtasks:***** [ ] Create `src/app/(frontend)/components/landing/CashflowChart.tsx`.
+3) The chart animates into view when the user scrolls to that section.
 
-* [ ] Use a `useRef` for the container element and an Intersection Observer to track its visibility.
+****Shadcn UI Mapping:****
+* ****Chart Container:**** Use `Card` from `shadcn/ui` to wrap the chart canvas for consistent padding and background styling.
 
-* [ ] Use a `useState` flag (e.g., `hasBeenVisible`) to ensure the chart renders only once.
+****Tasks / Subtasks:****
+* [x] Create `src/app/(frontend)/components/landing/CashflowChart.tsx`.
 
-* [ ] In the `useEffect` for the observer, when the element is intersecting, set `hasBeenVisible` to `true`.
+* [x] Use a `useRef` for the container element and an Intersection Observer to track its visibility.
 
-* [ ] Create a separate `useEffect` that depends on `hasBeenVisible`. When it becomes `true`, initialize and render the Chart.js instance.
+* [x] Use a `useState` flag (e.g., `hasBeenVisible`) to ensure the chart renders only once.
 
-* [ ] Wrap the canvas in a Shadcn `Card` and `CardContent`.
+* [x] In the `useEffect` for the observer, when the element is intersecting, set `hasBeenVisible` to `true`.
 
-* [ ] Add the `<CashflowChart />` component to `landing/page.tsx`.
+* [x] Create a separate `useEffect` that depends on `hasBeenVisible`. When it becomes `true`, initialize and render the Chart.js instance.
+
+* [x] Wrap the canvas in a Shadcn `Card` and `CardContent`.
+
+* [x] Add the `<CashflowChart />` component to `landing/page.tsx`.
 
 ### Story 1.9.8: Implement Testimonial Carousel
 
