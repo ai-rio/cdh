@@ -122,16 +122,16 @@ export default function AITypingDemo() {
   }, [state, selectedPrompt]);
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-6">
+    <div className="w-full max-w-4xl mx-auto p-4 sm:p-6">
       {/* Prompt Chips */}
-      <div className="flex flex-wrap gap-3 mb-6 justify-center">
+      <div className="flex flex-wrap gap-2 sm:gap-3 mb-6 justify-center">
         {prompts.map((prompt) => (
           <Button
             key={prompt.id}
             variant="outline"
             onClick={() => handlePromptClick(prompt)}
             disabled={state !== 'idle'}
-            className="bg-white/5 border border-white/10 text-white hover:bg-white/10 hover:border-white/20 transition-all duration-200 disabled:opacity-50"
+            className="bg-white/5 border border-white/10 text-white hover:bg-white/10 hover:border-white/20 transition-all duration-200 disabled:opacity-50 text-xs sm:text-sm px-3 py-2 sm:px-4 sm:py-2 flex-shrink-0"
           >
             {prompt.text}
           </Button>
@@ -139,43 +139,43 @@ export default function AITypingDemo() {
       </div>
 
       {/* AI Response Area */}
-      <Card className="bg-black/20 border-white/10 backdrop-blur-xl min-h-[200px]">
-        <CardContent className="p-6">
+      <Card className="bg-black/20 border-white/10 backdrop-blur-xl min-h-[200px] sm:min-h-[250px]">
+        <CardContent className="p-4 sm:p-6">
           {state === 'idle' && (
-            <div className="text-center text-gray-400 py-8">
-              <div className="text-2xl mb-2">🤖</div>
-              <p>Click a prompt above to see the AI co-pilot in action</p>
+            <div className="text-center text-gray-400 py-6 sm:py-8">
+              <div className="text-xl sm:text-2xl mb-2">🤖</div>
+              <p className="text-sm sm:text-base px-2">Click a prompt above to see the AI co-pilot in action</p>
             </div>
           )}
 
           {state === 'thinking' && (
-            <div className="text-center text-gray-400 py-8">
-              <div className="text-2xl mb-4">🤔</div>
+            <div className="text-center text-gray-400 py-6 sm:py-8">
+              <div className="text-xl sm:text-2xl mb-4">🤔</div>
               <div className="flex items-center justify-center space-x-1">
                 <div className="w-2 h-2 bg-lime-400 rounded-full animate-bounce"></div>
                 <div className="w-2 h-2 bg-lime-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
                 <div className="w-2 h-2 bg-lime-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
               </div>
-              <p className="mt-2">Analyzing your data...</p>
+              <p className="mt-2 text-sm sm:text-base">Analyzing your data...</p>
             </div>
           )}
 
           {state === 'responding' && selectedPrompt && (
             <div>
-              <div className="flex items-start space-x-3 mb-4">
-                <div className="text-xl">🤖</div>
-                <div className="flex-1">
-                  <p className="text-white leading-relaxed">
+              <div className="flex items-start space-x-2 sm:space-x-3 mb-4">
+                <div className="text-lg sm:text-xl flex-shrink-0">🤖</div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-white leading-relaxed text-sm sm:text-base break-words">
                     {displayedText}
                     {displayedText.length < selectedPrompt.response.length && (
-                      <span className="inline-block w-2 h-5 bg-lime-400 ml-1 animate-pulse"></span>
+                      <span className="inline-block w-2 h-4 sm:h-5 bg-lime-400 ml-1 animate-pulse"></span>
                     )}
                   </p>
                 </div>
               </div>
               
               {showChart && selectedPrompt.hasChart && selectedPrompt.chartData && (
-                <div className="animate-fade-in">
+                <div className="animate-fade-in mt-4">
                   <ChartComponent data={selectedPrompt.chartData} />
                 </div>
               )}
