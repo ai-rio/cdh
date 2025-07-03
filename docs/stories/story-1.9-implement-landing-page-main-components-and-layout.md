@@ -88,17 +88,17 @@
 
 4) The "Scroll to explore" indicator with its pulsing animation is present.****Shadcn UI Mapping:***** ****Content Container:**** Use `Card` from `shadcn/ui` as the base for the main content block, customizing its style (`Card`, `CardContent`).
 
-* ****Request Early Access Button:**** Use `Button` from `shadcn/ui`. Replicate the exact styling, including the custom shadow effect on hover.****Tasks / Subtasks:***** [ ] Create the component file `src/app/(frontend)/components/landing/HeroSection.tsx`.
+* ****Request Early Access Button:**** Use `Button` from `shadcn/ui`. Replicate the exact styling, including the custom shadow effect on hover.****Tasks / Subtasks:***** [x] Create the component file `src/app/(frontend)/components/landing/HeroSection.tsx`.
 
-* [ ] Use Tailwind CSS for the full-screen `h-screen` and `flex` properties to center the content.
+* [x] Use Tailwind CSS for the full-screen `h-screen` and `flex` properties to center the content.
 
-* [ ] Implement the main content container using Shadcn `Card` and apply the specified background, border, and blur styles via `className`.
+* [x] Implement the main content container using Shadcn `Card` and apply the specified background, border, and blur styles via `className`.
 
-* [ ] Implement the "Request Early Access" button using Shadcn `Button`, ensuring the custom `shadow-[0_0_20px_rgba(192,252,50,0.4)]` and hover effects are applied.
+* [x] Implement the "Request Early Access" button using Shadcn `Button`, ensuring the custom `shadow-[0_0_20px_rgba(192,252,50,0.4)]` and hover effects are applied.
 
-* [ ] Define the `pulse` animation for the scroll indicator in `globals.css` and apply it to the indicator element.
+* [x] Define the `pulse` animation for the scroll indicator in `globals.css` and apply it to the indicator element.
 
-* [ ] Add the `<HeroSection />` component to `src/app/(frontend)/landing/page.tsx`.
+* [x] Add the `<HeroSection />` component to `src/app/(frontend)/landing/page.tsx`.
 
 ### Story 1.9.5: Implement "AI Co-Pilot" Feature Demo
 

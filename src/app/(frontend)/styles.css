@@ -281,6 +281,21 @@ svg {
   }
 }
 
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 0.3;
+    transform: translateY(8px);
+  }
+}
+
+.scroll-indicator {
+  animation: pulse 2s infinite;
+}
+
 #logo-circle {
   stroke-dasharray: 86;
   stroke-dashoffset: 86;
@@ -498,6 +513,43 @@ svg {
 .cta-glow:active {
   transform: translateY(0);
   box-shadow: 0 4px 15px rgba(163, 230, 53, 0.3);
+}
+
+/* Landing Header Styles */
+.border-gradient-animated {
+  border-image: linear-gradient(90deg, rgba(255,255,255,0.1), rgba(163, 230, 53, 0.5), rgba(255,255,255,0.1)) 1;
+  animation: animate-gradient 5s linear infinite;
+  background-size: 200% 200%;
+}
+
+@keyframes animate-gradient {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.nav-link {
+  position: relative;
+  padding-bottom: 4px;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 5px;
+  height: 5px;
+  background-color: #A3E635;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  transform: translateX(-50%) scale(0);
+}
+
+.nav-link:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
 }
 
 @layer base {
