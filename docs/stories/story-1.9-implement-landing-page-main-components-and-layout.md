@@ -102,27 +102,38 @@
 
 ### Story 1.9.5: Implement "AI Co-Pilot" Feature Demo
 
-# ****Story:**** As a user, I want to interact with the AI co-pilot demo to understand its capabilities through a simulated, dynamic experience.****Acceptance Criteria (ACs):****1) An `AITypingDemo` component is created.
+# ****Story:**** As a user, I want to interact with the AI co-pilot demo to understand its capabilities through a simulated, dynamic experience.
+
+## Status: Complete
+
+****Acceptance Criteria (ACs):****
+1) An `AITypingDemo` component is created.
 
 2) It contains three interactive prompt chips.
 
 3) Clicking a chip triggers a "thinking" animation, followed by a typed-out text response.
 
-4) For applicable prompts, a Chart.js bar chart is rendered below the text.****Shadcn UI Mapping:***** ****Prompt Chips:**** Use `Button` from `shadcn/ui` with `variant="outline"` or custom styling to achieve the `bg-white/5 border border-white/10` look.
+4) For applicable prompts, a Chart.js bar chart is rendered below the text.
 
-* ****AI Response Area:**** Use `Card` from `shadcn/ui` to frame the entire response area, including the placeholder, thinking indicator, and final text/chart.****Tasks / Subtasks:***** [ ] Create `src/app/(frontend)/components/landing/AITypingDemo.tsx`.
+****Shadcn UI Mapping:****
+* ****Prompt Chips:**** Use `Button` from `shadcn/ui` with `variant="outline"` or custom styling to achieve the `bg-white/5 border border-white/10` look.
 
-* [ ] Use `useState` to manage the demo's state: `idle`, `thinking`, `responding`.
+* ****AI Response Area:**** Use `Card` from `shadcn/ui` to frame the entire response area, including the placeholder, thinking indicator, and final text/chart.
 
-* [ ] Implement the prompt chips using Shadcn `Button` and attach `onClick` handlers.
+****Tasks / Subtasks:****
+* [x] Create `src/app/(frontend)/components/landing/AITypingDemo.tsx`.
 
-* [ ] The `onClick` handler should set the state to `thinking`, then use a `setTimeout` to switch to `responding`.
+* [x] Use `useState` to manage the demo's state: `idle`, `thinking`, `responding`.
 
-* [ ] Implement the typing effect logic within a `useEffect` that triggers when the response text changes.
+* [x] Implement the prompt chips using Shadcn `Button` and attach `onClick` handlers.
 
-* [ ] Create a separate `ChartComponent.tsx` that takes chart data as props and renders a Chart.js instance. Conditionally render this component based on the response data.
+* [x] The `onClick` handler should set the state to `thinking`, then use a `setTimeout` to switch to `responding`.
 
-* [ ] Add the `<AITypingDemo />` component to `landing/page.tsx`.
+* [x] Implement the typing effect logic within a `useEffect` that triggers when the response text changes.
+
+* [x] Create a separate `ChartComponent.tsx` that takes chart data as props and renders a Chart.js instance. Conditionally render this component based on the response data.
+
+* [x] Add the `<AITypingDemo />` component to `landing/page.tsx`.
 
 ### Story 1.9.6: Implement "Deals Timeline" Feature
 

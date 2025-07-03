@@ -4,6 +4,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import HeroSection from '../components/landing/HeroSection'
 import ParticleCanvas from '../components/landing/ParticleCanvas'
 import AITypingDemo from '../components/landing/AITypingDemo'
+import DealsTimeline from '../components/landing/DealsTimeline'
 
 export default function LandingPage() {
   return (
@@ -49,6 +50,19 @@ export default function LandingPage() {
               See how our AI assistant can help you make data-driven decisions for your creator business
             </p>
             <AITypingDemo />
+          </div>
+        </section>
+
+        {/* Deals Timeline Section */}
+        <section id="deals-timeline-section" className="min-h-screen flex items-center justify-center px-4">
+          <div className="max-w-6xl mx-auto text-center">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white leading-tight">
+              Track Your Brand Collaborations
+            </h2>
+            <p className="text-lg md:text-xl text-gray-400 mb-16 max-w-3xl mx-auto leading-relaxed">
+              Visualize and manage all your active deals in one comprehensive timeline
+            </p>
+            <DealsTimeline />
           </div>
         </section>
 
