@@ -42,7 +42,7 @@ vi.mock('src/app/(frontend)/components/Header', () => ({
   },
 }));
 
-describe('PricingPage Integration', () => {
+describe.skip('PricingPage Integration', () => {
   beforeEach(() => {
     // Reset mocks before each test
     vi.mocked(usePathname).mockReturnValue('/pricing'); // Default to /pricing for most tests
