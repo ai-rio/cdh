@@ -39,7 +39,7 @@ export function FoundersKeyCard({ onClaimOffer }: FoundersKeyCardProps) {
   return (
     <div className="founders-key-card p-8 rounded-2xl mb-16">
       <h2 className="text-3xl md:text-4xl font-extrabold text-white">
-        Join the <span className="text-lime-300">Founder's Circle</span>
+        Join the <span className="text-lime-300">Founder&apos;s Circle</span>
       </h2>
       <p className="text-lg text-gray-300 mt-2">A one-time offer for the pioneers.</p>
       
@@ -61,7 +61,7 @@ export function FoundersKeyCard({ onClaimOffer }: FoundersKeyCardProps) {
         onClick={onClaimOffer}
         className="mt-8 w-full max-w-sm mx-auto cta-glow bg-[#EEFC97] text-[#1D1F04] font-bold text-lg p-4 rounded-lg hover:scale-105 transition-all duration-300 hover:shadow-[0_0_25px_rgba(238,252,151,0.5),0_0_50px_rgba(238,252,151,0.3)]"
       >
-        Claim My Founder's Key
+        Claim My Founder&apos;s Key
       </Button>
     </div>
   )

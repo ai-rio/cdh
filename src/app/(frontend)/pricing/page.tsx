@@ -3,11 +3,12 @@
 import React, { useState } from 'react'
 import { Header } from '../components/Header'
 import { Footer } from '../components/Footer'
-import { StarfieldCanvas } from '../components/StarfieldCanvas'
+import ParticleCanvas from '../components/ParticleCanvas'
 import { FoundersKeyCard } from '../components/FoundersKeyCard'
 import { PricingCard } from '../components/PricingCard'
 import { BillingToggle } from '../components/BillingToggle'
 import { EarlyAccessModal } from '../components/EarlyAccessModal'
+import PricingPageCtaFooter from '../components/PricingPageCtaFooter'
 
 export default function PricingPage() {
   const [billingPeriod, setBillingPeriod] = useState<'monthly' | 'annually'>('monthly')
@@ -38,7 +39,7 @@ export default function PricingPage() {
 
   return (
     <div className="min-h-screen bg-[#111111] text-[#F3F3F4] overflow-y-auto overflow-x-hidden">
-      <StarfieldCanvas />
+      <ParticleCanvas />
       <Header />
       
       <div className="content-container">
@@ -84,6 +85,7 @@ export default function PricingPage() {
         </div>
       </div>
       
+      <PricingPageCtaFooter />
       <Footer />
       
       <EarlyAccessModal 
