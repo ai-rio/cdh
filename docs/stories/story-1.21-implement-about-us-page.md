@@ -1,6 +1,6 @@
 # Story 1.21: Implement About Us Page (`/about`)
 
-## Status: Not Implemented
+## Status: Complete
 
 ## Story
 
@@ -15,10 +15,10 @@
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Implement `src/app/(frontend)/about/page.tsx`.
-- [ ] Task 2: Display "Manifesto" sections with styling and number overlays.
-- [ ] Task 3: Display "Architects" team grid.
-- [ ] Task 4: Implement animations/visual effects from `about.html`.
+- [x] Task 1: Implement `src/app/(frontend)/about/page.tsx`.
+- [x] Task 2: Display "Manifesto" sections with styling and number overlays.
+- [x] Task 3: Display "Architects" team grid.
+- [x] Task 4: Implement animations/visual effects from `about.html`.
 
 ## Dev Notes
 
@@ -45,10 +45,15 @@ Manual Test Steps:
 ### Debug Log References
 
 ### Completion Notes List
+- Implemented About Us page with content, styling, and Three.js/GSAP background animation.
 
 ### File List
+- `src/app/(frontend)/about/page.tsx`
+- `src/components/AboutUsBackground.tsx`
+- `src/utils/animation-helpers.ts`
 
 ### Change Log
 
 | Date | Version | Description | Author |
 | :--- | :------ | :---------- | :----- |
+| 2025-07-04 | 1.0 | Initial implementation of About Us page. | Gemini |
