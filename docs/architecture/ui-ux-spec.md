@@ -227,7 +227,7 @@ GSAP and Three.js remain key for enhancing visual engagement. Chart.js is introd
 
 **Modal Transitions**: Smooth opacity and scale transitions for modal entry/exit, potentially utilizing Shadcn UI's built-in animation capabilities for Dialog and Sheet components.
 
-**Logo Animation**: SVG stroke-drawing animation on page load for the CDH logo.
+**Logo Animation**: SVG stroke-drawing animation on page load for the CDH  logo.
 
 **Form Toggles (Auth Modal)**: Smooth slider animation for "Sign In" / "Sign Up" toggle.
 

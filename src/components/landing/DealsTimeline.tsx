@@ -129,7 +129,7 @@ const DealsTimeline: React.FC = () => {
                   {/* Deal info */}
                   <div className="flex-1">
                     <div className="flex items-center justify-between mb-2">
-                      <h3 className="text-lg font-semibold text-white">{deal.brandName}</h3>
+                      <h3 className="text-lg font-semibold text-white text-center">{deal.brandName}</h3>
                       <span className="text-lime-400 font-bold">{formatCurrency(deal.dealValue)}</span>
                     </div>
                     
@@ -156,17 +156,17 @@ const DealsTimeline: React.FC = () => {
             >
               <div className="space-y-4">
                 <div className="border-b border-white/10 pb-3">
-                  <h4 className="text-lg font-bold text-white mb-1">{deal.brandName}</h4>
+                  <h4 className="text-lg font-bold text-white mb-1 text-center">{deal.brandName}</h4>
                   <p className="text-2xl font-bold text-lime-400">{formatCurrency(deal.dealValue)}</p>
                 </div>
                 
                 <div>
-                  <h5 className="text-sm font-semibold text-gray-300 mb-2">Description</h5>
+                  <h5 className="text-sm font-semibold text-gray-300 mb-2 text-center">Description</h5>
                   <p className="text-sm text-gray-400">{deal.description}</p>
                 </div>
                 
                 <div>
-                  <h5 className="text-sm font-semibold text-gray-300 mb-2">Deliverables</h5>
+                  <h5 className="text-sm font-semibold text-gray-300 mb-2 text-center">Deliverables</h5>
                   <ul className="space-y-1">
                     {deal.deliverables.map((deliverable, idx) => (
                       <li key={idx} className="text-sm text-gray-400 flex items-center">

@@ -26,7 +26,7 @@ Plaintext
 
 
 
-cdh/
+CDH /
 ├── .bmad-core/                 # BMAD Core configuration and agents
 │   ├── core-config.yml
 │   ├── install-manifest.yml

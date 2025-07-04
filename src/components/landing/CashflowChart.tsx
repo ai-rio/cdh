@@ -203,10 +203,10 @@ const CashflowChart: React.FC = () => {
       <Card className="bg-black/20 border-white/10 backdrop-blur-xl">
         <CardContent className="p-8">
           <div className="mb-6 text-center">
-            <h3 className="text-2xl font-bold text-white mb-2">
+            <h3 className="text-2xl font-bold text-white mb-2 text-center">
               Revenue Analytics Dashboard
             </h3>
-            <p className="text-gray-400">
+            <p className="text-gray-400 text-center">
               Track your projected vs actual revenue performance
             </p>
           </div>

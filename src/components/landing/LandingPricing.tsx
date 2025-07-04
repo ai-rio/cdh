@@ -21,25 +21,25 @@ export default function LandingPricing() {
           {/* Creator Plan */}
           <Card className="bg-black/20 border-white/10 backdrop-blur-xl hover:border-white/20 transition-all duration-300">
             <CardContent className="p-8">
-              <h3 className="text-2xl font-bold mb-4 text-white">Creator</h3>
+              <h3 className="text-2xl font-bold mb-4 text-white text-center">Creator</h3>
               <div className="mb-6">
                 <p className="text-4xl font-bold text-lime-400">$29</p>
                 <p className="text-gray-400">/month</p>
               </div>
-              <ul className="text-left space-y-3 mb-8">
-                <li className="flex items-center text-gray-300">
+              <ul className="text-center space-y-3 mb-8">
+                <li className="flex items-center justify-center text-gray-300">
                   <span className="text-lime-400 mr-3 text-lg">✓</span>
                   Deal tracking & management
                 </li>
-                <li className="flex items-center text-gray-300">
+                <li className="flex items-center justify-center text-gray-300">
                   <span className="text-lime-400 mr-3 text-lg">✓</span>
                   Basic analytics dashboard
                 </li>
-                <li className="flex items-center text-gray-300">
+                <li className="flex items-center justify-center text-gray-300">
                   <span className="text-lime-400 mr-3 text-lg">✓</span>
                   Email support
                 </li>
-                <li className="flex items-center text-gray-300">
+                <li className="flex items-center justify-center text-gray-300">
                   <span className="text-lime-400 mr-3 text-lg">✓</span>
                   Up to 10 active deals
                 </li>
@@ -61,33 +61,33 @@ export default function LandingPricing() {
               </div>
             </div>
             <CardContent className="p-8 pt-12">
-              <h3 className="text-2xl font-bold mb-4 text-white">Business</h3>
+              <h3 className="text-2xl font-bold mb-4 text-white text-center">Business</h3>
               <div className="mb-6">
                 <p className="text-4xl font-bold text-lime-400">$99</p>
                 <p className="text-gray-400">/month</p>
               </div>
-              <ul className="text-left space-y-3 mb-8">
-                <li className="flex items-center text-gray-300">
+              <ul className="text-center space-y-3 mb-8">
+                <li className="flex items-center justify-center text-gray-300">
                   <span className="text-lime-400 mr-3 text-lg">✓</span>
                   Everything in Creator
                 </li>
-                <li className="flex items-center text-gray-300">
+                <li className="flex items-center justify-center text-gray-300">
                   <span className="text-lime-400 mr-3 text-lg">✓</span>
                   AI-powered insights & recommendations
                 </li>
-                <li className="flex items-center text-gray-300">
+                <li className="flex items-center justify-center text-gray-300">
                   <span className="text-lime-400 mr-3 text-lg">✓</span>
                   Advanced analytics & reporting
                 </li>
-                <li className="flex items-center text-gray-300">
+                <li className="flex items-center justify-center text-gray-300">
                   <span className="text-lime-400 mr-3 text-lg">✓</span>
                   Priority support & onboarding
                 </li>
-                <li className="flex items-center text-gray-300">
+                <li className="flex items-center justify-center text-gray-300">
                   <span className="text-lime-400 mr-3 text-lg">✓</span>
                   Unlimited deals
                 </li>
-                <li className="flex items-center text-gray-300">
+                <li className="flex items-center justify-center text-gray-300">
                   <span className="text-lime-400 mr-3 text-lg">✓</span>
                   Custom integrations
                 </li>

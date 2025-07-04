@@ -1,28 +1,28 @@
-'use client';
+'use client'
 
-import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { useWaitlistModal } from '@/lib/stores/waitlist-modal-store';
+import React, { useState, useEffect } from 'react'
+import { Button } from '@/components/ui/button'
+import { useWaitlistModal } from '@/lib/stores/waitlist-modal-store'
 
 export default function LandingHeader() {
-  const [isVisible, setIsVisible] = useState(false);
-  const { openModal } = useWaitlistModal();
+  const [isVisible, setIsVisible] = useState(false)
+  const { openModal } = useWaitlistModal()
 
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 50) {
-        setIsVisible(true);
+        setIsVisible(true)
       } else {
-        setIsVisible(false);
+        setIsVisible(false)
       }
-    };
+    }
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll)
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [])
 
   return (
     <header
@@ -33,12 +33,27 @@ export default function LandingHeader() {
       <div className="max-w-6xl mx-auto flex justify-between items-center">
         <a href="#" className="flex items-center space-x-2">
           {/* Placeholder for logo/site title */}
-          <span className="font-bold text-xl text-white">CDH</span>
+          <span className="font-bold text-xl text-white">CDH </span>
         </a>
         <nav className="hidden md:flex items-center space-x-8">
-          <a href="#features-section" className="nav-link text-gray-300 hover:text-white transition-colors">Features</a>
-          <a href="#testimonials-section" className="nav-link text-gray-300 hover:text-white transition-colors">Testimonials</a>
-          <a href="#pricing-section" className="nav-link text-gray-300 hover:text-white transition-colors">Pricing</a>
+          <a
+            href="#features-section"
+            className="nav-link text-gray-300 hover:text-white transition-colors"
+          >
+            Features
+          </a>
+          <a
+            href="#testimonials-section"
+            className="nav-link text-gray-300 hover:text-white transition-colors"
+          >
+            Testimonials
+          </a>
+          <a
+            href="#pricing-section"
+            className="nav-link text-gray-300 hover:text-white transition-colors"
+          >
+            Pricing
+          </a>
         </nav>
         <Button
           onClick={openModal}
@@ -48,5 +63,5 @@ export default function LandingHeader() {
         </Button>
       </div>
     </header>
-  );
+  )
 }

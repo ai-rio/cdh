@@ -21,7 +21,7 @@ These components are typically used across multiple pages.
 
     * **Header**
     * **Type**: Custom Component (adapting existing `Header.tsx` structure)
-    * **Purpose**: The main navigation header of the site, providing branding (CDH logo), key metrics (Active Deals, Overdue Invoices, Key Contacts), and a mobile navigation toggle.
+    * **Purpose**: The main navigation header of the site, providing branding (CDH  logo), key metrics (Active Deals, Overdue Invoices, Key Contacts), and a mobile navigation toggle.
     * **Source HTML Reference**: `<header class="mission-control-hud">...</header>` from `home.html`.
     * **File Location**: `src/app/(frontend)/components/Header.tsx`.
     * **Props**: `activeDealsCount: number`, `overdueInvoicesCount: number`, `keyContactsCount: number`.

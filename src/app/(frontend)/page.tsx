@@ -28,21 +28,21 @@ export default async function HomePage() {
       <Header />
       <div className="scroll-container relative z-[2] w-full">
         <HeroSection />
-        
+
         <InfoSection title="Command Your Deals" id="deals-section">
           <p>
             From pitch to payment, visualize your entire deal pipeline. See active negotiations,
             track deliverable deadlines, and identify high-value partnerships at a glance.
           </p>
         </InfoSection>
-        
+
         <InfoSection title="Financial Clarity" id="finance-section">
           <p>
             Connect your income streams and watch your finances organize themselves. Instantly see
             overdue invoices and track campaign performance against its value.
           </p>
         </InfoSection>
-        
+
         <InfoSection title="Contact Intelligence" id="contacts-section">
           <p>
             Your network is your net worth. See your key relationships in context, understanding who

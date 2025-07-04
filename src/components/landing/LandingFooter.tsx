@@ -55,9 +55,9 @@ export default function LandingFooter() {
 
         {/* Footer Links */}
         <div className="border-t border-white/10 pt-12">
-          <div className="grid md:grid-cols-4 gap-8 text-left mb-8">
+          <div className="grid md:grid-cols-4 gap-8 text-center mb-8">
             <div>
-              <h4 className="text-white font-semibold mb-4">Product</h4>
+              <h4 className="text-white font-semibold mb-4 text-center">Product</h4>
               <ul className="space-y-2 text-gray-400">
                 <li><a href="#features" className="hover:text-lime-400 transition-colors">Features</a></li>
                 <li><a href="#pricing" className="hover:text-lime-400 transition-colors">Pricing</a></li>
@@ -66,7 +66,7 @@ export default function LandingFooter() {
               </ul>
             </div>
             <div>
-              <h4 className="text-white font-semibold mb-4">Company</h4>
+              <h4 className="text-white font-semibold mb-4 text-center">Company</h4>
               <ul className="space-y-2 text-gray-400">
                 <li><a href="/about" className="hover:text-lime-400 transition-colors">About</a></li>
                 <li><a href="/careers" className="hover:text-lime-400 transition-colors">Careers</a></li>
@@ -75,7 +75,7 @@ export default function LandingFooter() {
               </ul>
             </div>
             <div>
-              <h4 className="text-white font-semibold mb-4">Resources</h4>
+              <h4 className="text-white font-semibold mb-4 text-center">Resources</h4>
               <ul className="space-y-2 text-gray-400">
                 <li><a href="#" className="hover:text-lime-400 transition-colors">Documentation</a></li>
                 <li><a href="#" className="hover:text-lime-400 transition-colors">Help Center</a></li>
@@ -84,7 +84,7 @@ export default function LandingFooter() {
               </ul>
             </div>
             <div>
-              <h4 className="text-white font-semibold mb-4">Legal</h4>
+              <h4 className="text-white font-semibold mb-4 text-center">Legal</h4>
               <ul className="space-y-2 text-gray-400">
                 <li><a href="#" className="hover:text-lime-400 transition-colors">Privacy Policy</a></li>
                 <li><a href="#" className="hover:text-lime-400 transition-colors">Terms of Service</a></li>
