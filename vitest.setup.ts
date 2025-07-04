@@ -1,5 +1,6 @@
 import '@testing-library/jest-dom/vitest';
 import React from 'react';
+import { vi } from 'vitest';
 
 // Make React available globally for tests
 global.React = React;
