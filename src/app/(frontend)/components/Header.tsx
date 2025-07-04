@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { CommandDeck } from './CommandDeck'
@@ -9,7 +9,23 @@ import AuthModal from './AuthModal'
 export function Header() {
   const [isCommandDeckOpen, setIsCommandDeckOpen] = useState(false)
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
+  const [isHeaderVisible, setIsHeaderVisible] = useState(false) // New state for header visibility
   const pathname = usePathname()
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setIsHeaderVisible(true)
+      } else {
+        setIsHeaderVisible(false)
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [])
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId)
@@ -20,7 +36,7 @@ export function Header() {
 
   return (
     <>
-      <header className="mission-control-hud">
+      <header className={`fixed top-0 left-0 right-0 p-4 z-50 main-header bg-black/20 backdrop-blur-xl ${isHeaderVisible ? 'visible' : ''} mission-control-hud`}>
         <nav className="p-4 w-full max-w-7xl mx-auto flex justify-between items-center">
           <Link href="/" className="flex items-center space-x-3">
             <svg
