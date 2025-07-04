@@ -11,7 +11,7 @@ describe('Header', () => {
 
   it('renders the CDH  logo and text', () => {
     render(<Header />)
-    expect(screen.getByText('CDH ')).toBeInTheDocument()
+    expect(screen.getByText('CDH')).toBeInTheDocument()
   })
 
   it('renders HUD items with correct data', () => {

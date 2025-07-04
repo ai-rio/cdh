@@ -1,6 +1,6 @@
 # Story 1.17: Implement Waitlist Modal (Landing Page Specific) (`WaitlistModalLanding`)
 
-## Status: Not Implemented
+## Status: Complete
 
 ## Story
 
@@ -16,11 +16,11 @@
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Implement `WaitlistModalLanding.tsx` component.
-- [ ] Task 2: Integrate modal opening with CTA buttons on the landing page.
-- [ ] Task 3: Implement form functionality, submission, and success message with animation.
-- [ ] Task 4: Implement modal closing functionality.
-- [ ] Task 5: Use Shadcn `Dialog`, `Input`, `Label`, and `Button` components.
+- [x] Task 1: Implement `WaitlistModalLanding.tsx` component.
+- [x] Task 2: Integrate modal opening with CTA buttons on the landing page.
+- [x] Task 3: Implement form functionality, submission, and success message with animation.
+- [x] Task 4: Implement modal closing functionality.
+- [x] Task 5: Use Shadcn `Dialog`, `Input`, `Label`, and `Button` components.
 
 ## Dev Notes
 

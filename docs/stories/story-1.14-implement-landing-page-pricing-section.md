@@ -1,6 +1,6 @@
 # Story 1.14: Implement Landing Page Pricing Section (`LandingPricingSection`)
 
-## Status: Not Implemented
+## Status: Complete
 
 ## Story
 
@@ -15,10 +15,10 @@
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Implement `LandingPricingSection.tsx` component.
-- [ ] Task 2: Display "Creator" and "Business" plans with details.
-- [ ] Task 3: Integrate "Join the Waitlist" buttons to trigger `WaitlistModal`.
-- [ ] Task 4: Use Shadcn `Button` for "Join the Waitlist" buttons.
+- [x] Task 1: Implement `LandingPricingSection.tsx` component.
+- [x] Task 2: Display "Creator" and "Business" plans with details.
+- [x] Task 3: Integrate "Join the Waitlist" buttons to trigger `WaitlistModal`.
+- [x] Task 4: Use Shadcn `Button` for "Join the Waitlist" buttons.
 
 ## Dev Notes
 

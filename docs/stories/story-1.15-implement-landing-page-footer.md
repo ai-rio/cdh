@@ -1,6 +1,6 @@
 # Story 1.15: Implement Landing Page Footer (`LandingFooter`)
 
-## Status: Not Implemented
+## Status: Complete
 
 ## Story
 
@@ -15,10 +15,10 @@
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Implement `LandingFooter.tsx` component.
-- [ ] Task 2: Integrate "Get Early Access" button to trigger `WaitlistModal`.
-- [ ] Task 3: Display copyright information.
-- [ ] Task 4: Use Shadcn `Button` for "Get Early Access" button.
+- [x] Task 1: Implement `LandingFooter.tsx` component.
+- [x] Task 2: Integrate "Get Early Access" button to trigger `WaitlistModal`.
+- [x] Task 3: Display copyright information.
+- [x] Task 4: Use Shadcn `Button` for "Get Early Access" button.
 
 ## Dev Notes
 

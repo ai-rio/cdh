@@ -1,6 +1,6 @@
 # Story 1.13: Implement Testimonial Carousel (`TestimonialCarousel`)
 
-## Status: Not Implemented
+## Status: Complete
 
 ## Story
 
@@ -15,10 +15,10 @@
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Implement `TestimonialCarousel.tsx` component.
-- [ ] Task 2: Display testimonials in a horizontally scrollable container.
-- [ ] Task 3: Implement "Scroll left" and "Scroll right" button functionality.
-- [ ] Task 4: Use Shadcn `Button` for navigation buttons.
+- [x] Task 1: Implement `TestimonialCarousel.tsx` component.
+- [x] Task 2: Display testimonials in a horizontally scrollable container.
+- [x] Task 3: Implement "Scroll left" and "Scroll right" button functionality.
+- [x] Task 4: Use Shadcn `Button` for navigation buttons.
 
 ## Dev Notes
 

@@ -267,7 +267,11 @@
 
 ### Story 1.9.10: Implement Waitlist Modal
 
-# **Story:** As a user, I want to be able to sign up for the waitlist via a sleek, interactive modal.**Acceptance Criteria (ACs):**1) A `WaitlistModal` component is created.
+# **Story:** As a user, I want to be able to sign up for the waitlist via a sleek, interactive modal.
+
+## Status: Complete
+
+**Acceptance Criteria (ACs):**1) A `WaitlistModal` component is created.
 
 2) The modal is initially hidden and can be triggered by any waitlist CTA.
 
@@ -281,16 +285,16 @@
 
 * **Form Labels:** Use `Label` from `shadcn/ui`.
 
-* **Submit Button:** Use `Button` from `shadcn/ui`.**Tasks / Subtasks:*** [ ] Create a state management store (e.g., using Zustand or React Context) to handle the modal's open/closed state globally. The store should have `isOpen`, `openModal`, and `closeModal` properties/methods.
+* **Submit Button:** Use `Button` from `shadcn/ui`.**Tasks / Subtasks:*** [x] Create a state management store (e.g., using Zustand or React Context) to handle the modal's open/closed state globally. The store should have `isOpen`, `openModal`, and `closeModal` properties/methods.
 
-* [ ] Create `src/app/(frontend)/components/landing/WaitlistModal.tsx`.
+* [x] Create `src/app/(frontend)/components/landing/WaitlistModal.tsx`.
 
-* [ ] Wrap the buttons in `LandingHeader`, `HeroSection`, etc., with the `DialogTrigger` and connect their `onClick` to the `openModal` action from your state store.
+* [x] Wrap the buttons in `LandingHeader`, `HeroSection`, etc., with the `DialogTrigger` and connect their `onClick` to the `openModal` action from your state store.
 
-* [ ] Implement the modal content using Shadcn `DialogContent`.
+* [x] Implement the modal content using Shadcn `DialogContent`.
 
-* [ ] Use `useState` within the modal to toggle between the form view and the success view.
+* [x] Use `useState` within the modal to toggle between the form view and the success view.
 
-* [ ] Re-create the SVG checkmark and its `stroke` animation in `globals.css`.
+* [x] Re-create the SVG checkmark and its `stroke` animation in `globals.css`.
 
-* [ ] Add the `<WaitlistModal />` component to `src/app/(frontend)/landing/layout.tsx` so it is available across the entire page.
+* [x] Add the `<WaitlistModal />` component to `src/app/(frontend)/landing/layout.tsx` so it is available across the entire page.

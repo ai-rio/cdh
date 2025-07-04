@@ -1,6 +1,6 @@
 # Story 1.12: Implement Cashflow Chart (`CashflowChart`)
 
-## Status: Not Implemented
+## Status: Complete
 
 ## Story
 
@@ -14,9 +14,9 @@
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Implement `CashflowChart.tsx` component.
-- [ ] Task 2: Display Chart.js bar chart with mock data.
-- [ ] Task 3: Implement animation for chart when scrolled into view.
+- [x] Task 1: Implement `CashflowChart.tsx` component.
+- [x] Task 2: Display Chart.js bar chart with mock data.
+- [x] Task 3: Implement animation for chart when scrolled into view.
 
 ## Dev Notes
 

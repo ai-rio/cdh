@@ -1,6 +1,6 @@
 # Story 1.11: Implement Deals Timeline (`DealsTimeline`)
 
-## Status: Not Implemented
+## Status: Complete
 
 ## Story
 
@@ -16,11 +16,11 @@
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Implement `DealsTimeline.tsx` component.
-- [ ] Task 2: Display mock deal data as horizontal bars.
-- [ ] Task 3: Implement hover functionality for deal bars to display popover.
-- [ ] Task 4: Implement dynamic popover positioning.
-- [ ] Task 5: Use Shadcn `Popover` for deal details.
+- [x] Task 1: Implement `DealsTimeline.tsx` component.
+- [x] Task 2: Display mock deal data as horizontal bars.
+- [x] Task 3: Implement hover functionality for deal bars to display popover.
+- [x] Task 4: Implement dynamic popover positioning.
+- [x] Task 5: Use Shadcn `Popover` for deal details.
 
 ## Dev Notes
 

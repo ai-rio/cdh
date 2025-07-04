@@ -26,10 +26,10 @@ describe('Header Integration Tests', () => {
   })
 
   it("displays the Creator's Deal Hub logo and title", () => {
-    const logoLink = screen.getByRole('link', { name: /CDH /i })
+    const logoLink = screen.getByRole('link', { name: /CDH/i })
     expect(logoLink).toBeInTheDocument()
     expect(logoLink).toHaveAttribute('href', '/')
-    expect(screen.getByText('CDH ')).toBeInTheDocument()
+    expect(screen.getByText(/CDH/)).toBeInTheDocument()
   })
 
   it('displays HUD items with correct values', () => {

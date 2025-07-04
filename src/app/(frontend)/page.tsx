@@ -12,6 +12,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { StarfieldCanvas } from './components/StarfieldCanvas'
 import { HeroSection } from './components/HeroSection'
 import { InfoSection } from './components/InfoSection'
+import { Footer } from './components/Footer'
 import { Header } from './components/Header'
 
 export default async function HomePage() {
@@ -49,6 +50,7 @@ export default async function HomePage() {
             your most valuable partners are and how they connect to your deals.
           </p>
         </InfoSection>
+        <Footer />
       </div>
     </>
   )

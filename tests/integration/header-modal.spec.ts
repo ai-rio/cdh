@@ -156,7 +156,7 @@ describe('Header Modal Integration', () => {
     render(React.createElement(Header))
 
     // Check for logo
-    expect(screen.getByText('CDH ')).toBeInTheDocument()
+    expect(screen.getByText('CDH')).toBeInTheDocument()
 
     // Check for navigation button
     expect(screen.getByLabelText('Open navigation menu')).toBeInTheDocument()
