@@ -7,7 +7,7 @@ vi.mock('@/components/Header', () => ({ default: () => <div data-testid="mock-he
 vi.mock('@/components/StarfieldCanvas', () => ({ default: () => <div data-testid="mock-starfield" /> }));
 vi.mock('@/components/HeroSection', () => ({ default: () => <div data-testid="mock-hero" /> }));
 vi.mock('@/components/InfoSection', () => ({ default: () => <div data-testid="mock-info" /> }));
-vi.mock('@/components/Footer', () => ({ default: () => <div data-testid="mock-footer" /> }));
+
 
 describe('HomePage Assembly', () => {
   it('renders without crashing', () => {
@@ -21,6 +21,5 @@ describe('HomePage Assembly', () => {
     expect(screen.getByTestId('mock-starfield')).toBeInTheDocument();
     expect(screen.getByTestId('mock-hero')).toBeInTheDocument();
     expect(screen.getByTestId('mock-info')).toBeInTheDocument();
-    expect(screen.getByTestId('mock-footer')).toBeInTheDocument();
   });
 });

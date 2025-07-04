@@ -52,8 +52,5 @@ describe('HomePage Integration', () => {
     expect(screen.getByText('Mocked InfoSection 1')).toBeInTheDocument();
     expect(screen.getByText('Mocked InfoSection 2')).toBeInTheDocument();
     expect(screen.getByText('Mocked InfoSection 3')).toBeInTheDocument();
-
-    // Check for Footer content (e.g., copyright)
-    expect(screen.getByText('Mocked Footer')).toBeInTheDocument();
   });
 });

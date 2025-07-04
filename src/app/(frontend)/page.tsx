@@ -50,8 +50,7 @@ export default async function HomePage() {
             your most valuable partners are and how they connect to your deals.
           </p>
         </InfoSection>
-        <Footer />
-      </div>
+        </div>
     </>
   )
 }

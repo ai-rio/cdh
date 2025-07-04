@@ -27,7 +27,6 @@ Relevant Source Tree info:
 - `src/app/(frontend)/components/StarfieldCanvas.tsx`
 - `src/app/(frontend)/components/HeroSection.tsx`
 - `src/app/(frontend)/components/InfoSection.tsx`
-- `src/app/(frontend)/components/Footer.tsx`
 
 ### Testing
 
