@@ -576,3 +576,46 @@ svg {
     @apply bg-background text-foreground;
   }
 }
+
+/* Pricing Page Specific Styles */
+.content-container {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  padding-top: 112px;
+}
+
+.pricing-card {
+  background-color: rgba(23, 23, 23, 0.5);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1.5rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pricing-card.popular {
+  border-color: #A3E635;
+  box-shadow: 0 0 30px rgba(163, 230, 53, 0.2);
+}
+
+.pricing-card:hover {
+  transform: translateY(-10px);
+}
+
+.feature-item i {
+  color: #A3E635;
+}
+
+.founders-key-card {
+  background: linear-gradient(145deg, rgba(30, 30, 30, 0.5), rgba(50, 50, 50, 0.5));
+  backdrop-filter: blur(20px);
+  border: 1px solid #A3E635;
+  box-shadow: 0 0 40px rgba(163, 230, 53, 0.3), inset 0 0 20px rgba(163, 230, 53, 0.1);
+}
+
+.countdown-timer {
+  font-family: 'Courier New', Courier, monospace;
+  background-color: rgba(0,0,0,0.3);
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+}

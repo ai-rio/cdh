@@ -2,12 +2,14 @@
 
 import React, { useState } from 'react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { CommandDeck } from './CommandDeck'
 import AuthModal from './AuthModal'
 
 export function Header() {
   const [isCommandDeckOpen, setIsCommandDeckOpen] = useState(false)
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
+  const pathname = usePathname()
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId)
@@ -55,32 +57,34 @@ export function Header() {
             </svg>
             <span className="font-bold text-xl text-white">CDH </span>
           </Link>
-          <div className="hidden md:flex items-center space-x-8">
-            <div
-              className="hud-item cursor-pointer"
-              onClick={() => scrollToSection('deals-section')}
-              data-target="#deals-section"
-            >
-              <div className="hud-label">Deals</div>
-              <div className="hud-value">12</div>
+          {pathname === '/' && (
+            <div className="hidden md:flex items-center space-x-8">
+              <div
+                className="hud-item cursor-pointer"
+                onClick={() => scrollToSection('deals-section')}
+                data-target="#deals-section"
+              >
+                <div className="hud-label">Deals</div>
+                <div className="hud-value">12</div>
+              </div>
+              <div
+                className="hud-item cursor-pointer"
+                onClick={() => scrollToSection('finance-section')}
+                data-target="#finance-section"
+              >
+                <div className="hud-label">Finance</div>
+                <div className="hud-value overdue">3</div>
+              </div>
+              <div
+                className="hud-item cursor-pointer"
+                onClick={() => scrollToSection('contacts-section')}
+                data-target="#contacts-section"
+              >
+                <div className="hud-label">Contacts</div>
+                <div className="hud-value">47</div>
+              </div>
             </div>
-            <div
-              className="hud-item cursor-pointer"
-              onClick={() => scrollToSection('finance-section')}
-              data-target="#finance-section"
-            >
-              <div className="hud-label">Finance</div>
-              <div className="hud-value overdue">3</div>
-            </div>
-            <div
-              className="hud-item cursor-pointer"
-              onClick={() => scrollToSection('contacts-section')}
-              data-target="#contacts-section"
-            >
-              <div className="hud-label">Contacts</div>
-              <div className="hud-value">47</div>
-            </div>
-          </div>
+          )}
           <button
             id="command-deck-toggle"
             className="p-2 rounded-md hover:bg-white/10"
