@@ -72,7 +72,7 @@ export default function AboutPage() {
 
       </div>
 
-      <style jsx={true}>{`
+      <style jsx>{`
         .content-container {
           position: relative;
           z-index: 2;
