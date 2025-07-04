@@ -13,6 +13,7 @@
 3.  The `BillingToggle` correctly switches between monthly and annual pricing for `PricingCard` components.
 4.  The "Claim My Founder's Key" button triggers the `EarlyAccessModal`.
 5.  (Shadcn Integration) `FoundersKeyCard` and `PricingCard` buttons use Shadcn `Button`. The `BillingToggle` uses Shadcn `ToggleGroup`.
+6.  The HUD items in the `Header` component are only visible on the home page (`/`).
 
 ## Tasks / Subtasks
 
@@ -21,6 +22,7 @@
 - [ ] Task 3: Implement `BillingToggle` functionality.
 - [ ] Task 4: Integrate "Claim My Founder's Key" button with `EarlyAccessModal`.
 - [ ] Task 5: Use Shadcn `Button` and `ToggleGroup`.
+- [ ] Task 6: Implement conditional rendering for HUD items in `Header.tsx`.
 
 ## Dev Notes
 
@@ -31,6 +33,13 @@ Relevant Source Tree info:
 - `src/app/(frontend)/components/PricingCard.tsx`
 - `src/app/(frontend)/components/BillingToggle.tsx`
 - `src/app/(frontend)/components/EarlyAccessModal.tsx`
+
+### Conditional HUD Items in Header
+
+To implement Task 6, modify `src/app/(frontend)/components/Header.tsx`:
+1.  Import `usePathname` from `next/navigation`.
+2.  Inside the `Header` component, get the current path using `const pathname = usePathname();`.
+3.  Conditionally render the `div` containing the `hud-item` elements based on `pathname === '/'`.
 
 ### Testing
 
