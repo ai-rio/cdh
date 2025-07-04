@@ -72,7 +72,8 @@ export default function AboutPage() {
 
       </div>
 
-      <style jsx>{`
+      <style dangerouslySetInnerHTML={{
+        __html: `
         .content-container {
           position: relative;
           z-index: 2;
@@ -113,7 +114,8 @@ export default function AboutPage() {
           transform: translateY(-5px);
           background-color: rgba(255, 255, 255, 0.1);
         }
-      `}</style>
+        `
+      }} />
     </>
   );
 }
