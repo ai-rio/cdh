@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import { Header } from '../components/Header'
-import { Footer } from '../components/Footer'
+
 import ParticleCanvas from '../components/ParticleCanvas'
 import { FoundersKeyCard } from '../components/FoundersKeyCard'
 import { PricingCard } from '../components/PricingCard'
@@ -82,7 +82,7 @@ export default function PricingPage() {
       </div>
 
       <PricingPageCtaFooter />
-      <Footer />
+      
 
       <EarlyAccessModal
         isOpen={isEarlyAccessModalOpen}
