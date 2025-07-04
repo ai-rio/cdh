@@ -12,7 +12,10 @@ export default function AboutPage() {
         
         <div className="text-center p-8">
           <h1 className="text-4xl md:text-6xl font-extrabold text-white">Our Manifesto</h1>
-          <p className="text-lg text-gray-400 mt-4 max-w-3xl mx-auto">We don&apos;t just build tools. We build beliefs. This is the philosophy that drives every pixel and every line of code at CDH .</p>
+          <p className="text-lg text-gray-400 mt-4 max-w-3xl inline-block">
+            We don&apos;t just build tools. We build beliefs. This is the philosophy that drives
+            every pixel and every line of code at CDH .
+          </p>
         </div>
 
         {/* Tenet 1: Clarity over Chaos */}
