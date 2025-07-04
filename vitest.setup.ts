@@ -11,3 +11,22 @@ global.requestAnimationFrame = vi.fn((cb) => {
 global.cancelAnimationFrame = vi.fn((id) => {
   clearTimeout(id);
 });
+
+// Mock IntersectionObserver
+class IntersectionObserver {
+  observe = vi.fn();
+  unobserve = vi.fn();
+  disconnect = vi.fn();
+}
+
+Object.defineProperty(window, 'IntersectionObserver', {
+  writable: true,
+  configurable: true,
+  value: IntersectionObserver,
+});
+
+Object.defineProperty(global, 'IntersectionObserver', {
+  writable: true,
+  configurable: true,
+  value: IntersectionObserver,
+});

@@ -1,4 +1,4 @@
-# Story 1.19: Assemble Landing Page (`/landing/page.tsx`)
+# Story 1.19: Assemble Landing Page (`/marketing/landing/page.tsx`)
 
 ## Status: Not Implemented
 
@@ -37,9 +37,9 @@ Relevant Source Tree info:
 
 Dev Note: Story Requires the following tests:
 
-- [ ] Vitest Unit Tests: (nextToFile: true), coverage requirement: 80%
-- [ ] Vitest with in memory db Integration Test (Test Location): location: `/tests/pages/landingpage.spec.ts`
-- [ ] Cypress E2E: location: `/e2e/landingpage.test.ts`
+- [x] Vitest Unit Tests: (nextToFile: true), coverage requirement: 80%
+- [x] Vitest with in memory db Integration Test (Test Location): location: `/tests/pages/marketing-landingpage.spec.tsx`
+- [ ] Cypress E2E: location: `/e2e/marketing-landingpage.test.ts`
 
 Dev Note: Upon completion, consider running targeted E2E tests as per `docs/testing/e2e-strategy.md`.
 
