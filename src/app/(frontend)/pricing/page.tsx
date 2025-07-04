@@ -1,18 +1,21 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { Header } from '../components/Header'
-import { Footer } from '../components/Footer'
-import ParticleCanvas from '../components/ParticleCanvas'
 import { FoundersKeyCard } from '../components/FoundersKeyCard'
 import { PricingCard } from '../components/PricingCard'
 import { BillingToggle } from '../components/BillingToggle'
 import { EarlyAccessModal } from '../components/EarlyAccessModal'
+
+// Import the new ParticleCanvas component
+import ParticleCanvas from '../components/ParticleCanvas'
+// Import the new PricingPageCtaFooter component
 import PricingPageCtaFooter from '../components/PricingPageCtaFooter'
 
 export default function PricingPage() {
   const [billingPeriod, setBillingPeriod] = useState<'monthly' | 'annually'>('monthly')
   const [isEarlyAccessModalOpen, setIsEarlyAccessModalOpen] = useState(false)
+  const pricingCardsRef = useRef<HTMLDivElement>(null)
 
   const handleClaimOffer = () => {
     setIsEarlyAccessModalOpen(true)
@@ -20,6 +23,10 @@ export default function PricingPage() {
 
   const handleChoosePlan = () => {
     setIsEarlyAccessModalOpen(true)
+  }
+
+  const scrollToPricingCards = () => {
+    pricingCardsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 
   const creatorFeatures = [
@@ -56,10 +63,11 @@ export default function PricingPage() {
           
           <BillingToggle 
             value={billingPeriod} 
-            onValueChange={setBillingPeriod} 
+            onValueChange={setBillingPeriod}
+            onToggleClick={scrollToPricingCards}
           />
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+          <div ref={pricingCardsRef} className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
             <PricingCard
               planName="Creator"
               description="For individuals ready to professionalize."
@@ -86,7 +94,6 @@ export default function PricingPage() {
       </div>
       
       <PricingPageCtaFooter />
-      <Footer />
       
       <EarlyAccessModal 
         isOpen={isEarlyAccessModalOpen} 

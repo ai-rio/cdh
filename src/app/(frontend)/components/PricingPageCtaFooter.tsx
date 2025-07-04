@@ -1,8 +1,15 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
+import { EarlyAccessModal } from './EarlyAccessModal';
 
 const PricingPageCtaFooter: React.FC = () => {
+  const [isEarlyAccessModalOpen, setIsEarlyAccessModalOpen] = useState(false);
+
+  const handleGetEarlyAccess = () => {
+    setIsEarlyAccessModalOpen(true);
+  };
+
   return (
     <footer id="final-cta" className="py-20 px-4 md:px-8 content-section text-center border-t border-white/10">
       <div className="max-w-2xl mx-auto">
@@ -10,14 +17,18 @@ const PricingPageCtaFooter: React.FC = () => {
         <p className="text-gray-400 mt-4 mb-8 reveal">
           Stop managing, start commanding. Transform your creator business in minutes.
         </p>
-        <button className="waitlist-trigger bg-lime-400 text-black font-bold text-xl px-10 py-5 rounded-xl shadow-[0_0_20px_rgba(192,252,50,0.4)] transition-all duration-300 ease-in-out hover:bg-lime-300 hover:shadow-[0_0_30px_rgba(192,252,50,0.6)] hover:scale-105 active:scale-100 active:bg-lime-500 reveal">
+        <button
+          className="waitlist-trigger bg-lime-400 text-black font-bold text-xl px-10 py-5 rounded-xl shadow-[0_0_20px_rgba(192,252,50,0.4)] transition-all duration-300 ease-in-out hover:bg-lime-300 hover:shadow-[0_0_30px_rgba(192,252,50,0.6)] hover:scale-105 active:scale-100 active:bg-lime-500 reveal"
+          onClick={handleGetEarlyAccess}
+        >
           Get Early Access
         </button>
         <p className="text-gray-500 text-sm mt-4 reveal">Be the first to know when we launch.</p>
       </div>
-      <div className="mt-16 text-gray-500 text-sm reveal">
-        &copy; 2025 Creator&apos;s Deal Hub. All rights reserved.
-      </div>
+      <EarlyAccessModal
+        isOpen={isEarlyAccessModalOpen}
+        onClose={() => setIsEarlyAccessModalOpen(false)}
+      />
     </footer>
   );
 };
