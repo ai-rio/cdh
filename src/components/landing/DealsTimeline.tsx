@@ -150,9 +150,12 @@ const DealsTimeline: React.FC = () => {
               </div>
             </PopoverTrigger>
             
-            <PopoverContent 
-              className="w-80 bg-black/90 border-white/20 backdrop-blur-xl"
+            <PopoverContent
+              className="w-80 bg-black/90 border-white/20 backdrop-blur-xl z-50"
+              side="bottom"
+              align="center"
               sideOffset={8}
+              collisionPadding={80}
             >
               <div className="space-y-4">
                 <div className="border-b border-white/10 pb-3">
