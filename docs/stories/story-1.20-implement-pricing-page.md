@@ -1,6 +1,6 @@
 # Story 1.20: Implement Pricing Page (`/pricing`)
 
-## Status: Not Implemented
+## Status: Implemented
 
 ## Story
 
@@ -17,12 +17,12 @@
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Implement `src/app/(frontend)/pricing/page.tsx`.
-- [ ] Task 2: Integrate `FoundersKeyCard`, `PricingCard`, and `BillingToggle` components.
-- [ ] Task 3: Implement `BillingToggle` functionality.
-- [ ] Task 4: Integrate "Claim My Founder's Key" button with `EarlyAccessModal`.
-- [ ] Task 5: Use Shadcn `Button` and `ToggleGroup`.
-- [ ] Task 6: Implement conditional rendering for HUD items in `Header.tsx`.
+- [x] Task 1: Implement `src/app/(frontend)/pricing/page.tsx`.
+- [x] Task 2: Integrate `FoundersKeyCard`, `PricingCard`, and `BillingToggle` components.
+- [x] Task 3: Implement `BillingToggle` functionality.
+- [x] Task 4: Integrate "Claim My Founder's Key" button with `EarlyAccessModal`.
+- [x] Task 5: Use Shadcn `Button` and `ToggleGroup`.
+- [x] Task 6: Implement conditional rendering for HUD items in `Header.tsx`.
 
 ## Dev Notes
 
