@@ -32,7 +32,7 @@ Dev Note: Story Requires the following tests:
 
 - [ ] Vitest Unit Tests: (nextToFile: true), coverage requirement: 80%
 - [ ] Vitest with in memory db Integration Test (Test Location): location: `/tests/pages/404page.spec.ts`
-- [ ] Cypress E2E: location: `/e2e/404page.test.ts`
+
 
 Dev Note: Upon completion, consider running targeted E2E tests as per `docs/testing/e2e-strategy.md`.
 
