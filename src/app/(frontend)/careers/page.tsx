@@ -115,7 +115,7 @@ export default function CareersPage() {
           <h1 className="text-6xl md:text-8xl font-bold mb-8">
             Join the <span className="text-lime-400">Expedition</span>
           </h1>
-          <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-400 max-w-2xl mx-auto inline-block">
              We&apos;re building the future of human-AI collaboration. 
              Help us push the boundaries of what&apos;s possible.
            </p>
