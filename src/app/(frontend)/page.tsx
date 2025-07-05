@@ -14,6 +14,13 @@ import { HeroSection } from './components/HeroSection'
 import { InfoSection } from './components/InfoSection'
 import { Footer } from './components/Footer'
 import { Header } from './components/Header'
+import { CTASection } from './components/CTASection'
+
+// Import existing landing page components for proof-of-concept demos
+import AITypingDemo from '@/components/landing/AITypingDemo'
+import DealsTimelineWrapper from './components/DealsTimelineWrapper'
+import CashflowChart from '@/components/landing/CashflowChart'
+import TestimonialCarousel from '@/components/landing/TestimonialCarousel'
 
 export default async function HomePage() {
   const headers = await getHeaders()
@@ -30,6 +37,7 @@ export default async function HomePage() {
       <div className="scroll-container relative z-[2] w-full">
         <HeroSection />
 
+        {/* Deals Section with Proof-of-Concept Demo */}
         <InfoSection title="Command Your Deals" id="deals-section">
           <p>
             From pitch to payment, visualize your entire deal pipeline. See active negotiations,
@@ -37,6 +45,25 @@ export default async function HomePage() {
           </p>
         </InfoSection>
 
+        {/* See Deal Management In Action */}
+        <section className="content-section demo-section">
+          <div className="w-full max-w-6xl mx-auto px-4 text-center">
+            <div className="mb-8">
+              <h4 className="text-2xl md:text-3xl font-bold text-white mb-4">
+                See Deal Management In Action
+              </h4>
+              <p className="text-gray-400 text-lg max-w-3xl mx-auto">
+                Experience how our platform transforms chaotic spreadsheets into a visual, 
+                organized deal pipeline that keeps you on top of every opportunity.
+              </p>
+            </div>
+            <div className="deals-timeline">
+              <DealsTimelineWrapper />
+            </div>
+          </div>
+        </section>
+
+        {/* Finance Section with Proof-of-Concept Demo */}
         <InfoSection title="Financial Clarity" id="finance-section">
           <p>
             Connect your income streams and watch your finances organize themselves. Instantly see
@@ -44,13 +71,56 @@ export default async function HomePage() {
           </p>
         </InfoSection>
 
+        {/* See Financial Analytics In Action */}
+        <section className="content-section demo-section">
+          <div className="w-full max-w-6xl mx-auto px-4 text-center">
+            <div className="mb-8">
+              <h4 className="text-2xl md:text-3xl font-bold text-white mb-4">
+                See Financial Analytics In Action
+              </h4>
+              <p className="text-gray-400 text-lg max-w-3xl mx-auto">
+                Watch your revenue data come to life with intelligent forecasting and 
+                real-time tracking that shows exactly where your money is coming from.
+              </p>
+            </div>
+            <CashflowChart />
+          </div>
+        </section>
+
+        {/* Contacts Section with Proof-of-Concept Demo */}
         <InfoSection title="Contact Intelligence" id="contacts-section">
           <p>
             Your network is your net worth. See your key relationships in context, understanding who
             your most valuable partners are and how they connect to your deals.
           </p>
         </InfoSection>
-        </div>
+
+        {/* See AI Intelligence In Action */}
+        <section className="content-section demo-section">
+          <div className="w-full max-w-6xl mx-auto px-4 text-center">
+            <div className="mb-8">
+              <h4 className="text-2xl md:text-3xl font-bold text-white mb-4">
+                See AI Intelligence In Action
+              </h4>
+              <p className="text-gray-400 text-lg max-w-3xl mx-auto">
+                Experience how our AI co-pilot analyzes your business data to provide 
+                actionable insights and strategic recommendations for growth.
+              </p>
+            </div>
+            <AITypingDemo />
+          </div>
+        </section>
+
+        {/* Social Proof Section */}
+        <section className="content-section">
+          <div className="w-full max-w-6xl mx-auto px-4">
+            <TestimonialCarousel />
+          </div>
+        </section>
+
+        {/* Request Early Access CTA */}
+        <CTASection />
+      </div>
     </>
   )
 }

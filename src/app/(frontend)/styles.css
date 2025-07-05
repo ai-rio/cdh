@@ -210,18 +210,9 @@ svg {
   }
 }
 
-.hero-section {
-  min-height: calc(100vh - 64px); /* Ensure it's at least viewport height minus header */
-  display: flex;
-  flex-direction: column;
-  justify-content: center; /* Center content vertically */
-  padding-top: 4rem; /* Add internal padding for hero content */
-  padding-bottom: 2rem; /* Add some bottom padding for smaller screens */
-}
-
 .content-section {
-  min-height: 100vh;
-  padding: 10rem 1.5rem;
+  min-height: 80vh; /* Reduced from 100vh */
+  padding: 4rem 1.5rem; /* Reduced from 10rem */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -716,4 +707,278 @@ svg {
   height: 100%;
   z-index: 1;
   pointer-events: none;
+}
+/* Proof-of-Concept Demo Section Styles */
+.demo-section {
+  background: rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(3px);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.demo-intro {
+  background: rgba(17, 17, 17, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  padding: 2rem;
+  margin-bottom: 3rem;
+  backdrop-filter: blur(10px);
+}
+
+.demo-title {
+  background: linear-gradient(135deg, #a3e635, #84cc16);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 30px rgba(163, 230, 53, 0.3);
+}
+
+/* Interactive Component Wrapper Styles */
+.component-demo-wrapper {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 1.5rem;
+  padding: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.component-demo-wrapper:hover {
+  border-color: rgba(163, 230, 53, 0.2);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* Enhanced demo section spacing */
+.demo-section .content-section {
+  padding: 3rem 1.5rem; /* Reduced from 6rem */
+  min-height: 60vh; /* Reduced from default */
+}
+
+@media (max-width: 768px) {
+  .demo-intro {
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  .component-demo-wrapper {
+    padding: 1.5rem;
+  }
+  
+  .demo-section .content-section {
+    padding: 2rem 1rem; /* Reduced from 4rem */
+    min-height: 50vh;
+  }
+  
+  .content-section {
+    min-height: 60vh; /* Reduced for mobile */
+    padding: 2rem 1rem; /* Reduced for mobile */
+  }
+}
+/* Force center alignment for all demo sections */
+.demo-section h4,
+.demo-section p,
+.demo-section .text-center {
+  text-align: center !important;
+}
+
+/* Reduce hero section height to minimize gaps */
+.hero-section {
+  min-height: 90vh; /* Increased to give more breathing room */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 3rem; /* Increased for better spacing */
+  padding-bottom: 3rem;
+}
+
+/* Force center alignment for all demo sections and subheaders */
+.demo-section h4,
+.demo-section p,
+.demo-section .text-center,
+.demo-section div {
+  text-align: center !important;
+}
+
+/* Ensure all text in demo sections is centered */
+.demo-section * {
+  text-align: center !important;
+}
+
+/* Override any left-aligned text in components */
+.demo-section .w-full,
+.demo-section .max-w-6xl,
+.demo-section .mx-auto {
+  text-align: center !important;
+}
+
+/* Tighter spacing for info sections */
+.content-box {
+  max-width: 36rem;
+  background-color: rgba(17, 17, 17, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1.5rem; /* Reduced from 2rem */
+  border-radius: 1rem;
+  text-align: center;
+}
+
+/* Reduce gaps between consecutive sections */
+.content-section + .content-section {
+  margin-top: -2rem;
+}
+
+/* Specific adjustments for demo sections */
+.demo-section {
+  background: rgba(0, 0, 0, 0.05); /* Lighter background to distinguish */
+  backdrop-filter: blur(2px);
+  border-top: 1px solid rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+/* Specific demo section text centering - very specific selectors */
+.demo-section .w-full.max-w-6xl.mx-auto.px-4.text-center h4 {
+  text-align: center !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+.demo-section .w-full.max-w-6xl.mx-auto.px-4.text-center p {
+  text-align: center !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* Force center for any text elements in demo sections */
+.demo-section .mb-8 h4,
+.demo-section .mb-8 p {
+  text-align: center !important;
+  display: block !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* Additional centering for demo section containers */
+.demo-section .text-center {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+/* Fix popover z-index to appear above header */
+[data-radix-popover-content] {
+  z-index: 60 !important; /* Higher than header's z-index: 50 */
+}
+
+/* Alternative selector for popover content */
+.z-50[data-radix-popover-content] {
+  z-index: 60 !important;
+}
+
+/* Ensure all popovers appear above header */
+[role="dialog"][data-radix-popover-content] {
+  z-index: 60 !important;
+}
+/* Additional popover z-index fixes */
+[data-radix-portal] [data-radix-popover-content] {
+  z-index: 60 !important;
+}
+
+/* Target Radix UI popover portal specifically */
+[data-radix-portal] {
+  z-index: 60 !important;
+}
+
+/* Ensure deals timeline popovers appear above everything */
+.deals-timeline [data-radix-popover-content],
+.deals-timeline [role="dialog"] {
+  z-index: 60 !important;
+}
+/* More aggressive popover z-index fixes */
+.z-50 {
+  z-index: 60 !important;
+}
+
+/* Target popover content with specific class combinations */
+.w-80.bg-black\/90.border-white\/20.backdrop-blur-xl.z-50 {
+  z-index: 60 !important;
+}
+
+/* Override Tailwind z-50 class specifically for popovers */
+[data-radix-popover-content].z-50 {
+  z-index: 60 !important;
+}
+
+/* Nuclear option - override all z-50 in demo sections */
+.demo-section .z-50,
+.deals-timeline .z-50 {
+  z-index: 60 !important;
+}
+/* Comprehensive popover z-index fix - target all possible selectors */
+[data-state="open"][data-radix-popover-content] {
+  z-index: 60 !important;
+}
+
+[data-state="closed"][data-radix-popover-content] {
+  z-index: 60 !important;
+}
+
+/* Target the specific popover content styling from DealsTimeline */
+.w-80.bg-black\/90 {
+  z-index: 60 !important;
+}
+
+/* Override any z-50 class in the entire page */
+* {
+  z-index: inherit;
+}
+
+.z-50 {
+  z-index: 60 !important;
+}
+
+/* Ensure header stays below popovers */
+.mission-control-hud {
+  z-index: 50 !important;
+}
+/* Proper z-index hierarchy fix */
+/* Header should be lower than popovers */
+.main-header {
+  z-index: 40 !important;
+}
+
+.mission-control-hud {
+  z-index: 40 !important;
+}
+
+/* All popovers should be above header */
+.z-50,
+[data-radix-popover-content] {
+  z-index: 60 !important;
+}
+
+/* Remove conflicting z-index rules */
+.z-50 {
+  z-index: 60 !important;
+}
+/* Fix popover positioning to appear below header */
+[data-radix-popover-content] {
+  margin-top: 80px !important; /* Push popover down below header */
+  transform: translateY(20px) !important; /* Additional downward offset */
+}
+
+/* Specific fix for deals timeline popovers */
+.deals-timeline [data-radix-popover-content] {
+  margin-top: 100px !important;
+  top: auto !important;
+}
+
+/* Ensure popover doesn't overlap with fixed header */
+[data-side="bottom"][data-radix-popover-content] {
+  margin-top: 80px !important;
+}
+
+/* Add padding to popover container to account for header */
+.demo-section [data-radix-popover-content] {
+  margin-top: 90px !important;
+  transform: translateY(30px) !important;
 }
