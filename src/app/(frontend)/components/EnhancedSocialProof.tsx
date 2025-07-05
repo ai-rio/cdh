@@ -24,7 +24,7 @@ export function EnhancedSocialProof() {
                 No More Spreadsheet Chaos
               </h4>
               <p className="text-gray-300 italic leading-relaxed">
-                "This platform saved me 10+ hours a week. My brand deals used to be a nightmare of spreadsheets and missed emails. Now, everything is in one place, and I feel like a true professional."
+                &ldquo;This platform saved me 10+ hours a week. My brand deals used to be a nightmare of spreadsheets and missed emails. Now, everything is in one place, and I feel like a true professional.&rdquo;
               </p>
             </CardContent>
           </Card>
@@ -36,7 +36,7 @@ export function EnhancedSocialProof() {
                 Confidence in My Numbers
               </h4>
               <p className="text-gray-300 italic leading-relaxed">
-                "For the first time, I actually understand my business. I can see which partnerships are most profitable and negotiate better deals because I have the data to back it up. It's a game-changer."
+                &ldquo;For the first time, I actually understand my business. I can see which partnerships are most profitable and negotiate better deals because I have the data to back it up. It&rsquo;s a game-changer.&rdquo;
               </p>
             </CardContent>
           </Card>
@@ -48,7 +48,7 @@ export function EnhancedSocialProof() {
                 Authentic Growth
               </h4>
               <p className="text-gray-300 italic leading-relaxed">
-                "I stopped worrying about vanity metrics and started focusing on real engagement. This tool helped me identify my 'top fans' and build a stronger, more loyal community."
+                &ldquo;I stopped worrying about vanity metrics and started focusing on real engagement. This tool helped me identify my &lsquo;top fans&rsquo; and build a stronger, more loyal community.&rdquo;
               </p>
             </CardContent>
           </Card>
