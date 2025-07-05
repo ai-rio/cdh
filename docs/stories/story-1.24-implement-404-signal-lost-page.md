@@ -1,30 +1,34 @@
-# Story 1.24: Implement 404 Signal Lost Page (`/404_Signal_Lost`)
+# Story 1.24: Modify 404 Signal Lost Page to Match Final Design
 
-## Status: Not Implemented
+## Status: Ready for Dev
 
 ## Story
 
-- As a user, I want to be informed when a page is not found, so that I can re-establish my connection.
+- As a user, when I encounter a 404 error, I want to see a visually engaging "Signal Lost" page that matches the design specification, so I can understand the error and navigate back to safety.
 
 ## Acceptance Criteria (ACs)
 
-1.  The `src/app/(frontend)/404_Signal_Lost/page.tsx` (or `not-found.tsx`) renders the content of `404_Signal_Lost.html`.
-2.  The "Re-establish Connection" button correctly navigates back to the homepage (`/`).
-3.  The specific 404 page styling, including the glitch effect on the "404" text and the background Three.js animation, is preserved.
-4.  (Shadcn Integration) The "Re-establish Connection" button uses a Shadcn `Button` component.
+1.  The existing `src/app/(frontend)/not-found.tsx` is modified to replace the current `<StarfieldCanvas />` with the Three.js animation from `docs/html/404_Signal_Lost.html`.
+2.  The `glitch-text` style from the HTML reference is applied to the "404" heading.
+3.  The existing `Link` component for "Re-establish Connection" is refactored to use a Shadcn `Button` component, maintaining the link to the homepage (`/`).
+4.  The "Mission Control HUD" header is **explicitly excluded** from the page.
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Implement `src/app/(frontend)/404_Signal_Lost/page.tsx` (or `not-found.tsx`).
-- [ ] Task 2: Implement "Re-establish Connection" button to navigate to homepage.
-- [ ] Task 3: Preserve 404 page styling, glitch effect, and Three.js animation.
-- [ ] Task 4: Use Shadcn `Button` for "Re-establish Connection" button.
+- [ ] Task 1: Create a new client component at `src/components/special/SignalLostAnimation.tsx` to encapsulate the Three.js logic from `404_Signal_Lost.html`.
+- [ ] Task 2: Modify `src/app/(frontend)/not-found.tsx` to remove `<StarfieldCanvas />` and integrate the new `SignalLostAnimation` component.
+- [ ] Task 3: In `not-found.tsx`, apply the `glitch-text` style to the '404' heading.
+- [ ] Task 4: In `not-found.tsx`, refactor the navigation link to use a Shadcn `Button` wrapped in a Next.js `Link`.
 
 ## Dev Notes
 
+This is a **modification** of an existing file, not a new implementation. The core layout is in place but needs specific visual and component updates.
+
 Relevant Source Tree info:
-- `src/app/(frontend)/404_Signal_Lost/page.tsx` (or `src/app/(frontend)/not-found.tsx`)
-- `404_Signal_Lost.html` (for original design reference)
+- `src/app/(frontend)/not-found.tsx` (File to be modified)
+- `docs/html/404_Signal_Lost.html` (Design and animation logic reference)
+
+**Design Decision:** Per discussion, the 'Mission Control HUD' header will be omitted from the final implementation to provide a cleaner, more focused user experience. The primary call-to-action button is sufficient for user navigation.
 
 ### Testing
 
@@ -37,8 +41,9 @@ Dev Note: Story Requires the following tests:
 Dev Note: Upon completion, consider running targeted E2E tests as per `docs/testing/e2e-strategy.md`.
 
 Manual Test Steps:
-- Verify navigating to an invalid URL displays the 404 page visually identical to `404_Signal_Lost.html`.
+- Verify navigating to an invalid URL displays the updated 404 page.
 - Verify the "Re-establish Connection" button navigates to the homepage.
+- Verify the new background animation and glitch text effect are present.
 
 ## Dev Agent Record
 
