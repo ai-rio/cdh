@@ -5,7 +5,7 @@ import Link from 'next/link'
 
 export function Footer() {
   return (
-    <footer className="site-footer relative z-[9]">
+    <footer className="site-footer relative z-[10]" style={{ zIndex: 10, position: 'relative' }}>
       <div className="max-w-5xl mx-auto">
         <div className="footer-grid grid grid-cols-2 md:grid-cols-4 gap-8 text-center md:text-left">
           <div>

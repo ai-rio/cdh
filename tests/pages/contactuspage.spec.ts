@@ -3,11 +3,6 @@ import { vi } from 'vitest'
 import ContactPage from '../../src/app/(frontend)/contact/page'
 import React from 'react'
 
-// Mock the Header component
-vi.mock('../../src/app/(frontend)/components/Header', () => ({
-  Header: () => React.createElement('div', { 'data-testid': 'header' }, 'Header')
-}))
-
 // Mock the ContactCanvas component
 vi.mock('../../src/app/(frontend)/contact/components/ContactCanvas', () => ({
   ContactCanvas: () => React.createElement('canvas', { 'data-testid': 'contact-canvas' })
@@ -64,7 +59,6 @@ describe('Contact Us Page', () => {
   it('renders the contact page correctly', () => {
     render(React.createElement(ContactPage))
     
-    expect(screen.getByTestId('header')).toBeInTheDocument()
     expect(screen.getByTestId('contact-canvas')).toBeInTheDocument()
     expect(screen.getByText('Establish Comms')).toBeInTheDocument()
     expect(screen.getByText('What is the nature of your transmission? Select a channel to route your signal to the correct command center.')).toBeInTheDocument()

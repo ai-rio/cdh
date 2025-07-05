@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { Header } from '../components/Header'
 import { ContactCanvas } from './components/ContactCanvas'
 import { TriageCard } from './components/TriageCard'
 import { ContactFormView } from './components/ContactFormView'
@@ -53,12 +52,11 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#111111] text-[#F3F3F4] overflow-x-hidden font-['Inter',sans-serif]">
-      <Header />
+    <div className="relative bg-[#111111] text-[#F3F3F4] overflow-x-hidden font-['Inter',sans-serif] min-h-[80vh]">
       <ContactCanvas />
       
-      <div className="relative w-full pt-28" style={{ zIndex: 2 }}>
-        <div className="min-h-[80vh] flex flex-col justify-center items-center">
+      <div className="relative w-full" style={{ zIndex: 2 }}>
+        <div className="min-h-[80vh] flex flex-col justify-center items-center py-8">
           <div className="max-w-[800px] mx-auto text-center p-6">
             
             {/* Triage View */}

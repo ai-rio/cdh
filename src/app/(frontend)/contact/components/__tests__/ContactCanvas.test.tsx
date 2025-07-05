@@ -57,7 +57,7 @@ describe('ContactCanvas', () => {
     const canvas = container.querySelector('canvas')
     expect(canvas).toBeInTheDocument()
     expect(canvas).toHaveAttribute('id', 'bg-canvas')
-    expect(canvas).toHaveClass('fixed', 'top-0', 'left-0', 'w-full', 'h-full')
+    expect(canvas).toHaveClass('absolute', 'top-0', 'left-0', 'w-full', 'h-full')
     expect(canvas).toHaveStyle('z-index: 1')
   })
 

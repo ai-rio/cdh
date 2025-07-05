@@ -102,7 +102,7 @@ export function ContactCanvas() {
     <canvas
       ref={canvasRef}
       id="bg-canvas"
-      className="fixed top-0 left-0 w-full h-full"
+      className="absolute top-0 left-0 w-full h-full"
       style={{ zIndex: 1 }}
       aria-hidden="true"
     />
