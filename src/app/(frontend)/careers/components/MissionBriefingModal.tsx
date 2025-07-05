@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -36,6 +36,7 @@ export default function MissionBriefingModal() {
 
   const renderBriefingView = () => (
     <div className="modal-view">
+      <DialogTitle className="sr-only">Mission Briefing for {currentMission?.title}</DialogTitle>
       <div className="flex justify-between items-start mb-4">
         <div>
           <h2 className="text-3xl font-bold text-white">{currentMission?.title}</h2>
@@ -66,6 +67,7 @@ export default function MissionBriefingModal() {
 
   const renderApplyView = () => (
     <div className="modal-view">
+      <DialogTitle className="sr-only">Application Form for {currentMission?.title}</DialogTitle>
       <div className="flex justify-between items-start mb-4">
         <h2 className="text-3xl font-bold text-white">Transmit Dossier</h2>
         <Button
@@ -140,6 +142,7 @@ export default function MissionBriefingModal() {
 
   const renderSuccessView = () => (
     <div className="modal-view text-center p-8">
+      <DialogTitle className="sr-only">Application Submitted Successfully</DialogTitle>
       <CheckCircle className="w-16 h-16 mx-auto text-[#EEFC97]" />
       <h2 className="text-3xl font-bold text-white mt-4 mb-2">Transmission Received.</h2>
       <p className="text-gray-300">We are reviewing your dossier. Stand by for potential contact.</p>
