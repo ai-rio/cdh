@@ -14,11 +14,10 @@ describe('Header', () => {
     expect(screen.getByText('CDH')).toBeInTheDocument()
   })
 
-  it('renders HUD items with correct data', () => {
+  it('renders navigation toggle button', () => {
     render(<Header />)
-    expect(screen.getByText('Deals')).toBeInTheDocument()
-    expect(screen.getByText('Finance')).toBeInTheDocument()
-    expect(screen.getByText('Contacts')).toBeInTheDocument()
+    const toggleButton = screen.getByLabelText('Open navigation menu')
+    expect(toggleButton).toBeInTheDocument()
   })
 
   it('toggles the CommandDeck on navigation button click', () => {

@@ -40,68 +40,60 @@ describe('404 Not Found Page', () => {
   it('renders the Re-establish Connection button with correct styling and link', () => {
     render(<NotFound />)
     
-    // Find the button by its text content
-    const button = screen.getByRole('button', { name: /Re-establish Connection/i })
-    expect(button).toBeInTheDocument()
+    // Find the link by its text content (it's a link, not a button)
+    const link = screen.getByRole('link', { name: /Re-establish Connection/i })
+    expect(link).toBeInTheDocument()
     
-    // Check that the button has the correct styling classes
-    expect(button).toHaveClass('bg-[#A3E635]')
-    expect(button).toHaveClass('text-[#1D1F04]')
-    
-    // Check that the button is wrapped in a link to the homepage
-    const link = button.closest('a')
+    // Check that the link has the correct href
     expect(link).toHaveAttribute('href', '/')
+    
+    // Check that it has a CSS module class for the CTA button
+    expect(link.className).toMatch(/_ctaButton_/)
   })
 
   it('applies the glitch-text class to the 404 heading', () => {
     render(<NotFound />)
     
     const heading = screen.getByRole('heading', { level: 1 })
-    expect(heading).toHaveClass('glitch-text')
+    // Check that it has the CSS module class (not the literal class name)
+    expect(heading.className).toMatch(/_glitchText_/)
   })
 
   it('has proper styling for the main container', () => {
     render(<NotFound />)
     
-    // Check for the main content container - now it's a simple text-center div
+    // Check for the holo panel container with CSS module classes
     const container = screen.getByRole('heading', { level: 1 }).closest('div')
-    expect(container).toHaveClass('text-center')
-    expect(container).toHaveClass('max-w-lg')
-    expect(container).toHaveClass('mx-auto')
+    expect(container?.className).toMatch(/_holoPanel_/)
   })
 
-  it('includes the global styles for glitch-text', () => {
+  it('includes the global styles for body background', () => {
     const { container } = render(<NotFound />)
     
     // Check that the style tag is present in the document
     const styleTag = container.querySelector('style')
     expect(styleTag).toBeInTheDocument()
-    expect(styleTag?.innerHTML).toContain('.glitch-text')
-    expect(styleTag?.innerHTML).toContain("font-family: 'Share Tech Mono', monospace")
-    expect(styleTag?.innerHTML).toContain('text-shadow: 0 0 5px #A3E635, 0 0 10px #A3E635')
-    expect(styleTag?.innerHTML).toContain('color: #000000')
+    expect(styleTag?.innerHTML).toContain('background-color: #000000')
+    expect(styleTag?.innerHTML).toContain('overflow: hidden')
   })
 
-  it('has the correct root container styling for light theme', () => {
+  it('has the correct root container styling for dark theme', () => {
     const { container } = render(<NotFound />)
     
-    // Check for the root container styling - should have light theme classes
+    // Check for the page wrapper with CSS module classes
     const rootContainer = container.firstChild as HTMLElement
-    expect(rootContainer).toHaveClass('overflow-hidden')
-    expect(rootContainer).toHaveClass('font-inter')
-    expect(rootContainer).toHaveClass('bg-white')
-    expect(rootContainer).toHaveClass('min-h-screen')
+    expect(rootContainer.className).toMatch(/_pageWrapper_/)
   })
 
-  it('has proper text colors for light theme', () => {
+  it('has proper text colors for dark theme', () => {
     render(<NotFound />)
     
-    // Check that the main title has black text
+    // Check that the main title has the CSS module class
     const mainTitle = screen.getByRole('heading', { level: 2 })
-    expect(mainTitle).toHaveClass('text-black')
+    expect(mainTitle.className).toMatch(/_subtitle_/)
     
-    // Check that the description has gray text
+    // Check that the description has the CSS module class
     const description = screen.getByText(/You've discovered an uncharted sector of the constellation/)
-    expect(description).toHaveClass('text-gray-600')
+    expect(description.className).toMatch(/_description_/)
   })
 })

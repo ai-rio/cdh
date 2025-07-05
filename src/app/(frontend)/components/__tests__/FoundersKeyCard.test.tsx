@@ -1,18 +1,17 @@
-import { render, screen, fireEvent, act } from '@testing-library/react'
+import { render, screen, fireEvent, act, cleanup } from '@testing-library/react'
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { FoundersKeyCard } from '../FoundersKeyCard'
 
-// Mock timers
-vi.useFakeTimers()
-
 describe('FoundersKeyCard', () => {
   beforeEach(() => {
+    vi.useFakeTimers()
     vi.setSystemTime(new Date('2024-01-01T00:00:00Z'))
   })
 
   afterEach(() => {
     vi.runOnlyPendingTimers()
     vi.useRealTimers()
+    cleanup()
   })
 
   it('renders the founders key offer correctly', () => {
@@ -35,28 +34,30 @@ describe('FoundersKeyCard', () => {
 
   it('calls onClaimOffer when button is clicked', () => {
     const mockOnClaim = vi.fn()
-    render(<FoundersKeyCard onClaimOffer={mockOnClaim} />)
+    const { container } = render(<FoundersKeyCard onClaimOffer={mockOnClaim} />)
     
-    const claimButton = screen.getByText('Claim My Founder\'s Key')
-    fireEvent.click(claimButton)
+    const claimButton = container.querySelector('button')
+    expect(claimButton).toBeInTheDocument()
+    fireEvent.click(claimButton!)
     
     expect(mockOnClaim).toHaveBeenCalledTimes(1)
   })
 
   it('updates countdown timer every second', () => {
     const mockOnClaim = vi.fn()
-    render(<FoundersKeyCard onClaimOffer={mockOnClaim} />)
+    const { container } = render(<FoundersKeyCard onClaimOffer={mockOnClaim} />)
     
-    const initialTime = screen.getByText(/\d{2}:\d{2}:\d{2}/)
-    const initialTimeText = initialTime.textContent
+    const timerElement = container.querySelector('.countdown-timer span')
+    expect(timerElement).toBeInTheDocument()
+    const initialTimeText = timerElement?.textContent
     
     // Advance timer by 1 second
     act(() => {
       vi.advanceTimersByTime(1000)
     })
     
-    const updatedTime = screen.getByText(/\d{2}:\d{2}:\d{2}/)
-    expect(updatedTime.textContent).not.toBe(initialTimeText)
+    const updatedTimeText = timerElement?.textContent
+    expect(updatedTimeText).not.toBe(initialTimeText)
   })
 
   it('applies correct CSS classes', () => {

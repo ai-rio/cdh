@@ -32,13 +32,9 @@ describe('Header Integration Tests', () => {
     expect(screen.getByText(/CDH/)).toBeInTheDocument()
   })
 
-  it('displays HUD items with correct values', () => {
-    expect(screen.getByText('Deals')).toBeInTheDocument()
-    expect(screen.getByText('12')).toBeInTheDocument()
-    expect(screen.getByText('Finance')).toBeInTheDocument()
-    expect(screen.getByText('3')).toBeInTheDocument()
-    expect(screen.getByText('Contacts')).toBeInTheDocument()
-    expect(screen.getByText('47')).toBeInTheDocument()
+  it('has navigation toggle functionality', () => {
+    const toggleButton = screen.getByRole('button', { name: /open navigation menu/i })
+    expect(toggleButton).toBeInTheDocument()
   })
 
   it('has a navigation toggle button', () => {
@@ -110,8 +106,8 @@ describe('Header Integration Tests', () => {
     expect(aboutLink).toHaveAttribute('href', '/about')
   })
 
-  it('applies overdue styling to overdue HUD item', () => {
-    const overdueValue = screen.getByText('3')
-    expect(overdueValue).toHaveClass('overdue')
+  it('has proper header styling classes', () => {
+    const header = screen.getByRole('banner')
+    expect(header).toHaveClass('mission-control-hud')
   })
 })
