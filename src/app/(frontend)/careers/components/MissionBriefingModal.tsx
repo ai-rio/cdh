@@ -70,15 +70,7 @@ export default function MissionBriefingModal() {
       <DialogTitle className="sr-only">Application Form for {currentMission?.title}</DialogTitle>
       <div className="flex justify-between items-start mb-4">
         <h2 className="text-3xl font-bold text-white">Transmit Dossier</h2>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={handleClose}
-          className="p-2 text-gray-500 hover:text-white"
-          aria-label="Close form"
-        >
-          <X className="h-6 w-6" />
-        </Button>
+        
       </div>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
@@ -158,7 +150,7 @@ export default function MissionBriefingModal() {
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="briefing-content max-h-[90vh] overflow-y-auto bg-black/70 backdrop-blur-[25px] border-white/10 rounded-3xl p-8 w-[90%] max-w-[640px]">
+      <DialogContent showCloseButton={false} className="briefing-content max-h-[90vh] overflow-y-auto bg-black/70 backdrop-blur-[25px] border-white/10 rounded-3xl p-8 w-[90%] max-w-[640px]">
         {currentView === 'briefing' && renderBriefingView()}
         {currentView === 'apply' && renderApplyView()}
         {currentView === 'success' && renderSuccessView()}
