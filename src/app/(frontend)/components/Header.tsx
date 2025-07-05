@@ -71,7 +71,7 @@ export function Header() {
                 strokeLinejoin="round"
               />
             </svg>
-            <span className="font-bold text-xl text-white">CDH </span>
+            <span className="font-bold text-lg text-white">CDH </span>
           </Link>
           {pathname === '/' && (
             <div className="hidden md:flex items-center space-x-8">

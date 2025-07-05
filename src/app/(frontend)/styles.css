@@ -211,11 +211,12 @@ svg {
 }
 
 .hero-section {
-  height: 100vh;
+  min-height: calc(100vh - 64px); /* Ensure it's at least viewport height minus header */
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  padding-top: 88px;
+  justify-content: center; /* Center content vertically */
+  padding-top: 4rem; /* Add internal padding for hero content */
+  padding-bottom: 2rem; /* Add some bottom padding for smaller screens */
 }
 
 .content-section {
@@ -581,6 +582,10 @@ svg {
   z-index: 2;
   width: 100%;
   padding-top: 112px;
+}
+
+.scroll-container {
+  padding-top: 1px; /* Adjust based on header height */
 }
 
 .pricing-card {
