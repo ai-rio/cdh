@@ -614,3 +614,98 @@ svg {
   border-radius: 0.5rem;
   padding: 0.5rem 1rem;
 }
+
+/* Careers Page Specific Styles */
+.mission-control-hud {
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(163, 230, 53, 0.2);
+}
+
+.command-deck {
+  backdrop-filter: blur(20px);
+}
+
+.code-card {
+  background: rgba(23, 23, 23, 0.6);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  transition: all 0.3s ease;
+}
+
+.code-card:hover {
+  border-color: rgba(163, 230, 53, 0.3);
+  box-shadow: 0 8px 25px rgba(163, 230, 53, 0.1);
+  transform: translateY(-5px);
+}
+
+.mission-card {
+  background: rgba(23, 23, 23, 0.7);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  transition: all 0.3s ease;
+}
+
+.mission-card:hover {
+  border-color: rgba(163, 230, 53, 0.4);
+  box-shadow: 0 10px 30px rgba(163, 230, 53, 0.15);
+  transform: translateY(-8px);
+}
+
+.briefing-content {
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.briefing-content .modal-view {
+  color: white;
+}
+
+.briefing-content .briefing-body {
+  line-height: 1.6;
+}
+
+.briefing-content .briefing-body h3 {
+  color: #A3E635;
+  font-weight: bold;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.briefing-content .briefing-body ul {
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+}
+
+.briefing-content .briefing-body li {
+  margin-bottom: 0.5rem;
+  color: #d1d5db;
+}
+
+.briefing-content .form-input {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.briefing-content .form-input:focus {
+  border-color: #A3E635;
+  box-shadow: 0 0 0 3px rgba(163, 230, 53, 0.1);
+}
+
+.briefing-content .form-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+#bg-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
