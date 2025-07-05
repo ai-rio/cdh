@@ -36,7 +36,7 @@ export function Header() {
 
   return (
     <>
-      <header className={`fixed top-0 left-0 right-0 p-4 z-50 main-header bg-black/20 backdrop-blur-xl ${isHeaderVisible ? 'visible' : ''} mission-control-hud`}>
+      <header className={`fixed top-0 left-0 right-0 p-1 z-50 main-header bg-black/20 backdrop-blur-xl ${isHeaderVisible ? 'visible' : ''} mission-control-hud`}>
         <nav className="p-4 w-full max-w-7xl mx-auto flex justify-between items-center">
           <Link href="/" className="flex items-center space-x-3">
             <svg

@@ -253,7 +253,7 @@ svg {
 
 .hud-item {
   cursor: pointer;
-  padding: 1rem 1.5rem;
+  padding: 0.5rem 1rem;
   transition: all 0.3s ease;
   border-radius: 0.5rem;
   will-change: transform;
@@ -456,7 +456,8 @@ svg {
   z-index: 9999;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start; /* Align content to the top */
+  padding-top: 100px; /* Push content down below the header */
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
@@ -468,6 +469,8 @@ svg {
 }
 
 .modal-content {
+  margin-top: auto; /* Vertically center within the remaining space */
+  margin-bottom: auto; /* Vertically center within the remaining space */
   background-color: rgba(17, 17, 17, 0.95);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 1rem;
