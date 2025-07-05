@@ -6,11 +6,11 @@ import { vi } from 'vitest';
 global.React = React;
 
 global.requestAnimationFrame = vi.fn((cb) => {
-  return setTimeout(cb, 0);
+  return setTimeout(cb, 0) as unknown as number;
 });
 
 global.cancelAnimationFrame = vi.fn((id) => {
-  clearTimeout(id);
+  clearTimeout(id as unknown as NodeJS.Timeout);
 });
 
 // Mock IntersectionObserver

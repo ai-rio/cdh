@@ -1,5 +1,6 @@
 import { getPayload } from 'payload';
 import config from '@/payload.config';
+import { postgresAdapter } from '@payloadcms/db-postgres';
 
 // In-memory database setup for testing
 let testPayload: any = null;
@@ -10,13 +11,14 @@ export async function createTestDatabase() {
     const payloadConfig = await config;
     testPayload = await getPayload({ 
       config: {
-        ...payloadConfig,
+        ...(payloadConfig as any),
         // Override database settings for testing
-        db: {
-          ...payloadConfig.db,
-          // Use in-memory database for tests
-          url: process.env.TEST_DATABASE_URI || 'memory://test'
-        }
+        db: postgresAdapter({
+          pool: {
+            connectionString: process.env.TEST_DATABASE_URI || 'postgresql://user:password@localhost:5432/test_db_for_tests',
+          },
+          allowIDOnCreate: true,
+        }),
       }
     });
     

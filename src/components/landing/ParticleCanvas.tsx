@@ -28,7 +28,7 @@ function useDebounce(callback: () => void, delay: number) {
 
 interface InteractiveConstellationProps {
   // Pass a ref to the element that should trigger the constellation
-  targetRef: React.RefObject<HTMLElement>
+  targetRef: React.RefObject<HTMLDivElement>
 }
 
 const InteractiveConstellation: React.FC<InteractiveConstellationProps> = ({ targetRef }) => {
