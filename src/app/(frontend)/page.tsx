@@ -15,6 +15,7 @@ import { InfoSection } from './components/InfoSection'
 import { Footer } from './components/Footer'
 import { Header } from './components/Header'
 import { CTASection } from './components/CTASection'
+import { EnhancedSocialProof } from './components/EnhancedSocialProof'
 
 // Import existing landing page components for proof-of-concept demos
 import AITypingDemo from '@/components/landing/AITypingDemo'
@@ -40,8 +41,7 @@ export default async function HomePage() {
         {/* Deals Section with Proof-of-Concept Demo */}
         <InfoSection title="Command Your Deals" id="deals-section">
           <p>
-            From pitch to payment, visualize your entire deal pipeline. See active negotiations,
-            track deliverable deadlines, and identify high-value partnerships at a glance.
+            From pitch to payment, master your entire deal pipeline. Go beyond the spreadsheet and manage every brand collaboration with the confidence of a top-tier creator, ensuring you never miss a deadline or a payment again.
           </p>
         </InfoSection>
 
@@ -66,8 +66,7 @@ export default async function HomePage() {
         {/* Finance Section with Proof-of-Concept Demo */}
         <InfoSection title="Financial Clarity" id="finance-section">
           <p>
-            Connect your income streams and watch your finances organize themselves. Instantly see
-            overdue invoices and track campaign performance against its value.
+            Connect your income streams and watch your finances align. Finally prove your ROI with clear analytics that bridge the financial literacy gap, all without the headache of complex accounting software.
           </p>
         </InfoSection>
 
@@ -90,8 +89,7 @@ export default async function HomePage() {
         {/* Contacts Section with Proof-of-Concept Demo */}
         <InfoSection title="Contact Intelligence" id="contacts-section">
           <p>
-            Your network is your net worth. See your key relationships in context, understanding who
-            your most valuable partners are and how they connect to your deals.
+            Your entire deal network is now in the clear. Use AI-driven insights to understand who your most valuable partners are, what relationships are at risk, and how to connect to grow your brand and your business.
           </p>
         </InfoSection>
 
@@ -111,12 +109,8 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* Social Proof Section */}
-        <section className="content-section">
-          <div className="w-full max-w-6xl mx-auto px-4">
-            <TestimonialCarousel />
-          </div>
-        </section>
+        {/* Enhanced Social Proof Section */}
+        <EnhancedSocialProof />
 
         {/* Request Early Access CTA */}
         <CTASection />
