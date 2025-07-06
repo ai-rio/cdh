@@ -116,7 +116,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
           position: relative;
           border: 1px solid transparent;
           background-clip: padding-box;
-          overflow: hidden;
+          overflow: visible; /* Changed from hidden to visible */
         }
         
         .modal-content::before {
@@ -279,19 +279,42 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
         
         .close-btn {
           position: absolute;
-          top: 1.5rem;
-          right: 1.5rem;
-          background: none;
-          border: none;
-          color: rgba(156, 163, 175, 1);
+          top: 1rem;
+          right: 1rem;
+          background: rgba(255, 255, 255, 0.1);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          color: #ffffff;
           cursor: pointer;
-          transition: color 0.3s ease;
-          z-index: 20;
-          padding: 0.5rem;
+          transition: all 0.3s ease;
+          z-index: 9999;
+          padding: 0.75rem;
+          border-radius: 0.5rem;
+          font-size: 1.25rem;
+          font-weight: bold;
+          line-height: 1;
+          width: 2.5rem;
+          height: 2.5rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          backdrop-filter: blur(10px);
+          pointer-events: auto;
         }
         
         .close-btn:hover {
-          color: white;
+          background: rgba(255, 255, 255, 0.2);
+          border-color: rgba(255, 255, 255, 0.4);
+          color: #ffffff;
+          transform: scale(1.05);
+        }
+        
+        .close-btn:focus {
+          outline: 2px solid #a3e635;
+          outline-offset: 2px;
+        }
+        
+        .close-btn:active {
+          transform: scale(0.95);
         }
         
         .form-input {
@@ -539,20 +562,58 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
          }
       `}</style>
       
-      <div className={`modal ${isOpen ? 'open' : ''}`}>
+      <div 
+        className={`modal ${isOpen ? 'open' : ''}`}
+        onClick={(e) => {
+          // Only close modal when clicking directly on the backdrop (not on child elements)
+          if (e.target === e.currentTarget) {
+            onClose();
+          }
+        }}
+      >
         <div 
           ref={modalRef}
           className="modal-content"
           role="dialog"
           aria-modal="true"
           aria-labelledby="auth-modal-title"
+          onClick={(e) => {
+            // Prevent backdrop click when clicking inside modal content
+            e.stopPropagation();
+          }}
         >
           <button
-            onClick={onClose}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              onClose();
+            }}
             className="close-btn"
-            aria-label="Close modal"
+            aria-label="Close authentication modal"
+            title="Close"
+            type="button"
+            style={{
+              position: 'absolute',
+              top: '1rem',
+              right: '1rem',
+              zIndex: 9999,
+              pointerEvents: 'auto'
+            }}
           >
-            ×
+            <svg 
+              width="16" 
+              height="16" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="currentColor" 
+              strokeWidth="2" 
+              strokeLinecap="round" 
+              strokeLinejoin="round"
+              style={{ pointerEvents: 'none' }}
+            >
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
           </button>
           
           <div className="auth-form-container">
