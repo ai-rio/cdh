@@ -74,6 +74,26 @@
       "env": {},
       "timeout": 120000,
       "disabled": false
+    },
+    "resend-nextjs-app-router-example Docs": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://gitmcp.io/resend/resend-nextjs-app-router-example"
+      ],
+      "env": {},
+      "timeout": 120000,
+      "disabled": false
+    },
+    "payload Docs": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://gitmcp.io/payloadcms/payload"
+      ],
+      "env": {},
+      "timeout": 120000,
+      "disabled": false
     }
   }
 }
