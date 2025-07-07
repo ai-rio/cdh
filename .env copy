@@ -1,0 +1,8 @@
+DATABASE_URI=postgresql://postgres.eyxyxanyxyynahsphelm:Luliflora1.@@aws-0-us-east-2.pooler.supabase.com:6543/postgres
+PAYLOAD_SECRET=db2b24555f8f6ac670c367ff
+
+#supabase
+NEXT_PUBLIC_SUPABASE_URL=https://eyxyxanyxyynnahsphelm.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV5eHl4YW55eHl5bmFoc3BoZWxtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg1NTE5MzcsImV4cCI6MjA2NDEyNzkzN30.paY3h3piTf8J8Lms7DMM_Z5youokjM3i4Bz4Atc01Ug
+SUPABASE_ACCESS_TOKEN=sbp_a2417b00eff75e598320a503a60bae6483072203
+# Added by Payload
