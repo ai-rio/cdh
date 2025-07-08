@@ -57,3 +57,6 @@ next-env.d.ts
 
 # Zone.Identifier files
 *:Zone.Identifier
+
+# pnpm
+.pnpm-store
