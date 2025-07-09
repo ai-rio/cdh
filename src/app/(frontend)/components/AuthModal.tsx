@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
-import LoginForm1 from '@/components/mvpblocks/login-form1';
-import SignupForm1 from '@/components/mvpblocks/signup-form1';
+import { useRouter } from 'next/navigation'; // Import useRouter
+import { useAuth } from '@/contexts/AuthContext'; // Import useAuth
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -13,13 +13,89 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
+  const [validationError, setValidationError] = useState<string | null>(null); // New state for validation errors
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const { user, login, register, isLoading, error } = useAuth(); // Integrate useAuth hook
+  const router = useRouter(); // Initialize useRouter
+
+  // Effect to handle redirection after successful login/registration
+  useEffect(() => {
+    if (user) {
+      onClose(); // Close modal
+      router.push('/dashboard'); // Redirect to dashboard or profile page
+    }
+  }, [user, onClose, router]);
+
+  // Effect to clear validation errors and reset form when modal opens
+  useEffect(() => {
+    setValidationError(null);
+    if (isOpen) {
+      // Reset form fields when modal opens
+      setEmail('');
+      setPassword('');
+      setName('');
+    }
+  }, [isOpen]);
+
+  // Effect to clear validation errors when form type changes
+  useEffect(() => {
+    setValidationError(null);
+    // Clear form fields when switching between sign in and sign up
+    setEmail('');
+    setPassword('');
+    setName('');
+  }, [isSignUp]);
+
+  const handleSubmit = async (e: React.FormEvent) => { // Make handleSubmit async
     e.preventDefault();
+    setValidationError(null); // Clear previous validation errors
+
+    // Enhanced client-side validation
+    if (!email || !password || (isSignUp && !name)) {
+      setValidationError('All fields are required.');
+      return;
+    }
+    
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setValidationError('Please enter a valid email address.');
+      return;
+    }
+    
+    // Password validation
+    if (password.length < 8) {
+      setValidationError('Password must be at least 8 characters long.');
+      return;
+    }
+    
     if (isSignUp) {
-      console.log('Sign up:', { email, password, name });
-    } else {
-      console.log('Sign in:', { email, password });
+      // Additional validation for sign up
+      if (name.trim().length < 2) {
+        setValidationError('Name must be at least 2 characters long.');
+        return;
+      }
+      
+      // Password strength validation for sign up
+      const hasUpperCase = /[A-Z]/.test(password);
+      const hasLowerCase = /[a-z]/.test(password);
+      const hasNumbers = /\d/.test(password);
+      
+      if (!hasUpperCase || !hasLowerCase || !hasNumbers) {
+        setValidationError('Password must contain at least one uppercase letter, one lowercase letter, and one number.');
+        return;
+      }
+    }
+
+    try {
+      if (isSignUp) {
+        await register(name.trim(), email.toLowerCase().trim(), password);
+      } else {
+        await login(email.toLowerCase().trim(), password);
+      }
+    } catch (err) {
+      // Error is already handled in AuthContext, but we can add additional handling here if needed
+      console.error('Authentication error:', err);
     }
   };
   const modalRef = useRef<HTMLDivElement>(null);
@@ -162,6 +238,11 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
         
         .form-input:focus + .form-input-icon {
           color: #a3e635;
+        }
+        
+        .form-input:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
         }
         
         .auth-toggle-bg {
@@ -401,13 +482,19 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
           width: 100%;
         }
         
-        .cta-glow:hover {
+        .cta-glow:hover:not(:disabled) {
           transform: translateY(-2px);
           box-shadow: 0 10px 25px rgba(163, 230, 53, 0.3);
         }
         
-        .cta-glow:active {
+        .cta-glow:active:not(:disabled) {
           transform: translateY(0);
+        }
+        
+        .cta-glow:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+          transform: none;
         }
         
         .divider {
@@ -626,12 +713,14 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                   ref={firstFocusableElementRef}
                   onClick={() => setIsSignUp(false)}
                   className={`auth-toggle-button ${!isSignUp ? 'active' : ''}`}
+                  disabled={isLoading}
                 >
                   Sign In
                 </button>
                 <button
                   onClick={() => setIsSignUp(true)}
                   className={`auth-toggle-button ${isSignUp ? 'active' : ''}`}
+                  disabled={isLoading}
                 >
                   Sign Up
                 </button>
@@ -643,6 +732,11 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                 <div className={`signin-view ${isSignUp ? 'hidden-form from-left' : ''}`}>
                   <h2 style={{fontSize: '1.25rem', marginBottom: '1rem'}}>Welcome Back, Commander</h2>
                   <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                    {(error || validationError) && (
+                      <p style={{ color: 'red', textAlign: 'center', marginBottom: '1rem' }}>
+                        {error || validationError}
+                      </p>
+                    )}
                     <div className="form-group">
                       <div className="form-input-container">
                         <i className="fas fa-envelope form-input-icon"></i>
@@ -652,6 +746,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                           placeholder="Email"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
+                          disabled={isLoading}
                           required
                         />
                       </div>
@@ -666,19 +761,25 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                           placeholder="Password"
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
+                          disabled={isLoading}
                           required
                         />
                       </div>
                     </div>
                     
-                    <button type="submit" className="cta-glow" style={{padding: '0.75rem', fontSize: '0.875rem', height: '2.75rem'}}>
-                      Launch Command Center
+                    <button type="submit" className="cta-glow" style={{padding: '0.75rem', fontSize: '0.875rem', height: '2.75rem'}} disabled={isLoading}>
+                      {isLoading ? 'Loading...' : 'Launch Command Center'}
                     </button>
                   </form>
                 </div>
                 <div className={`signup-view ${!isSignUp ? 'hidden-form' : ''}`}>
                   <h2 style={{fontSize: '1.25rem', marginBottom: '1rem'}}>Join the Constellation</h2>
                   <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                    {(error || validationError) && (
+                      <p style={{ color: 'red', textAlign: 'center', marginBottom: '1rem' }}>
+                        {error || validationError}
+                      </p>
+                    )}
                     <div className="form-group">
                       <div className="form-input-container">
                         <i className="fas fa-user form-input-icon"></i>
@@ -688,6 +789,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                           placeholder="Full Name"
                           value={name}
                           onChange={(e) => setName(e.target.value)}
+                          disabled={isLoading}
                           required
                         />
                       </div>
@@ -702,6 +804,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                           placeholder="Email"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
+                          disabled={isLoading}
                           required
                         />
                       </div>
@@ -713,16 +816,17 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                         <input
                           type="password"
                           className="form-input"
-                          placeholder="Password"
+                          placeholder="Password (8+ chars, uppercase, lowercase, number)"
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
+                          disabled={isLoading}
                           required
                         />
                       </div>
                     </div>
                     
-                    <button type="submit" className="cta-glow" style={{padding: '0.75rem', fontSize: '0.875rem', height: '2.75rem'}}>
-                      Create My Account
+                    <button type="submit" className="cta-glow" style={{padding: '0.75rem', fontSize: '0.875rem', height: '2.75rem'}} disabled={isLoading}>
+                      {isLoading ? 'Loading...' : 'Create My Account'}
                     </button>
                     
                     <p className="terms-text">
@@ -736,16 +840,16 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
               <div className="social-section mobile-social">
                 <h3>Quick Access</h3>
                 <div className="social-icons-grid">
-                  <button className="social-icon-btn google" title="Continue with Google">
+                  <button className="social-icon-btn google" title="Continue with Google" disabled={isLoading}>
                     <i className="fab fa-google"></i>
                   </button>
-                  <button className="social-icon-btn facebook" title="Continue with Facebook">
+                  <button className="social-icon-btn facebook" title="Continue with Facebook" disabled={isLoading}>
                     <i className="fab fa-facebook-f"></i>
                   </button>
-                  <button className="social-icon-btn twitter" title="Continue with Twitter">
+                  <button className="social-icon-btn twitter" title="Continue with Twitter" disabled={isLoading}>
                     <i className="fab fa-twitter"></i>
                   </button>
-                  <button className="social-icon-btn apple" title="Continue with Apple">
+                  <button className="social-icon-btn apple" title="Continue with Apple" disabled={isLoading}>
                     <i className="fab fa-apple"></i>
                   </button>
                 </div>
@@ -759,16 +863,16 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
             <div className="social-section desktop-social">
               <h3>Quick Access</h3>
               <div className="social-icons-grid">
-                <button className="social-icon-btn google" title="Continue with Google">
+                <button className="social-icon-btn google" title="Continue with Google" disabled={isLoading}>
                   <i className="fab fa-google"></i>
                 </button>
-                <button className="social-icon-btn facebook" title="Continue with Facebook">
+                <button className="social-icon-btn facebook" title="Continue with Facebook" disabled={isLoading}>
                   <i className="fab fa-facebook-f"></i>
                 </button>
-                <button className="social-icon-btn twitter" title="Continue with Twitter">
+                <button className="social-icon-btn twitter" title="Continue with Twitter" disabled={isLoading}>
                   <i className="fab fa-twitter"></i>
                 </button>
-                <button className="social-icon-btn apple" title="Continue with Apple">
+                <button className="social-icon-btn apple" title="Continue with Apple" disabled={isLoading}>
                   <i className="fab fa-apple"></i>
                 </button>
               </div>

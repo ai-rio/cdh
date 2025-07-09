@@ -1,5 +1,6 @@
 import React from 'react'
 import './globals.css'
+import { AuthProvider } from '@/contexts/AuthContext' // Import AuthProvider
 
 export const metadata = {
   description: 'A blank template using Payload in a Next.js app.',
@@ -25,7 +26,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className="bg-white text-black">
-        {children}
+        <AuthProvider> {/* Wrap children with AuthProvider */}
+          {children}
+        </AuthProvider>
       </body>
     </html>
   )
