@@ -2,6 +2,79 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 import { NextRequest, NextResponse } from 'next/server'
 
+// GET method for fetching all users (admin only)
+export async function GET(request: NextRequest) {
+  try {
+    const payload = await getPayload({ config })
+    
+    // Authenticate the user
+    const { user } = await payload.auth({ headers: request.headers })
+    
+    if (!user) {
+      return NextResponse.json(
+        { message: 'Authentication required' },
+        { status: 401 }
+      )
+    }
+    
+    // Check if user is admin
+    if (user.role !== 'admin') {
+      return NextResponse.json(
+        { message: 'Admin access required' },
+        { status: 403 }
+      )
+    }
+    
+    // Get query parameters for pagination and filtering
+    const url = new URL(request.url)
+    const page = parseInt(url.searchParams.get('page') || '1')
+    const limit = parseInt(url.searchParams.get('limit') || '10')
+    const search = url.searchParams.get('search') || ''
+    const role = url.searchParams.get('role') || ''
+    
+    // Build where clause
+    const where: any = {}
+    
+    if (search) {
+      where.or = [
+        {
+          name: {
+            contains: search,
+          },
+        },
+        {
+          email: {
+            contains: search,
+          },
+        },
+      ]
+    }
+    
+    if (role && role !== 'all') {
+      where.role = {
+        equals: role,
+      }
+    }
+    
+    // Fetch users
+    const users = await payload.find({
+      collection: 'users',
+      where,
+      page,
+      limit,
+      sort: '-createdAt',
+    })
+    
+    return NextResponse.json(users)
+  } catch (error: any) {
+    console.error('Error fetching users:', error)
+    return NextResponse.json(
+      { message: 'Error fetching users' },
+      { status: 500 }
+    )
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
     const payload = await getPayload({ config })
@@ -123,6 +196,111 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(
       { message: 'An error occurred during registration' },
+      { status: 500 }
+    )
+  }
+}
+
+// PATCH method for updating users (admin only)
+export async function PATCH(request: NextRequest) {
+  try {
+    const payload = await getPayload({ config })
+    
+    // Authenticate the user
+    const { user } = await payload.auth({ headers: request.headers })
+    
+    if (!user) {
+      return NextResponse.json(
+        { message: 'Authentication required' },
+        { status: 401 }
+      )
+    }
+    
+    // Check if user is admin
+    if (user.role !== 'admin') {
+      return NextResponse.json(
+        { message: 'Admin access required' },
+        { status: 403 }
+      )
+    }
+    
+    const { id, ...updateData } = await request.json()
+    
+    if (!id) {
+      return NextResponse.json(
+        { message: 'User ID is required' },
+        { status: 400 }
+      )
+    }
+    
+    // Update the user
+    const updatedUser = await payload.update({
+      collection: 'users',
+      id,
+      data: updateData,
+    })
+    
+    return NextResponse.json(updatedUser)
+  } catch (error: any) {
+    console.error('Error updating user:', error)
+    return NextResponse.json(
+      { message: 'Error updating user' },
+      { status: 500 }
+    )
+  }
+}
+
+// DELETE method for deleting users (admin only)
+export async function DELETE(request: NextRequest) {
+  try {
+    const payload = await getPayload({ config })
+    
+    // Authenticate the user
+    const { user } = await payload.auth({ headers: request.headers })
+    
+    if (!user) {
+      return NextResponse.json(
+        { message: 'Authentication required' },
+        { status: 401 }
+      )
+    }
+    
+    // Check if user is admin
+    if (user.role !== 'admin') {
+      return NextResponse.json(
+        { message: 'Admin access required' },
+        { status: 403 }
+      )
+    }
+    
+    const { id } = await request.json()
+    
+    if (!id) {
+      return NextResponse.json(
+        { message: 'User ID is required' },
+        { status: 400 }
+      )
+    }
+    
+    // Prevent admin from deleting themselves
+    if (id === user.id) {
+      return NextResponse.json(
+        { message: 'Cannot delete your own account' },
+        { status: 400 }
+      )
+    }
+    
+    // Delete the user
+    await payload.delete({
+      collection: 'users',
+      id,
+    })
+    
+    return NextResponse.json({ message: 'User deleted successfully' })
+  } catch (error: any) {
+    console.error('Error deleting user:', error)
+    return NextResponse.json(
+      { message: 'Error deleting user' },
       { status: 500 }
     )
   }
