@@ -27,8 +27,14 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 // Load environment variables from project root
+// Try .env.local first, then fallback to .env
+const envLocalPath = path.resolve(__dirname, '../.env.local')
 const envPath = path.resolve(__dirname, '../.env')
-const result = config({ path: envPath })
+
+let result = config({ path: envLocalPath })
+if (result.error) {
+  result = config({ path: envPath })
+}
 
 // Debug environment loading
 if (result.error) {
