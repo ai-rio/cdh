@@ -60,3 +60,7 @@ next-env.d.ts
 
 # pnpm
 .pnpm-store
+
+# supabase
+.supabase
+/supabase 
