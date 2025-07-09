@@ -22,6 +22,9 @@
     "test:e2e": "npm run cypress:run",
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
+    "promote-admin": "cross-env NODE_OPTIONS=--no-deprecation npx tsx scripts/promote-user-to-admin.ts",
+    "user-info": "cross-env NODE_OPTIONS=--no-deprecation npx tsx scripts/promote-user-to-admin.ts --info",
+    "list-admins": "cross-env NODE_OPTIONS=--no-deprecation npx tsx scripts/promote-user-to-admin.ts --list-admins",
     "prepare": "husky"
   },
   "dependencies": {
@@ -81,6 +84,7 @@
     "@vitest/ui": "^3.2.4",
     "autoprefixer": "^10.4.19",
     "cypress": "^14.5.0",
+    "dotenv": "^16.4.5",
     "eslint": "^9.16.0",
     "eslint-config-next": "15.3.0",
     "husky": "^9.1.7",

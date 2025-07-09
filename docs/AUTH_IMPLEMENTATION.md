@@ -184,6 +184,41 @@ npm test -- AuthModal.integration.test.tsx
 - ✅ Session management
 - ✅ Security validation
 
+## 👑 User Role Management
+
+### Admin Promotion
+
+The system includes tools for promoting users to admin role for full Payload CMS access:
+
+```bash
+# Promote carlos@ai.rio.br to admin
+npm run promote-admin carlos@ai.rio.br
+
+# Check user information
+npm run user-info carlos@ai.rio.br
+
+# List all admin users
+npm run list-admins
+```
+
+### User Roles
+
+| Role | Description | Permissions |
+|------|-------------|-------------|
+| **creator** | Content creators | Create and manage own content |
+| **brand** | Brand managers | Manage brand content and users |
+| **admin** | System administrators | Full Payload CMS access |
+
+### Admin Access
+
+Once promoted to admin, users gain:
+- Full access to `/admin` Payload CMS panel
+- All collection management (CRUD operations)
+- User management and role assignments
+- System configuration access
+
+For detailed user promotion guide, see: [User Promotion Documentation](./admin/USER_PROMOTION.md)
+
 ## 🚀 Usage Examples
 
 ### Using AuthContext in Components
