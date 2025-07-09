@@ -155,6 +155,16 @@ POST /api/users/logout
 Authorization: Bearer jwt_token_here
 ```
 
+**Response (Success - 200)**:
+```json
+{
+  "message": "Logged out successfully",
+  "success": true
+}
+```
+
+**Note**: Logout primarily clears HTTP-only cookies and client-side tokens. Since JWTs are stateless, server-side token invalidation isn't required - tokens will expire naturally based on their expiration time.
+
 ## 🧪 Testing
 
 ### Running Tests
@@ -266,6 +276,11 @@ The authentication system is configured in `src/payload.config.ts` with:
    - Verify DATABASE_URI environment variable
    - Check PostgreSQL connection
    - Ensure database migrations are run
+
+5. **"payload.logout is not a function" error**
+   - This has been fixed in the current implementation
+   - JWT logout is handled by clearing cookies and client-side tokens
+   - No server-side token invalidation is needed for stateless JWTs
 
 ### Debug Mode
 Enable debug logging by setting:

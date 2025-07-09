@@ -1,29 +1,16 @@
-import { getPayload } from 'payload'
-import config from '@payload-config'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(request: NextRequest) {
   try {
-    const payload = await getPayload({ config })
+    // For JWT-based authentication, logout is primarily about clearing the client-side token
+    // and HTTP-only cookies. There's no server-side token invalidation needed with JWTs
+    // since they are stateless and will expire naturally.
     
-    // Get token from Authorization header or cookie
-    const authHeader = request.headers.get('authorization')
-    const token = authHeader?.replace('Bearer ', '') || request.cookies.get('payload-token')?.value
-
-    if (token) {
-      try {
-        // Attempt to logout with Payload (this may invalidate the token server-side)
-        await payload.logout({
-          collection: 'users',
-        })
-      } catch (error) {
-        // Logout errors are not critical - we'll clear the cookie anyway
-        console.warn('Payload logout warning:', error)
-      }
-    }
-
     // Clear the HTTP-only cookie
-    const response = NextResponse.json({ message: 'Logged out successfully' })
+    const response = NextResponse.json({ 
+      message: 'Logged out successfully',
+      success: true 
+    })
     
     response.cookies.set('payload-token', '', {
       httpOnly: true,
@@ -38,7 +25,10 @@ export async function POST(request: NextRequest) {
     console.error('Logout error:', error)
     
     // Even if there's an error, we should clear the cookie
-    const response = NextResponse.json({ message: 'Logged out' })
+    const response = NextResponse.json({ 
+      message: 'Logged out',
+      success: true 
+    })
     
     response.cookies.set('payload-token', '', {
       httpOnly: true,

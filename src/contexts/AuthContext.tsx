@@ -194,9 +194,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     localStorage.removeItem('auth_token');
     localStorage.removeItem('auth_user');
     
-    // Call logout endpoint to invalidate token on server
+    // Call logout endpoint to clear HTTP-only cookies
     try {
-      await fetch('/api/users/logout', {
+      const response = await fetch('/api/users/logout', {
         method: 'POST',
         headers: {
           'Authorization': token ? `Bearer ${token}` : '',
@@ -204,6 +204,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         },
         credentials: 'include',
       });
+      
+      if (!response.ok) {
+        console.warn('Logout endpoint returned non-OK status:', response.status);
+      }
     } catch (error) {
       // Ignore logout endpoint errors - user is logged out locally anyway
       console.warn('Logout endpoint error (non-critical):', error);
