@@ -4,17 +4,18 @@ import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
 export default function Dashboard() {
-  const { user, logout, isLoading } = useAuth();
+  const { user, logout, isLoading, isInitialized } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    // Redirect to home if not authenticated
-    if (!isLoading && !user) {
+    // Only redirect after auth is initialized and user is not authenticated
+    if (isInitialized && !isLoading && !user) {
       router.push('/');
     }
-  }, [user, isLoading, router]);
+  }, [user, isLoading, isInitialized, router]);
 
-  if (isLoading) {
+  // Show loading while auth is initializing or loading
+  if (!isInitialized || isLoading) {
     return (
       <div className="min-h-screen bg-black text-white flex items-center justify-center">
         <div className="text-center">
@@ -25,8 +26,9 @@ export default function Dashboard() {
     );
   }
 
+  // Don't render anything if not authenticated (will redirect)
   if (!user) {
-    return null; // Will redirect in useEffect
+    return null;
   }
 
   return (

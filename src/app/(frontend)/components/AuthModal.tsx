@@ -15,16 +15,16 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
   const [name, setName] = useState('');
   const [validationError, setValidationError] = useState<string | null>(null); // New state for validation errors
 
-  const { user, login, register, isLoading, error } = useAuth(); // Integrate useAuth hook
+  const { user, login, register, isLoading, error, isInitialized } = useAuth(); // Integrate useAuth hook
   const router = useRouter(); // Initialize useRouter
 
   // Effect to handle redirection after successful login/registration
   useEffect(() => {
-    if (user) {
+    if (user && isInitialized) {
       onClose(); // Close modal
       router.push('/dashboard'); // Redirect to dashboard or profile page
     }
-  }, [user, onClose, router]);
+  }, [user, isInitialized, onClose, router]);
 
   // Effect to clear validation errors and reset form when modal opens
   useEffect(() => {

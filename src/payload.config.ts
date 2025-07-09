@@ -31,6 +31,16 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URI || '',
     },
   }),
+  cors: [
+    'http://localhost:3000',
+    'https://localhost:3000',
+    ...(process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : []),
+  ],
+  csrf: [
+    'http://localhost:3000',
+    'https://localhost:3000',
+    ...(process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : []),
+  ],
   sharp,
   plugins: [
     payloadCloudPlugin(),

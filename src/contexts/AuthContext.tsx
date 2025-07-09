@@ -10,6 +10,7 @@ interface AuthContextType {
   logout: () => void;
   isLoading: boolean;
   error: string | null;
+  isInitialized: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -23,22 +24,55 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [isInitialized, setIsInitialized] = useState<boolean>(false);
 
-  // Load user session from localStorage on mount
+  // Load user session from localStorage and verify with server on mount
   useEffect(() => {
-    const storedToken = localStorage.getItem('auth_token');
-    const storedUser = localStorage.getItem('auth_user');
-    
-    if (storedToken && storedUser) {
-      try {
-        setToken(storedToken);
-        setUser(JSON.parse(storedUser));
-      } catch (err) {
-        // Clear invalid stored data
-        localStorage.removeItem('auth_token');
-        localStorage.removeItem('auth_user');
+    const initializeAuth = async () => {
+      const storedToken = localStorage.getItem('auth_token');
+      const storedUser = localStorage.getItem('auth_user');
+      
+      if (storedToken && storedUser) {
+        try {
+          const parsedUser = JSON.parse(storedUser);
+          
+          // Verify token with server
+          const response = await fetch('/api/users/me', {
+            method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${storedToken}`,
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            setUser(data.user);
+            setToken(data.token || storedToken);
+            
+            // Update stored data if server returned updated info
+            if (data.token && data.token !== storedToken) {
+              localStorage.setItem('auth_token', data.token);
+            }
+            localStorage.setItem('auth_user', JSON.stringify(data.user));
+          } else {
+            // Token is invalid, clear stored data
+            localStorage.removeItem('auth_token');
+            localStorage.removeItem('auth_user');
+          }
+        } catch (err) {
+          console.error('Session restoration error:', err);
+          // Clear invalid stored data
+          localStorage.removeItem('auth_token');
+          localStorage.removeItem('auth_user');
+        }
       }
-    }
+      
+      setIsInitialized(true);
+    };
+
+    initializeAuth();
   }, []);
 
   // Store user session in localStorage when user/token changes
@@ -62,23 +96,26 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           'Content-Type': 'application/json',
           'Accept': 'application/json'
         },
+        credentials: 'include',
         body: JSON.stringify({ email, password })
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        // Handle HTTP errors
+        // Handle specific HTTP errors
         if (response.status === 401) {
-          throw new Error('Invalid email or password');
+          throw new Error(data.message || 'Invalid email or password');
+        } else if (response.status === 423) {
+          throw new Error(data.message || 'Account is temporarily locked. Please try again later.');
         } else if (response.status === 429) {
           throw new Error('Too many login attempts. Please try again later.');
         } else if (response.status >= 500) {
           throw new Error('Server error. Please try again later.');
         } else {
-          throw new Error('Login failed. Please check your credentials.');
+          throw new Error(data.message || 'Login failed. Please check your credentials.');
         }
       }
-
-      const data = await response.json();
 
       if (data.user && data.token) {
         setUser(data.user);
@@ -108,28 +145,31 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           'Content-Type': 'application/json',
           'Accept': 'application/json'
         },
+        credentials: 'include',
         body: JSON.stringify({ name, email, password })
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        // Handle HTTP errors
+        // Handle specific HTTP errors
         if (response.status === 400) {
-          const errorData = await response.json();
-          throw new Error(errorData.message || 'Invalid registration data');
+          throw new Error(data.message || 'Invalid registration data');
         } else if (response.status === 409) {
-          throw new Error('An account with this email already exists');
+          throw new Error(data.message || 'An account with this email already exists');
         } else if (response.status >= 500) {
           throw new Error('Server error. Please try again later.');
         } else {
-          throw new Error('Registration failed. Please try again.');
+          throw new Error(data.message || 'Registration failed. Please try again.');
         }
       }
-
-      const data = await response.json();
 
       if (data.user && data.token) {
         setUser(data.user);
         setToken(data.token);
+      } else if (data.user) {
+        // User created but not logged in automatically
+        throw new Error('Account created successfully. Please log in.');
       } else {
         throw new Error('Invalid response from server');
       }
@@ -145,30 +185,42 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  const logout = () => {
+  const logout = async () => {
     setUser(null);
     setToken(null);
     setError(null);
-    // Clear token from storage
+    
+    // Clear token from storage immediately
     localStorage.removeItem('auth_token');
     localStorage.removeItem('auth_user');
     
-    // Optional: Call logout endpoint to invalidate token on server
-    if (token) {
-      fetch('/api/users/logout', {
+    // Call logout endpoint to invalidate token on server
+    try {
+      await fetch('/api/users/logout', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${token}`,
+          'Authorization': token ? `Bearer ${token}` : '',
           'Content-Type': 'application/json'
-        }
-      }).catch(() => {
-        // Ignore logout endpoint errors - user is logged out locally anyway
+        },
+        credentials: 'include',
       });
+    } catch (error) {
+      // Ignore logout endpoint errors - user is logged out locally anyway
+      console.warn('Logout endpoint error (non-critical):', error);
     }
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, register, logout, isLoading, error }}>
+    <AuthContext.Provider value={{ 
+      user, 
+      token, 
+      login, 
+      register, 
+      logout, 
+      isLoading, 
+      error, 
+      isInitialized 
+    }}>
       {children}
     </AuthContext.Provider>
   );

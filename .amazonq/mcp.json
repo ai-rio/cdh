@@ -2,20 +2,14 @@
   "mcpServers": {
     "gemini-cli-docs": {
       "command": "npx",
-      "args": [
-        "mcp-remote",
-        "https://gitmcp.io/google-gemini/gemini-cli/tree/main"
-      ],
+      "args": ["mcp-remote", "https://gitmcp.io/google-gemini/gemini-cli/tree/main"],
       "env": {},
       "timeout": 120000,
       "disabled": false
     },
     "fetch-mcp-docs": {
       "command": "npx",
-      "args": [
-        "mcp-remote",
-        "https://gitmcp.io/zcaceres/fetch-mcp"
-      ],
+      "args": ["mcp-remote", "https://gitmcp.io/zcaceres/fetch-mcp"],
       "env": {},
       "timeout": 120000,
       "disabled": false
@@ -36,29 +30,21 @@
     },
     "nextjs-docs": {
       "command": "npx",
-      "args": [
-        "mcp-remote",
-        "https://gitmcp.io/vercel/next.js/"
-      ],
+      "args": ["mcp-remote", "https://gitmcp.io/vercel/next.js/"],
       "env": {},
       "timeout": 120000,
       "disabled": false
     },
     "fetch": {
       "command": "node",
-      "args": [
-        "/root/dev/.devcontainer/fetch-mcp/dist/index.js"
-      ],
+      "args": ["/root/dev/.devcontainer/fetch-mcp/dist/index.js"],
       "env": {},
       "timeout": 120000,
       "disabled": false
     },
     "brave-search": {
       "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-brave-search"
-      ],
+      "args": ["-y", "@modelcontextprotocol/server-brave-search"],
       "env": {
         "BRAVE_API_KEY": "BSAnvp-gWxQKFORwwgR_9MSr0VG3odR"
       },
@@ -67,30 +53,21 @@
     },
     "puppeteer": {
       "command": "npx",
-      "args": [
-        "-y",
-        "puppeteer-mcp-server"
-      ],
+      "args": ["-y", "puppeteer-mcp-server"],
       "env": {},
       "timeout": 120000,
       "disabled": false
     },
     "resend-nextjs-app-router-example Docs": {
       "command": "npx",
-      "args": [
-        "mcp-remote",
-        "https://gitmcp.io/resend/resend-nextjs-app-router-example"
-      ],
+      "args": ["mcp-remote", "https://gitmcp.io/resend/resend-nextjs-app-router-example"],
       "env": {},
       "timeout": 120000,
       "disabled": false
     },
     "payload Docs": {
       "command": "npx",
-      "args": [
-        "mcp-remote",
-        "https://gitmcp.io/payloadcms/payload"
-      ],
+      "args": ["mcp-remote", "https://gitmcp.io/payloadcms/payload"],
       "env": {},
       "timeout": 120000,
       "disabled": false
