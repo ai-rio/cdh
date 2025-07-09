@@ -2,6 +2,7 @@
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import FullUserManagement from '@/app/(frontend)/components/admin/FullUserManagement';
 
 export default function Dashboard() {
   const { user, logout, isLoading, isInitialized } = useAuth();
@@ -343,7 +344,7 @@ export default function Dashboard() {
           )}
 
           {/* Find Creators Tab - For Brands */}
-          {activeTab === 'find-creators' && isBrand && (
+          {activeTab === 'creators' && isBrand && (
             <div className="space-y-6">
               <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
                 <h2 className="text-xl font-semibold text-lime-400 mb-4">Find Creators</h2>
@@ -369,42 +370,14 @@ export default function Dashboard() {
           )}
 
           {/* User Management Tab - For Admins */}
-          {activeTab === 'user-management' && isAdmin && (
+          {activeTab === 'users' && isAdmin && (
             <div className="space-y-6">
-              <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
-                <h2 className="text-xl font-semibold text-lime-400 mb-4">User Management</h2>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left">
-                    <thead>
-                      <tr className="border-b border-gray-700">
-                        <th className="pb-3 text-gray-300">Name</th>
-                        <th className="pb-3 text-gray-300">Email</th>
-                        <th className="pb-3 text-gray-300">Role</th>
-                        <th className="pb-3 text-gray-300">Status</th>
-                        <th className="pb-3 text-gray-300">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr className="border-b border-gray-800">
-                        <td className="py-3 text-white">John Doe</td>
-                        <td className="py-3 text-gray-300">john@example.com</td>
-                        <td className="py-3 text-gray-300">Creator</td>
-                        <td className="py-3 text-green-400">Active</td>
-                        <td className="py-3">
-                          <button className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm transition-colors">
-                            Edit
-                          </button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+              <FullUserManagement />
             </div>
           )}
 
           {/* Platform Analytics Tab - For Admins */}
-          {activeTab === 'platform-analytics' && isAdmin && (
+          {activeTab === 'analytics' && isAdmin && (
             <div className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
@@ -432,7 +405,7 @@ export default function Dashboard() {
           )}
 
           {/* System Settings Tab - For Admins */}
-          {activeTab === 'system-settings' && isAdmin && (
+          {activeTab === 'settings' && isAdmin && (
             <div className="space-y-6">
               <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
                 <h2 className="text-xl font-semibold text-lime-400 mb-4">System Settings</h2>

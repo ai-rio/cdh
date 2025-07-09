@@ -38,6 +38,11 @@ export default function UserManagement() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
+  // Debug logging
+  console.log('UserManagement - Current User:', currentUser);
+  console.log('UserManagement - Token exists:', !!token);
+  console.log('UserManagement - User role:', currentUser?.role);
+
   // Fetch users from Payload API
   const fetchUsers = async () => {
     if (!token || currentUser?.role !== 'admin') {
@@ -237,6 +242,12 @@ export default function UserManagement() {
               <AlertCircle className="h-4 w-4" />
               <AlertDescription className="text-red-400">
                 Access denied. Admin privileges required to manage users.
+                <br />
+                Current user: {currentUser?.name || 'Not logged in'} 
+                <br />
+                Current role: {currentUser?.role || 'No role'}
+                <br />
+                Has token: {token ? 'Yes' : 'No'}
               </AlertDescription>
             </Alert>
           </CardContent>
@@ -247,8 +258,21 @@ export default function UserManagement() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      <div className="space-y-6">
+        <Card className="bg-gray-800 border-gray-700">
+          <CardHeader>
+            <CardTitle className="text-white">User Management</CardTitle>
+            <CardDescription className="text-gray-400">
+              Loading user data...
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center justify-center h-64">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+              <span className="ml-2 text-gray-400">Loading users...</span>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     );
   }

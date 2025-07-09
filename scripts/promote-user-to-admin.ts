@@ -36,6 +36,11 @@ if (result.error) {
   result = config({ path: envPath })
 }
 
+// Also try loading from .env in current directory
+if (result.error) {
+  result = config()
+}
+
 // Debug environment loading
 if (result.error) {
   console.log(`❌ Error loading .env file from ${envPath}:`, result.error.message)
