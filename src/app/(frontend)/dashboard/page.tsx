@@ -13,6 +13,14 @@ const SmartUserManagement = dynamic(
   }
 );
 
+const ResendAdminUI = dynamic(
+  () => import('@/app/(frontend)/components/admin/ResendAdminUI'),
+  {
+    ssr: false,
+    loading: () => <div className="animate-pulse bg-gray-800 h-32 rounded-lg"></div>
+  }
+);
+
 // Memoized TabButton component to prevent re-renders
 const TabButton = memo(({ active, onClick, children }: { 
   active: boolean; 
@@ -289,6 +297,13 @@ export default function Dashboard() {
           onClick={() => handleTabChange('settings')}
         >
           System Settings
+        </TabButton>,
+        <TabButton 
+          key="email"
+          active={activeTab === 'email'} 
+          onClick={() => handleTabChange('email')}
+        >
+          Email
         </TabButton>
       );
     }
@@ -309,6 +324,8 @@ export default function Dashboard() {
         return isAdmin ? <AnalyticsTab /> : null;
       case 'settings':
         return isAdmin ? <SettingsTab /> : null;
+      case 'email':
+        return isAdmin ? <ResendAdminUI /> : null;
       case 'portfolio':
         return isCreator ? <PortfolioTab /> : null;
       case 'opportunities':
