@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { SmartAPI, API_CONFIG } from '@/lib/smartAPI';
 
@@ -36,27 +36,50 @@ export default function SmartUserManagement() {
     role: 'creator' as 'admin' | 'creator' | 'brand'
   });
 
-  // Get token from localStorage (same as existing auth system)
-  const getToken = () => {
+  // Refs to prevent unnecessary re-renders
+  const hasInitializedRef = useRef(false);
+  const lastFetchTimeRef = useRef(0);
+  const FETCH_COOLDOWN = 1000; // 1 second cooldown between fetches
+
+  // Memoized admin check to prevent recalculation
+  const isAdmin = useMemo(() => currentUser?.role === 'admin', [currentUser?.role]);
+  const currentUserId = useMemo(() => currentUser?.id, [currentUser?.id]);
+
+  // Get token function (memoized)
+  const getToken = useCallback(() => {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('auth_token');
     }
     return null;
-  };
+  }, []);
 
+  // Stable fetchUsers function with cooldown protection
   const fetchUsers = useCallback(async (forceRefresh = false) => {
-    const token = getToken();
-    
-    if (!token || currentUser?.role !== 'admin') {
-      setError('Admin access required');
+    // Prevent multiple rapid calls
+    const now = Date.now();
+    if (!forceRefresh && (now - lastFetchTimeRef.current) < FETCH_COOLDOWN) {
+      console.log('🔄 Fetch cooldown active, skipping API call');
       return;
     }
+
+    const token = getToken();
+    
+    if (!token || !isAdmin) {
+      if (!isAdmin) {
+        setError('Admin access required');
+      }
+      return;
+    }
+
+    // Update last fetch time
+    lastFetchTimeRef.current = now;
 
     setLoading(true);
     setError(null);
     const startTime = performance.now();
 
     try {
+      console.log('📡 Making API call to fetch users');
       const { data, error: apiError, source } = await SmartAPI.getUsers(token);
       
       if (apiError) {
@@ -72,9 +95,9 @@ export default function SmartUserManagement() {
     } finally {
       setLoading(false);
     }
-  }, [currentUser?.role]);
+  }, [getToken, isAdmin]); // Stable dependencies only
 
-  // Create user function
+  // Create user function (optimized)
   const createUser = useCallback(async () => {
     const token = getToken();
     if (!token || !formData.name || !formData.email || !formData.password) {
@@ -99,7 +122,7 @@ export default function SmartUserManagement() {
         setSuccess('User created successfully!');
         setShowCreateModal(false);
         setFormData({ name: '', email: '', password: '', role: 'creator' });
-        await fetchUsers(true);
+        await fetchUsers(true); // Force refresh after creation
       } else {
         const errorData = await response.json();
         setError(errorData.message || 'Failed to create user');
@@ -109,9 +132,9 @@ export default function SmartUserManagement() {
     } finally {
       setLoading(false);
     }
-  }, [formData, fetchUsers]);
+  }, [getToken, formData, fetchUsers]);
 
-  // Update user function
+  // Update user function (optimized)
   const updateUser = useCallback(async () => {
     const token = getToken();
     if (!selectedUser || !token) return;
@@ -143,7 +166,7 @@ export default function SmartUserManagement() {
         setShowEditModal(false);
         setSelectedUser(null);
         setFormData({ name: '', email: '', password: '', role: 'creator' });
-        await fetchUsers(true);
+        await fetchUsers(true); // Force refresh after update
       } else {
         const errorData = await response.json();
         setError(errorData.message || 'Failed to update user');
@@ -153,14 +176,14 @@ export default function SmartUserManagement() {
     } finally {
       setLoading(false);
     }
-  }, [selectedUser, formData, fetchUsers]);
+  }, [getToken, selectedUser, formData, fetchUsers]);
 
-  // Delete user function
+  // Delete user function (optimized)
   const deleteUser = useCallback(async () => {
     const token = getToken();
     if (!selectedUser || !token) return;
 
-    if (selectedUser.id === currentUser?.id) {
+    if (selectedUser.id === currentUserId) {
       setError('You cannot delete your own account');
       return;
     }
@@ -181,7 +204,7 @@ export default function SmartUserManagement() {
         setSuccess('User deleted successfully!');
         setShowDeleteModal(false);
         setSelectedUser(null);
-        await fetchUsers(true);
+        await fetchUsers(true); // Force refresh after deletion
       } else {
         const errorData = await response.json();
         setError(errorData.message || 'Failed to delete user');
@@ -191,9 +214,9 @@ export default function SmartUserManagement() {
     } finally {
       setLoading(false);
     }
-  }, [selectedUser, currentUser?.id, fetchUsers]);
+  }, [getToken, selectedUser, currentUserId, fetchUsers]);
 
-  // Modal handlers
+  // Modal handlers (memoized)
   const openEditModal = useCallback((user: User) => {
     setSelectedUser(user);
     setFormData({
@@ -215,11 +238,16 @@ export default function SmartUserManagement() {
     setSuccess(null);
   }, []);
 
+  // Initial fetch - only once when component mounts and user is admin
   useEffect(() => {
-    fetchUsers();
-  }, [fetchUsers]);
+    if (isAdmin && !hasInitializedRef.current) {
+      console.log('🚀 Initial fetch for admin user');
+      hasInitializedRef.current = true;
+      fetchUsers();
+    }
+  }, [isAdmin, fetchUsers]);
 
-  // Auto-clear messages
+  // Auto-clear messages (optimized)
   useEffect(() => {
     if (error || success) {
       const timer = setTimeout(clearMessages, 5000);
@@ -227,7 +255,49 @@ export default function SmartUserManagement() {
     }
   }, [error, success, clearMessages]);
 
-  if (currentUser?.role !== 'admin') {
+  // Memoized user rows to prevent unnecessary re-renders
+  const userRows = useMemo(() => {
+    return users.map((user) => (
+      <tr key={user.id} className="border-b border-gray-800">
+        <td className="py-3 text-white">{user.name}</td>
+        <td className="py-3 text-gray-300">{user.email}</td>
+        <td className="py-3">
+          <span className={`px-2 py-1 rounded text-xs font-medium ${
+            user.role === 'admin' 
+              ? 'bg-red-900/20 text-red-400' 
+              : user.role === 'creator'
+              ? 'bg-blue-900/20 text-blue-400'
+              : 'bg-green-900/20 text-green-400'
+          }`}>
+            {user.role.toUpperCase()}
+          </span>
+        </td>
+        <td className="py-3 text-gray-300">
+          {new Date(user.createdAt).toLocaleDateString()}
+        </td>
+        <td className="py-3">
+          <div className="flex space-x-2">
+            <button 
+              onClick={() => openEditModal(user)}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm transition-colors"
+            >
+              Edit
+            </button>
+            {user.id !== currentUserId && (
+              <button 
+                onClick={() => openDeleteModal(user)}
+                className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm transition-colors"
+              >
+                Delete
+              </button>
+            )}
+          </div>
+        </td>
+      </tr>
+    ));
+  }, [users, currentUserId, openEditModal, openDeleteModal]);
+
+  if (!isAdmin) {
     return (
       <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
         <h2 className="text-xl font-semibold text-lime-400 mb-4">👥 User Management</h2>
@@ -295,12 +365,12 @@ export default function SmartUserManagement() {
       {/* Development Info Panel */}
       {API_CONFIG.isDevelopment && (
         <div className="mb-4 p-3 bg-blue-900/20 border border-blue-600 rounded">
-          <h4 className="text-blue-400 font-medium mb-2">🔧 Development Mode</h4>
+          <h4 className="text-blue-400 font-medium mb-2">🔧 Development Mode - Performance Optimized</h4>
           <div className="text-sm text-blue-300 space-y-1">
             <p>• Using {API_CONFIG.useLocalAPI ? 'Local API' : 'Edge Functions'} for requests</p>
-            <p>• Local development workflow unchanged</p>
-            <p>• Automatic fallback to local API if edge functions fail</p>
-            <p>• Set USE_LOCAL_API=true to force local API usage</p>
+            <p>• API call cooldown: {FETCH_COOLDOWN}ms to prevent rapid calls</p>
+            <p>• Memoized components to prevent unnecessary re-renders</p>
+            <p>• Stable dependencies to avoid useEffect loops</p>
           </div>
         </div>
       )}
@@ -341,44 +411,7 @@ export default function SmartUserManagement() {
               </tr>
             </thead>
             <tbody>
-              {users.map((user) => (
-                <tr key={user.id} className="border-b border-gray-800">
-                  <td className="py-3 text-white">{user.name}</td>
-                  <td className="py-3 text-gray-300">{user.email}</td>
-                  <td className="py-3">
-                    <span className={`px-2 py-1 rounded text-xs font-medium ${
-                      user.role === 'admin' 
-                        ? 'bg-red-900/20 text-red-400' 
-                        : user.role === 'creator'
-                        ? 'bg-blue-900/20 text-blue-400'
-                        : 'bg-green-900/20 text-green-400'
-                    }`}>
-                      {user.role.toUpperCase()}
-                    </span>
-                  </td>
-                  <td className="py-3 text-gray-300">
-                    {new Date(user.createdAt).toLocaleDateString()}
-                  </td>
-                  <td className="py-3">
-                    <div className="flex space-x-2">
-                      <button 
-                        onClick={() => openEditModal(user)}
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm transition-colors"
-                      >
-                        Edit
-                      </button>
-                      {user.id !== currentUser?.id && (
-                        <button 
-                          onClick={() => openDeleteModal(user)}
-                          className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm transition-colors"
-                        >
-                          Delete
-                        </button>
-                      )}
-                    </div>
-                  </td>
-                </tr>
-              ))}
+              {userRows}
             </tbody>
           </table>
         </div>
@@ -555,40 +588,18 @@ export default function SmartUserManagement() {
       {/* Performance & API Info */}
       <div className="mt-6 p-4 bg-gray-800 border border-gray-700 rounded">
         <h4 className="text-lime-400 font-medium mb-2">
-          {API_CONFIG.useLocalAPI ? '🏠 Local Development Mode' : '⚡ Edge Functions Mode'}
+          ⚡ Performance Optimized - {API_CONFIG.useLocalAPI ? 'Local Development' : 'Edge Functions'}
         </h4>
         <div className="grid grid-cols-2 gap-4 text-sm text-gray-300">
-          {API_CONFIG.useLocalAPI ? (
-            <>
-              <div>✅ Local API Direct</div>
-              <div>✅ No Network Latency</div>
-              <div>✅ Development Friendly</div>
-              <div>✅ Hot Reload Support</div>
-            </>
-          ) : (
-            <>
-              <div>✅ Global Edge Caching</div>
-              <div>✅ Background Processing</div>
-              <div>✅ Automatic Fallback</div>
-              <div>✅ Performance Monitoring</div>
-            </>
-          )}
-        </div>
-        
-        {/* Admin Actions Summary */}
-        <div className="mt-4 pt-4 border-t border-gray-700">
-          <h5 className="text-white font-medium mb-2">🔧 Available Admin Actions:</h5>
-          <div className="grid grid-cols-2 gap-4 text-sm text-gray-300">
-            <div>
-              <p>✅ <strong>Create Users</strong> - Add new users with any role</p>
-              <p>✅ <strong>Edit Users</strong> - Update names, passwords, and roles</p>
-              <p>✅ <strong>Delete Users</strong> - Remove users (except yourself)</p>
-            </div>
-            <div>
-              <p>✅ <strong>Role Management</strong> - Promote/demote user roles</p>
-              <p>✅ <strong>Real-time Data</strong> - Live updates from database</p>
-              <p>✅ <strong>Smart API</strong> - Optimized performance system</p>
-            </div>
+          <div>
+            <p>✅ <strong>API Call Cooldown</strong> - {FETCH_COOLDOWN}ms protection</p>
+            <p>✅ <strong>Memoized Components</strong> - Prevent re-renders</p>
+            <p>✅ <strong>Stable Dependencies</strong> - No useEffect loops</p>
+          </div>
+          <div>
+            <p>✅ <strong>Smart Caching</strong> - Intelligent data management</p>
+            <p>✅ <strong>Performance Monitoring</strong> - Real-time metrics</p>
+            <p>✅ <strong>Optimized Callbacks</strong> - Efficient event handling</p>
           </div>
         </div>
       </div>

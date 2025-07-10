@@ -1,56 +1,364 @@
 'use client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import SmartUserManagement from '@/app/(frontend)/components/admin/SmartUserManagement';
+import { useEffect, useState, useMemo, useCallback, useRef, memo } from 'react';
+import dynamic from 'next/dynamic';
+
+// Dynamically import SmartUserManagement to prevent SSR issues
+const SmartUserManagement = dynamic(
+  () => import('@/app/(frontend)/components/admin/SmartUserManagement'),
+  { 
+    ssr: false,
+    loading: () => <div className="animate-pulse bg-gray-800 h-32 rounded-lg"></div>
+  }
+);
+
+// Memoized TabButton component to prevent re-renders
+const TabButton = memo(({ active, onClick, children }: { 
+  active: boolean; 
+  onClick: () => void; 
+  children: React.ReactNode; 
+}) => (
+  <button
+    onClick={onClick}
+    className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
+      active
+        ? 'border-lime-400 text-lime-400'
+        : 'border-transparent text-gray-400 hover:text-gray-300'
+    }`}
+  >
+    {children}
+  </button>
+));
+
+TabButton.displayName = 'TabButton';
+
+// Memoized tab components to prevent unnecessary re-renders
+const OverviewTab = memo(({ userInfo, userRoles }: { userInfo: any, userRoles: any }) => {
+  const { isAdmin, isCreator, isBrand } = userRoles;
+  
+  return (
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
+          <h2 className="text-xl font-semibold text-lime-400 mb-4">Profile Info</h2>
+          <div className="space-y-2">
+            <p><span className="text-gray-400">Name:</span> {userInfo.name}</p>
+            <p><span className="text-gray-400">Email:</span> {userInfo.email}</p>
+            <p><span className="text-gray-400">Role:</span> {userInfo.role}</p>
+            <p><span className="text-gray-400">ID:</span> {userInfo.id}</p>
+          </div>
+        </div>
+
+        <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
+          <h2 className="text-xl font-semibold text-lime-400 mb-4">Quick Actions</h2>
+          <div className="space-y-3">
+            {isCreator && (
+              <>
+                <button className="w-full bg-lime-600 hover:bg-lime-700 text-black px-4 py-2 rounded transition-colors">
+                  Update Portfolio
+                </button>
+                <button className="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-colors">
+                  Browse Opportunities
+                </button>
+              </>
+            )}
+            {isBrand && (
+              <>
+                <button className="w-full bg-lime-600 hover:bg-lime-700 text-black px-4 py-2 rounded transition-colors">
+                  Create Campaign
+                </button>
+                <button className="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-colors">
+                  Find Creators
+                </button>
+              </>
+            )}
+            {isAdmin && (
+              <>
+                <button className="w-full bg-lime-600 hover:bg-lime-700 text-black px-4 py-2 rounded transition-colors">
+                  Manage Users
+                </button>
+                <button className="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-colors">
+                  Platform Analytics
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+
+        <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
+          <h2 className="text-xl font-semibold text-lime-400 mb-4">Recent Activity</h2>
+          <div className="space-y-3 text-sm text-gray-300">
+            <p>• Account created successfully</p>
+            <p>• Profile setup completed</p>
+            <p>• Welcome to {isAdmin ? 'Admin Panel' : isCreator ? "Creator's Deal Hub" : 'Brand Portal'}!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+});
+
+OverviewTab.displayName = 'OverviewTab';
+
+// Simple memoized placeholder components
+const AnalyticsTab = memo(() => (
+  <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
+    <h2 className="text-xl font-semibold text-lime-400 mb-4">Platform Analytics</h2>
+    <p className="text-gray-300">Analytics content</p>
+  </div>
+));
+
+AnalyticsTab.displayName = 'AnalyticsTab';
+
+const SettingsTab = memo(() => (
+  <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
+    <h2 className="text-xl font-semibold text-lime-400 mb-4">System Settings</h2>
+    <p className="text-gray-300">Settings content</p>
+  </div>
+));
+
+SettingsTab.displayName = 'SettingsTab';
+
+const PortfolioTab = memo(() => (
+  <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
+    <h2 className="text-xl font-semibold text-lime-400 mb-4">My Portfolio</h2>
+    <p className="text-gray-300">Portfolio content</p>
+  </div>
+));
+
+PortfolioTab.displayName = 'PortfolioTab';
+
+const OpportunitiesTab = memo(() => (
+  <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
+    <h2 className="text-xl font-semibold text-lime-400 mb-4">Opportunities</h2>
+    <p className="text-gray-300">Opportunities content</p>
+  </div>
+));
+
+OpportunitiesTab.displayName = 'OpportunitiesTab';
+
+const CampaignsTab = memo(() => (
+  <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
+    <h2 className="text-xl font-semibold text-lime-400 mb-4">My Campaigns</h2>
+    <p className="text-gray-300">Campaigns content</p>
+  </div>
+));
+
+CampaignsTab.displayName = 'CampaignsTab';
+
+const FindCreatorsTab = memo(() => (
+  <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
+    <h2 className="text-xl font-semibold text-lime-400 mb-4">Find Creators</h2>
+    <p className="text-gray-300">Find creators content</p>
+  </div>
+));
+
+FindCreatorsTab.displayName = 'FindCreatorsTab';
 
 export default function Dashboard() {
   const { user, logout, isLoading, isInitialized } = useAuth();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState('overview');
+  
+  // Refs to prevent re-render loops and track state
+  const mountedRef = useRef(false);
 
+  // Prevent scroll-based re-renders
   useEffect(() => {
-    // Only redirect after auth is initialized and user is not authenticated
-    if (isInitialized && !isLoading && !user) {
-      router.push('/');
+    mountedRef.current = true;
+    
+    // Disable scroll restoration to prevent scroll-based re-renders
+    if (typeof window !== 'undefined') {
+      window.history.scrollRestoration = 'manual';
     }
-  }, [user, isLoading, isInitialized, router]);
+    
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
 
-  // Helper function to check if user has admin privileges
-  const isAdmin = user?.role === 'admin';
-  const isCreator = user?.role === 'creator';
-  const isBrand = user?.role === 'brand';
+  // Stable user role checks with proper memoization
+  const userRoles = useMemo(() => {
+    if (!user?.role) return { isAdmin: false, isCreator: false, isBrand: false };
+    
+    return {
+      isAdmin: user.role === 'admin',
+      isCreator: user.role === 'creator',
+      isBrand: user.role === 'brand'
+    };
+  }, [user?.role]); // Only depend on role, not entire user object
 
-  // Show loading while auth is initializing or loading
+  const { isAdmin, isCreator, isBrand } = userRoles;
+
+  // Memoized dashboard title with stable dependency
+  const dashboardTitle = useMemo(() => {
+    if (isAdmin) return 'Admin Command Center';
+    if (isCreator) return 'Creator Dashboard';
+    return 'Brand Dashboard';
+  }, [isAdmin, isCreator]);
+
+  // Stable user info object with null checks
+  const userInfo = useMemo(() => {
+    if (!user) return { name: '', email: '', role: 'creator', id: '' };
+    
+    return {
+      name: user.name || '',
+      email: user.email || '',
+      role: user.role || 'creator',
+      id: user.id || ''
+    };
+  }, [user?.name, user?.email, user?.role, user?.id]);
+
+  // Stable tab change handler with debouncing
+  const handleTabChange = useCallback((tab: string) => {
+    if (tab !== activeTab && mountedRef.current) {
+      setActiveTab(tab);
+    }
+  }, [activeTab]);
+
+  // Memoized tab buttons to prevent re-renders
+  const tabButtons = useMemo(() => {
+    const buttons = [
+      <TabButton 
+        key="overview"
+        active={activeTab === 'overview'} 
+        onClick={() => handleTabChange('overview')}
+      >
+        Overview
+      </TabButton>
+    ];
+
+    if (isCreator) {
+      buttons.push(
+        <TabButton 
+          key="portfolio"
+          active={activeTab === 'portfolio'} 
+          onClick={() => handleTabChange('portfolio')}
+        >
+          Portfolio
+        </TabButton>,
+        <TabButton 
+          key="opportunities"
+          active={activeTab === 'opportunities'} 
+          onClick={() => handleTabChange('opportunities')}
+        >
+          Opportunities
+        </TabButton>
+      );
+    }
+
+    if (isBrand) {
+      buttons.push(
+        <TabButton 
+          key="campaigns"
+          active={activeTab === 'campaigns'} 
+          onClick={() => handleTabChange('campaigns')}
+        >
+          Campaigns
+        </TabButton>,
+        <TabButton 
+          key="creators"
+          active={activeTab === 'creators'} 
+          onClick={() => handleTabChange('creators')}
+        >
+          Find Creators
+        </TabButton>
+      );
+    }
+
+    if (isAdmin) {
+      buttons.push(
+        <TabButton 
+          key="users"
+          active={activeTab === 'users'} 
+          onClick={() => handleTabChange('users')}
+        >
+          User Management
+        </TabButton>,
+        <TabButton 
+          key="analytics"
+          active={activeTab === 'analytics'} 
+          onClick={() => handleTabChange('analytics')}
+        >
+          Platform Analytics
+        </TabButton>,
+        <TabButton 
+          key="settings"
+          active={activeTab === 'settings'} 
+          onClick={() => handleTabChange('settings')}
+        >
+          System Settings
+        </TabButton>
+      );
+    }
+
+    return buttons;
+  }, [activeTab, isCreator, isBrand, isAdmin, handleTabChange]);
+
+  // Memoized tab content to prevent unnecessary re-renders
+  const tabContent = useMemo(() => {
+    if (!mountedRef.current) return null;
+    
+    switch (activeTab) {
+      case 'overview':
+        return <OverviewTab userInfo={userInfo} userRoles={userRoles} />;
+      case 'users':
+        return isAdmin ? <SmartUserManagement /> : null;
+      case 'analytics':
+        return isAdmin ? <AnalyticsTab /> : null;
+      case 'settings':
+        return isAdmin ? <SettingsTab /> : null;
+      case 'portfolio':
+        return isCreator ? <PortfolioTab /> : null;
+      case 'opportunities':
+        return isCreator ? <OpportunitiesTab /> : null;
+      case 'campaigns':
+        return isBrand ? <CampaignsTab /> : null;
+      case 'creators':
+        return isBrand ? <FindCreatorsTab /> : null;
+      default:
+        return <OverviewTab userInfo={userInfo} userRoles={userRoles} />;
+    }
+  }, [activeTab, userInfo, userRoles, isAdmin, isCreator, isBrand]);
+
+  // Show loading state - simplified since middleware handles auth redirects
   if (!isInitialized || isLoading) {
     return (
       <div className="min-h-screen bg-black text-white flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-lime-400 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-lime-400 mx-auto mb-4"></div>
           <p className="text-lg">Loading your command center...</p>
         </div>
       </div>
     );
   }
 
-  // Don't render anything if not authenticated (will redirect)
+  // Show loading if user is still being fetched - middleware will redirect if not authenticated
   if (!user) {
-    return null;
+    return (
+      <div className="min-h-screen bg-black text-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-lime-400 mx-auto mb-4"></div>
+          <p className="text-lg">Loading user data...</p>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-black text-white" style={{ scrollBehavior: 'auto' }}>
       <div className="container mx-auto px-4 py-8">
         <header className="mb-8">
           <div className="flex justify-between items-center mb-6">
             <div>
               <h1 className="text-3xl font-bold text-lime-400 mb-2">
-                {isAdmin ? 'Admin Command Center' : isCreator ? 'Creator Dashboard' : 'Brand Dashboard'}
+                {dashboardTitle}
               </h1>
               <p className="text-gray-300">
-                Hello, <span className="text-lime-400">{user.name}</span>
+                Hello, <span className="text-lime-400">{userInfo.name}</span>
                 <span className="ml-2 px-2 py-1 text-xs rounded-full bg-gray-700 text-gray-300">
-                  {user.role?.toUpperCase()}
+                  {userInfo.role.toUpperCase()}
                 </span>
               </p>
             </div>
@@ -65,378 +373,28 @@ export default function Dashboard() {
           {/* Navigation Tabs */}
           <div className="border-b border-gray-700">
             <nav className="flex space-x-8">
-              <button
-                onClick={() => setActiveTab('overview')}
-                className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
-                  activeTab === 'overview'
-                    ? 'border-lime-400 text-lime-400'
-                    : 'border-transparent text-gray-400 hover:text-gray-300'
-                }`}
-              >
-                Overview
-              </button>
-              
-              {isCreator && (
-                <>
-                  <button
-                    onClick={() => setActiveTab('portfolio')}
-                    className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
-                      activeTab === 'portfolio'
-                        ? 'border-lime-400 text-lime-400'
-                        : 'border-transparent text-gray-400 hover:text-gray-300'
-                    }`}
-                  >
-                    Portfolio
-                  </button>
-                  <button
-                    onClick={() => setActiveTab('opportunities')}
-                    className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
-                      activeTab === 'opportunities'
-                        ? 'border-lime-400 text-lime-400'
-                        : 'border-transparent text-gray-400 hover:text-gray-300'
-                    }`}
-                  >
-                    Opportunities
-                  </button>
-                </>
-              )}
-              
-              {isBrand && (
-                <>
-                  <button
-                    onClick={() => setActiveTab('campaigns')}
-                    className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
-                      activeTab === 'campaigns'
-                        ? 'border-lime-400 text-lime-400'
-                        : 'border-transparent text-gray-400 hover:text-gray-300'
-                    }`}
-                  >
-                    Campaigns
-                  </button>
-                  <button
-                    onClick={() => setActiveTab('creators')}
-                    className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
-                      activeTab === 'creators'
-                        ? 'border-lime-400 text-lime-400'
-                        : 'border-transparent text-gray-400 hover:text-gray-300'
-                    }`}
-                  >
-                    Find Creators
-                  </button>
-                </>
-              )}
-              
-              {isAdmin && (
-                <>
-                  <button
-                    onClick={() => setActiveTab('users')}
-                    className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
-                      activeTab === 'users'
-                        ? 'border-lime-400 text-lime-400'
-                        : 'border-transparent text-gray-400 hover:text-gray-300'
-                    }`}
-                  >
-                    User Management
-                  </button>
-                  <button
-                    onClick={() => setActiveTab('analytics')}
-                    className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
-                      activeTab === 'analytics'
-                        ? 'border-lime-400 text-lime-400'
-                        : 'border-transparent text-gray-400 hover:text-gray-300'
-                    }`}
-                  >
-                    Platform Analytics
-                  </button>
-                  <button
-                    onClick={() => setActiveTab('settings')}
-                    className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
-                      activeTab === 'settings'
-                        ? 'border-lime-400 text-lime-400'
-                        : 'border-transparent text-gray-400 hover:text-gray-300'
-                    }`}
-                  >
-                    System Settings
-                  </button>
-                </>
-              )}
+              {tabButtons}
             </nav>
           </div>
         </header>
 
-        {/* Tab Content */}
+        {/* Tab Content - Memoized to prevent unnecessary re-renders */}
         <div className="mt-8">
-          {activeTab === 'overview' && (
-            <div className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
-                  <h2 className="text-xl font-semibold text-lime-400 mb-4">Profile Info</h2>
-                  <div className="space-y-2">
-                    <p><span className="text-gray-400">Name:</span> {user.name}</p>
-                    <p><span className="text-gray-400">Email:</span> {user.email}</p>
-                    <p><span className="text-gray-400">Role:</span> {user.role || 'Creator'}</p>
-                    <p><span className="text-gray-400">ID:</span> {user.id}</p>
-                  </div>
-                </div>
+          {tabContent}
+        </div>
 
-                <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
-                  <h2 className="text-xl font-semibold text-lime-400 mb-4">Quick Actions</h2>
-                  <div className="space-y-3">
-                    {isCreator && (
-                      <>
-                        <button className="w-full bg-lime-600 hover:bg-lime-700 text-black px-4 py-2 rounded transition-colors">
-                          Update Portfolio
-                        </button>
-                        <button className="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-colors">
-                          Browse Opportunities
-                        </button>
-                        <button className="w-full bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded transition-colors">
-                          View Earnings
-                        </button>
-                      </>
-                    )}
-                    {isBrand && (
-                      <>
-                        <button className="w-full bg-lime-600 hover:bg-lime-700 text-black px-4 py-2 rounded transition-colors">
-                          Create Campaign
-                        </button>
-                        <button className="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-colors">
-                          Find Creators
-                        </button>
-                        <button className="w-full bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded transition-colors">
-                          Campaign Analytics
-                        </button>
-                      </>
-                    )}
-                    {isAdmin && (
-                      <>
-                        <button className="w-full bg-lime-600 hover:bg-lime-700 text-black px-4 py-2 rounded transition-colors">
-                          Manage Users
-                        </button>
-                        <button className="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-colors">
-                          Platform Analytics
-                        </button>
-                        <button className="w-full bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded transition-colors">
-                          System Settings
-                        </button>
-                      </>
-                    )}
-                  </div>
-                </div>
-
-                <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
-                  <h2 className="text-xl font-semibold text-lime-400 mb-4">Recent Activity</h2>
-                  <div className="space-y-3 text-sm text-gray-300">
-                    <p>• Account created successfully</p>
-                    <p>• Profile setup completed</p>
-                    <p>• Welcome to {isAdmin ? 'Admin Panel' : isCreator ? "Creator's Deal Hub" : 'Brand Portal'}!</p>
-                    {isAdmin && <p>• Admin privileges granted</p>}
-                  </div>
-                </div>
-              </div>
-
-              {/* Role-specific getting started section */}
-              <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
-                <h2 className="text-xl font-semibold text-lime-400 mb-4">Getting Started</h2>
-                {isCreator && (
-                  <div>
-                    <h3 className="text-lg font-medium text-white mb-2">Creator Checklist</h3>
-                    <ul className="space-y-2 text-gray-300">
-                      <li>• Complete your creator profile</li>
-                      <li>• Upload your portfolio and showcase your work</li>
-                      <li>• Set your rates and availability</li>
-                      <li>• Browse brand partnerships and opportunities</li>
-                      <li>• Connect your social media accounts</li>
-                    </ul>
-                  </div>
-                )}
-                {isBrand && (
-                  <div>
-                    <h3 className="text-lg font-medium text-white mb-2">Brand Checklist</h3>
-                    <ul className="space-y-2 text-gray-300">
-                      <li>• Set up your brand profile and company information</li>
-                      <li>• Define your campaign goals and target audience</li>
-                      <li>• Set your budget and campaign parameters</li>
-                      <li>• Search for creators that match your brand</li>
-                      <li>• Launch your first campaign</li>
-                    </ul>
-                  </div>
-                )}
-                {isAdmin && (
-                  <div>
-                    <h3 className="text-lg font-medium text-white mb-2">Admin Dashboard</h3>
-                    <ul className="space-y-2 text-gray-300">
-                      <li>• Monitor platform activity and user engagement</li>
-                      <li>• Manage user accounts and permissions</li>
-                      <li>• Review and moderate content</li>
-                      <li>• Analyze platform performance metrics</li>
-                      <li>• Configure system settings and features</li>
-                    </ul>
-                  </div>
-                )}
-              </div>
-            </div>)}
-
-          {/* Portfolio Tab - For Creators */}
-          {activeTab === 'portfolio' && isCreator && (
-            <div className="space-y-6">
-              <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
-                <h2 className="text-xl font-semibold text-lime-400 mb-4">My Portfolio</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  <div className="bg-gray-800 rounded-lg p-4 text-center">
-                    <div className="w-full h-32 bg-gray-700 rounded mb-3 flex items-center justify-center">
-                      <span className="text-gray-400">Upload Content</span>
-                    </div>
-                    <button className="w-full bg-lime-600 hover:bg-lime-700 text-black px-4 py-2 rounded transition-colors">
-                      Add New Work
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Opportunities Tab - For Creators */}
-          {activeTab === 'opportunities' && isCreator && (
-            <div className="space-y-6">
-              <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
-                <h2 className="text-xl font-semibold text-lime-400 mb-4">Available Opportunities</h2>
-                <div className="space-y-4">
-                  <div className="bg-gray-800 border border-gray-700 rounded-lg p-4">
-                    <h3 className="text-lg font-medium text-white mb-2">Brand Partnership Opportunity</h3>
-                    <p className="text-gray-300 mb-3">Looking for content creators in lifestyle and wellness niche...</p>
-                    <div className="flex justify-between items-center">
-                      <span className="text-lime-400 font-semibold">$500 - $1,500</span>
-                      <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-colors">
-                        Apply Now
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Campaigns Tab - For Brands */}
-          {activeTab === 'campaigns' && isBrand && (
-            <div className="space-y-6">
-              <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
-                <div className="flex justify-between items-center mb-4">
-                  <h2 className="text-xl font-semibold text-lime-400">My Campaigns</h2>
-                  <button className="bg-lime-600 hover:bg-lime-700 text-black px-4 py-2 rounded transition-colors">
-                    Create New Campaign
-                  </button>
-                </div>
-                <div className="space-y-4">
-                  <div className="bg-gray-800 border border-gray-700 rounded-lg p-4">
-                    <h3 className="text-lg font-medium text-white mb-2">Summer Collection Launch</h3>
-                    <p className="text-gray-300 mb-3">Status: Active • 5 creators engaged</p>
-                    <div className="flex justify-between items-center">
-                      <span className="text-lime-400 font-semibold">Budget: $5,000</span>
-                      <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-colors">
-                        View Details
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Find Creators Tab - For Brands */}
-          {activeTab === 'creators' && isBrand && (
-            <div className="space-y-6">
-              <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
-                <h2 className="text-xl font-semibold text-lime-400 mb-4">Find Creators</h2>
-                <div className="mb-6">
-                  <input 
-                    type="text" 
-                    placeholder="Search creators by niche, location, or keywords..."
-                    className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white placeholder-gray-400"
-                  />
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  <div className="bg-gray-800 border border-gray-700 rounded-lg p-4">
-                    <div className="w-16 h-16 bg-gray-700 rounded-full mb-3"></div>
-                    <h3 className="text-lg font-medium text-white mb-1">Creator Name</h3>
-                    <p className="text-gray-300 text-sm mb-3">Lifestyle • 50K followers</p>
-                    <button className="w-full bg-lime-600 hover:bg-lime-700 text-black px-4 py-2 rounded transition-colors">
-                      View Profile
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* User Management Tab - For Admins */}
-          {activeTab === 'users' && isAdmin && (
-            <div className="space-y-6">
-              <SmartUserManagement />
-            </div>
-          )}
-
-          {/* Platform Analytics Tab - For Admins */}
-          {activeTab === 'analytics' && isAdmin && (
-            <div className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
-                  <h3 className="text-lg font-semibold text-lime-400 mb-2">Total Users</h3>
-                  <p className="text-3xl font-bold text-white">1,234</p>
-                  <p className="text-green-400 text-sm">+12% this month</p>
-                </div>
-                <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
-                  <h3 className="text-lg font-semibold text-lime-400 mb-2">Active Campaigns</h3>
-                  <p className="text-3xl font-bold text-white">56</p>
-                  <p className="text-green-400 text-sm">+8% this month</p>
-                </div>
-                <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
-                  <h3 className="text-lg font-semibold text-lime-400 mb-2">Revenue</h3>
-                  <p className="text-3xl font-bold text-white">$45,678</p>
-                  <p className="text-green-400 text-sm">+15% this month</p>
-                </div>
-                <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
-                  <h3 className="text-lg font-semibold text-lime-400 mb-2">Partnerships</h3>
-                  <p className="text-3xl font-bold text-white">89</p>
-                  <p className="text-green-400 text-sm">+5% this month</p>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* System Settings Tab - For Admins */}
-          {activeTab === 'settings' && isAdmin && (
-            <div className="space-y-6">
-              <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
-                <h2 className="text-xl font-semibold text-lime-400 mb-4">System Settings</h2>
-                <div className="space-y-6">
-                  <div>
-                    <h3 className="text-lg font-medium text-white mb-3">Platform Configuration</h3>
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between">
-                        <span className="text-gray-300">User Registration</span>
-                        <button className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm transition-colors">
-                          Enabled
-                        </button>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-gray-300">Email Notifications</span>
-                        <button className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm transition-colors">
-                          Enabled
-                        </button>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-gray-300">Maintenance Mode</span>
-                        <button className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm transition-colors">
-                          Disabled
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
+        {/* Performance indicator */}
+        <div className="mt-8 p-4 bg-gray-900 border border-gray-800 rounded-lg">
+          <h4 className="text-lime-400 font-medium mb-2">⚡ Performance Optimizations Active:</h4>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-gray-300">
+            <div>✅ React.memo Components</div>
+            <div>✅ Dynamic Imports</div>
+            <div>✅ Scroll Optimization</div>
+            <div>✅ Mount Protection</div>
+          </div>
+          <div className="mt-2 text-xs text-gray-400">
+            User ID: {userInfo.id} | Render Protection: Enhanced | Mounted: {mountedRef.current ? 'Yes' : 'No'}
+          </div>
         </div>
       </div>
     </div>

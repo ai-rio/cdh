@@ -18,13 +18,34 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
   const { user, login, register, isLoading, error, isInitialized } = useAuth(); // Integrate useAuth hook
   const router = useRouter(); // Initialize useRouter
 
-  // Effect to handle redirection after successful login/registration
+  // Debug logging
   useEffect(() => {
     if (user && isInitialized) {
-      onClose(); // Close modal
-      router.push('/dashboard'); // Redirect to dashboard or profile page
+      console.log('AuthModal: User authenticated, preparing to redirect', { 
+        userId: user.id, 
+        email: user.email,
+        routerAvailable: !!router 
+      });
     }
-  }, [user, isInitialized, onClose, router]);
+  }, [user, isInitialized, router]);
+
+  // Effect to handle modal closure after successful login/registration
+  // Let the parent component or middleware handle the redirect
+  useEffect(() => {
+    if (user && isInitialized) {
+      console.log('AuthModal: User authenticated, closing modal', { 
+        userId: user.id, 
+        email: user.email
+      });
+
+      // Just close the modal, let the app handle navigation naturally
+      const timeoutId = setTimeout(() => {
+        onClose();
+      }, 500); // Small delay to show success state
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [user, isInitialized, onClose]);
 
   // Effect to clear validation errors and reset form when modal opens
   useEffect(() => {

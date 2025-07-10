@@ -5,12 +5,40 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { CommandDeck } from './CommandDeck'
 import AuthModal from './AuthModal'
+import { useAuth } from '@/contexts/AuthContext'
 
 export function Header() {
   const [isCommandDeckOpen, setIsCommandDeckOpen] = useState(false)
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
   const [isHeaderVisible, setIsHeaderVisible] = useState(false) // New state for header visibility
   const pathname = usePathname()
+  const { user, isInitialized, logout } = useAuth()
+
+  const handleDashboardClick = () => {
+    try {
+      window.location.href = '/dashboard';
+    } catch (error) {
+      console.error('Navigation error:', error);
+    }
+  };
+
+  const handleLogout = () => {
+    try {
+      logout();
+      // Force page reload to ensure clean state
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 100);
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Fallback logout
+      localStorage.removeItem('auth_token');
+      localStorage.removeItem('auth_user');
+      document.cookie = 'auth_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+      document.cookie = 'payload-token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+      window.location.href = '/';
+    }
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -73,6 +101,57 @@ export function Header() {
             </svg>
             <span className="font-bold text-lg text-white">CDH </span>
           </Link>
+          
+          {/* Dashboard link and logout for authenticated users */}
+          {user && isInitialized && (
+            <div className="hidden md:flex items-center space-x-4">
+              <button 
+                onClick={handleDashboardClick}
+                className="flex items-center space-x-2 px-3 py-2 rounded-lg bg-lime-600/20 hover:bg-lime-600/30 transition-colors border border-lime-600/30"
+              >
+                <svg 
+                  width="16" 
+                  height="16" 
+                  viewBox="0 0 24 24" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  strokeWidth="2" 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round"
+                  className="text-lime-400"
+                >
+                  <rect x="3" y="3" width="7" height="7"/>
+                  <rect x="14" y="3" width="7" height="7"/>
+                  <rect x="14" y="14" width="7" height="7"/>
+                  <rect x="3" y="14" width="7" height="7"/>
+                </svg>
+                <span className="text-lime-400 font-medium">Dashboard</span>
+              </button>
+              
+              <button 
+                onClick={handleLogout}
+                className="flex items-center space-x-2 px-3 py-2 rounded-lg bg-red-600/20 hover:bg-red-600/30 transition-colors border border-red-600/30"
+              >
+                <svg 
+                  width="16" 
+                  height="16" 
+                  viewBox="0 0 24 24" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  strokeWidth="2" 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round"
+                  className="text-red-400"
+                >
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                  <polyline points="16,17 21,12 16,7"/>
+                  <line x1="21" y1="12" x2="9" y2="12"/>
+                </svg>
+                <span className="text-red-400 font-medium">Logout</span>
+              </button>
+            </div>
+          )}
+          
           {pathname === '/' && (
             <div className="hidden md:flex items-center space-x-8">
               <div

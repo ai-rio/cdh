@@ -5,7 +5,27 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function POST(request: NextRequest) {
   try {
     const payload = await getPayload({ config })
-    const { email, password } = await request.json()
+    
+    // Handle JSON parsing with proper error handling
+    let requestData
+    try {
+      const body = await request.text()
+      if (!body || body.trim() === '') {
+        return NextResponse.json(
+          { message: 'Request body is empty' },
+          { status: 400 }
+        )
+      }
+      requestData = JSON.parse(body)
+    } catch (parseError) {
+      console.error('JSON parsing error:', parseError)
+      return NextResponse.json(
+        { message: 'Invalid JSON in request body' },
+        { status: 400 }
+      )
+    }
+
+    const { email, password } = requestData
 
     if (!email || !password) {
       return NextResponse.json(
