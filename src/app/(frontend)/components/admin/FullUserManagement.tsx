@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 
 interface User {
@@ -33,7 +33,7 @@ export default function FullUserManagement() {
     role: 'creator' as 'admin' | 'creator' | 'brand'
   });
 
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     if (!token || currentUser?.role !== 'admin') {
       setError('Admin access required');
       return;
@@ -57,12 +57,12 @@ export default function FullUserManagement() {
         const errorData = await response.json();
         setError(errorData.message || 'Failed to fetch users');
       }
-    } catch (err: any) {
-      setError(err.message || 'Network error');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Network error');
     } finally {
       setLoading(false);
     }
-  };
+  }, [token, currentUser?.role]);
 
   const createUser = async () => {
     if (!token || !formData.name || !formData.email || !formData.password) {
@@ -92,8 +92,8 @@ export default function FullUserManagement() {
         const errorData = await response.json();
         setError(errorData.message || 'Failed to create user');
       }
-    } catch (err: any) {
-      setError(err.message || 'Network error');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Network error');
     } finally {
       setLoading(false);
     }
@@ -106,7 +106,7 @@ export default function FullUserManagement() {
     setError(null);
 
     try {
-      const updateData: any = {
+      const updateData: { name: string; role: string; password?: string } = {
         name: formData.name,
         role: formData.role,
       };
@@ -135,8 +135,8 @@ export default function FullUserManagement() {
         const errorData = await response.json();
         setError(errorData.message || 'Failed to update user');
       }
-    } catch (err: any) {
-      setError(err.message || 'Network error');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Network error');
     } finally {
       setLoading(false);
     }
@@ -146,7 +146,7 @@ export default function FullUserManagement() {
     if (!selectedUser || !token) return;
 
     // Prevent admin from deleting themselves
-    if (selectedUser.id === currentUser?.id) {
+    if (selectedUser.id === String(currentUser?.id)) {
       setError('You cannot delete your own account');
       return;
     }
@@ -172,8 +172,8 @@ export default function FullUserManagement() {
         const errorData = await response.json();
         setError(errorData.message || 'Failed to delete user');
       }
-    } catch (err: any) {
-      setError(err.message || 'Network error');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Network error');
     } finally {
       setLoading(false);
     }
@@ -204,7 +204,7 @@ export default function FullUserManagement() {
     if (currentUser?.role === 'admin' && token) {
       fetchUsers();
     }
-  }, [currentUser, token]);
+  }, [currentUser, token, fetchUsers]);
 
   // Clear messages after 5 seconds
   useEffect(() => {
@@ -311,7 +311,7 @@ export default function FullUserManagement() {
                       >
                         Edit
                       </button>
-                      {user.id !== currentUser?.id && (
+                      {user.id !== String(currentUser?.id) && (
                         <button 
                           onClick={() => openDeleteModal(user)}
                           className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm transition-colors"

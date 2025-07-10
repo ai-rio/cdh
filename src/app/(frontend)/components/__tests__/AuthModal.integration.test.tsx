@@ -3,9 +3,9 @@
  * Tests the complete authentication flow as specified in auth-modal-integration.md
  */
 
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { screen, fireEvent, waitFor } from '@testing-library/react'
+import { render } from '../../../../../tests/utils/test-utils'
 import { vi, describe, it, expect, beforeEach } from 'vitest'
-import { AuthProvider } from '@/contexts/AuthContext'
 import AuthModal from '../AuthModal'
 
 // Mock Next.js router
@@ -19,11 +19,7 @@ vi.mock('next/navigation', () => ({
 // Mock fetch for API calls
 global.fetch = vi.fn()
 
-const MockedAuthModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => (
-  <AuthProvider>
-    <AuthModal isOpen={isOpen} onClose={onClose} />
-  </AuthProvider>
-)
+// AuthProvider is now handled by the custom render function
 
 describe('AuthModal Integration Tests', () => {
   beforeEach(() => {
@@ -41,16 +37,16 @@ describe('AuthModal Integration Tests', () => {
 
   describe('AC1: Modal Display and Navigation', () => {
     it('should display the authentication modal with sign-in form by default', () => {
-      render(<MockedAuthModal isOpen={true} onClose={vi.fn()} />)
+      render(<AuthModal isOpen={true} onClose={vi.fn()} />)
       
       expect(screen.getByText('Welcome Back, Commander')).toBeInTheDocument()
-      expect(screen.getByPlaceholderText('Email')).toBeInTheDocument()
+      expect(screen.getAllByPlaceholderText('Email')).toHaveLength(2) // Both forms have email inputs
       expect(screen.getByPlaceholderText('Password')).toBeInTheDocument()
       expect(screen.getByText('Launch Command Center')).toBeInTheDocument()
     })
 
     it('should toggle between Sign In and Sign Up views', () => {
-      render(<MockedAuthModal isOpen={true} onClose={vi.fn()} />)
+      render(<AuthModal isOpen={true} onClose={vi.fn()} />)
       
       // Click Sign Up toggle
       fireEvent.click(screen.getByText('Sign Up'))
@@ -62,7 +58,7 @@ describe('AuthModal Integration Tests', () => {
 
     it('should close modal when X button is clicked', () => {
       const onClose = vi.fn()
-      render(<MockedAuthModal isOpen={true} onClose={onClose} />)
+      render(<AuthModal isOpen={true} onClose={onClose} />)
       
       const closeButton = screen.getByLabelText('Close authentication modal')
       fireEvent.click(closeButton)
@@ -73,7 +69,7 @@ describe('AuthModal Integration Tests', () => {
 
   describe('AC2: User Registration (Sign Up)', () => {
     it('should validate required fields before submission', async () => {
-      render(<MockedAuthModal isOpen={true} onClose={vi.fn()} />)
+      render(<AuthModal isOpen={true} onClose={vi.fn()} />)
       
       // Switch to sign up
       fireEvent.click(screen.getByText('Sign Up'))
@@ -87,14 +83,15 @@ describe('AuthModal Integration Tests', () => {
     })
 
     it('should validate email format', async () => {
-      render(<MockedAuthModal isOpen={true} onClose={vi.fn()} />)
+      render(<AuthModal isOpen={true} onClose={vi.fn()} />)
       
       // Switch to sign up
       fireEvent.click(screen.getByText('Sign Up'))
       
       // Fill invalid email
       fireEvent.change(screen.getByPlaceholderText('Full Name'), { target: { value: 'Test User' } })
-      fireEvent.change(screen.getByPlaceholderText('Email'), { target: { value: 'invalid-email' } })
+      const emailInputs = screen.getAllByPlaceholderText('Email')
+      fireEvent.change(emailInputs[1], { target: { value: 'invalid-email' } }) // Use signup form email input
       fireEvent.change(screen.getByPlaceholderText(/Password/), { target: { value: 'Password123' } })
       
       fireEvent.click(screen.getByText('Create My Account'))
@@ -105,14 +102,15 @@ describe('AuthModal Integration Tests', () => {
     })
 
     it('should validate password strength', async () => {
-      render(<MockedAuthModal isOpen={true} onClose={vi.fn()} />)
+      render(<AuthModal isOpen={true} onClose={vi.fn()} />)
       
       // Switch to sign up
       fireEvent.click(screen.getByText('Sign Up'))
       
       // Fill weak password
       fireEvent.change(screen.getByPlaceholderText('Full Name'), { target: { value: 'Test User' } })
-      fireEvent.change(screen.getByPlaceholderText('Email'), { target: { value: 'test@example.com' } })
+      const emailInputs = screen.getAllByPlaceholderText('Email')
+      fireEvent.change(emailInputs[1], { target: { value: 'test@example.com' } }) // Use signup form email input
       fireEvent.change(screen.getByPlaceholderText(/Password/), { target: { value: 'weak' } })
       
       fireEvent.click(screen.getByText('Create My Account'))
@@ -132,14 +130,15 @@ describe('AuthModal Integration Tests', () => {
         })
       })
 
-      render(<MockedAuthModal isOpen={true} onClose={vi.fn()} />)
+      render(<AuthModal isOpen={true} onClose={vi.fn()} />)
       
       // Switch to sign up
       fireEvent.click(screen.getByText('Sign Up'))
       
       // Fill valid data
       fireEvent.change(screen.getByPlaceholderText('Full Name'), { target: { value: 'Test User' } })
-      fireEvent.change(screen.getByPlaceholderText('Email'), { target: { value: 'test@example.com' } })
+      const emailInputs = screen.getAllByPlaceholderText('Email')
+      fireEvent.change(emailInputs[1], { target: { value: 'test@example.com' } }) // Use signup form email input
       fireEvent.change(screen.getByPlaceholderText(/Password/), { target: { value: 'Password123' } })
       
       fireEvent.click(screen.getByText('Create My Account'))
@@ -173,10 +172,11 @@ describe('AuthModal Integration Tests', () => {
         })
       })
 
-      render(<MockedAuthModal isOpen={true} onClose={vi.fn()} />)
+      render(<AuthModal isOpen={true} onClose={vi.fn()} />)
       
       // Fill login data
-      fireEvent.change(screen.getByPlaceholderText('Email'), { target: { value: 'test@example.com' } })
+      const emailInputs = screen.getAllByPlaceholderText('Email')
+      fireEvent.change(emailInputs[0], { target: { value: 'test@example.com' } }) // Use signin form email input
       fireEvent.change(screen.getByPlaceholderText('Password'), { target: { value: 'password123' } })
       
       fireEvent.click(screen.getByText('Launch Command Center'))
@@ -207,10 +207,11 @@ describe('AuthModal Integration Tests', () => {
         json: async () => ({ message: 'Invalid credentials' })
       })
 
-      render(<MockedAuthModal isOpen={true} onClose={vi.fn()} />)
+      render(<AuthModal isOpen={true} onClose={vi.fn()} />)
       
       // Fill login data
-      fireEvent.change(screen.getByPlaceholderText('Email'), { target: { value: 'test@example.com' } })
+      const emailInputs = screen.getAllByPlaceholderText('Email')
+      fireEvent.change(emailInputs[0], { target: { value: 'test@example.com' } }) // Use signin form email input
       fireEvent.change(screen.getByPlaceholderText('Password'), { target: { value: 'wrongpassword' } })
       
       fireEvent.click(screen.getByText('Launch Command Center'))
@@ -233,10 +234,11 @@ describe('AuthModal Integration Tests', () => {
       })
 
       const onClose = vi.fn()
-      render(<MockedAuthModal isOpen={true} onClose={onClose} />)
+      render(<AuthModal isOpen={true} onClose={onClose} />)
       
       // Fill login data
-      fireEvent.change(screen.getByPlaceholderText('Email'), { target: { value: 'test@example.com' } })
+      const emailInputs = screen.getAllByPlaceholderText('Email')
+      fireEvent.change(emailInputs[0], { target: { value: 'test@example.com' } }) // Use signin form email input
       fireEvent.change(screen.getByPlaceholderText('Password'), { target: { value: 'password123' } })
       
       fireEvent.click(screen.getByText('Launch Command Center'))

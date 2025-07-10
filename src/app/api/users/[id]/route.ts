@@ -3,9 +3,10 @@ import config from '@payload-config'
 import { NextRequest, NextResponse } from 'next/server'
 
 // GET method for fetching a specific user (admin only)
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const payload = await getPayload({ config })
+    const { id } = await params
     
     // Authenticate the user
     const { user } = await payload.auth({ headers: request.headers })
@@ -18,7 +19,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
     }
     
     // Check if user is admin or accessing their own profile
-    if (user.role !== 'admin' && user.id !== params.id) {
+    if (user.role !== 'admin' && user.id.toString() !== id) {
       return NextResponse.json(
         { message: 'Access denied' },
         { status: 403 }
@@ -28,7 +29,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
     // Fetch the user
     const userData = await payload.findByID({
       collection: 'users',
-      id: params.id,
+      id: id,
     })
     
     return NextResponse.json(userData)
@@ -42,9 +43,10 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
 }
 
 // PATCH method for updating a specific user (admin only)
-export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const payload = await getPayload({ config })
+    const { id } = await params
     
     // Authenticate the user
     const { user } = await payload.auth({ headers: request.headers })
@@ -69,7 +71,7 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
     // Update the user
     const updatedUser = await payload.update({
       collection: 'users',
-      id: params.id,
+      id: id,
       data: updateData,
     })
     
@@ -84,9 +86,10 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
 }
 
 // DELETE method for deleting a specific user (admin only)
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const payload = await getPayload({ config })
+    const { id } = await params
     
     // Authenticate the user
     const { user } = await payload.auth({ headers: request.headers })
@@ -107,7 +110,7 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
     }
     
     // Prevent admin from deleting themselves
-    if (params.id === user.id) {
+    if (id === user.id.toString()) {
       return NextResponse.json(
         { message: 'Cannot delete your own account' },
         { status: 400 }
@@ -117,7 +120,7 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
     // Delete the user
     await payload.delete({
       collection: 'users',
-      id: params.id,
+      id: id,
     })
     
     return NextResponse.json({ message: 'User deleted successfully' })

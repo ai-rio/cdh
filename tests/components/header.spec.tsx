@@ -1,9 +1,8 @@
 import React from 'react'
-import { render, screen, fireEvent } from '@testing-library/react'
-import { Header } from '../../src/app/(frontend)/components/Header'
-
-// Mock the next/link component
 import { vi } from 'vitest'
+import { render } from '../utils/test-utils'
+import { screen, fireEvent } from '@testing-library/react'
+import { Header } from '../../src/app/(frontend)/components/Header'
 
 // Mock the next/link component
 vi.mock('next/link', () => {

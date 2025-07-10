@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { screen, fireEvent, waitFor } from '@testing-library/react';
+import { render } from '../utils/test-utils';
 import { vi } from 'vitest';
 import AuthModal from '@/app/(frontend)/components/AuthModal';
 

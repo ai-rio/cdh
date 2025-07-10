@@ -25,7 +25,7 @@ describe('TriageCard', () => {
   it('calls onClick when clicked', () => {
     render(<TriageCard {...defaultProps} />)
     
-    const card = screen.getByText('Test Title').closest('div')
+    const card = document.querySelector('.triage-card') // Find the Card by its className
     fireEvent.click(card!)
     
     expect(mockOnClick).toHaveBeenCalledTimes(1)
@@ -34,7 +34,7 @@ describe('TriageCard', () => {
   it('has proper styling classes', () => {
     render(<TriageCard {...defaultProps} />)
     
-    const card = screen.getByText('Test Title').closest('div')
+    const card = document.querySelector('.triage-card') // Find the Card by its className
     expect(card).toHaveClass('cursor-pointer')
     expect(card).toHaveClass('transition-all')
     expect(card).toHaveClass('duration-300')
@@ -43,7 +43,7 @@ describe('TriageCard', () => {
   it('has hover effects', () => {
     render(<TriageCard {...defaultProps} />)
     
-    const card = screen.getByText('Test Title').closest('div')
+    const card = document.querySelector('.triage-card') // Find the Card by its className
     expect(card).toHaveClass('hover:translate-y-[-5px]')
     expect(card).toHaveClass('hover:border-[#A3E635]')
   })

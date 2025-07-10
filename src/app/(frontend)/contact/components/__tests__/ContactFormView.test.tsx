@@ -1,5 +1,6 @@
-import { render, screen, fireEvent } from '@testing-library/react'
-import { describe, it, expect, vi } from 'vitest'
+import { screen, fireEvent } from '@testing-library/react'
+import { render } from '../../../../../../tests/utils/test-utils'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { ContactFormView } from '../ContactFormView'
 
 describe('ContactFormView', () => {

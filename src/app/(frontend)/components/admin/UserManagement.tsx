@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
-import { Search, Plus, Edit, Trash2, UserCheck, UserX, AlertCircle, Shield, User as UserIcon, Building, UserPlus } from 'lucide-react';
+import { Search, Edit, Trash2, AlertCircle, Shield, User as UserIcon, Building, UserPlus } from 'lucide-react';
 import { User as PayloadUser } from '@/payload-types';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -44,7 +44,7 @@ export default function UserManagement() {
   console.log('UserManagement - User role:', currentUser?.role);
 
   // Fetch users from Payload API
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     if (!token || currentUser?.role !== 'admin') {
       setError('Unauthorized: Admin access required');
       setLoading(false);
@@ -76,18 +76,18 @@ export default function UserManagement() {
 
       const data: PayloadResponse<PayloadUser> = await response.json();
       setUsers(data.docs || []);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Error fetching users:', err);
-      setError(err.message || 'Failed to load users');
+      setError(err instanceof Error ? err.message : 'Failed to load users');
     } finally {
       setLoading(false);
     }
-  };
+  }, [token, currentUser?.role]);
 
   // Load users on component mount
   useEffect(() => {
     fetchUsers();
-  }, [token, currentUser]);
+  }, [fetchUsers]);
 
   const filteredUsers = users.filter(user => {
     const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -131,9 +131,9 @@ export default function UserManagement() {
       setIsCreateModalOpen(false);
       // Refresh users list
       fetchUsers();
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Error creating user:', err);
-      setError(err.message || 'Failed to create user');
+      setError(err instanceof Error ? err.message : 'Failed to create user');
     }
   };
 
@@ -162,14 +162,14 @@ export default function UserManagement() {
       }
 
       const updatedUser = await response.json();
-      setUsers(users.map(user => user.id === userId ? (updatedUser.doc || updatedUser) : user));
+      setUsers(users.map(user => user.id.toString() === userId ? (updatedUser.doc || updatedUser) : user));
       setSuccess('User updated successfully');
       setEditingUser(null);
       // Refresh users list
       fetchUsers();
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Error updating user:', err);
-      setError(err.message || 'Failed to update user');
+      setError(err instanceof Error ? err.message : 'Failed to update user');
     }
   };
 
@@ -200,11 +200,11 @@ export default function UserManagement() {
         throw new Error(errorData.message || 'Failed to delete user');
       }
 
-      setUsers(users.filter(user => user.id !== userId));
+      setUsers(users.filter(user => user.id.toString() !== userId));
       setSuccess('User deleted successfully');
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Error deleting user:', err);
-      setError(err.message || 'Failed to delete user');
+      setError(err instanceof Error ? err.message : 'Failed to delete user');
     }
   };
 
@@ -370,14 +370,14 @@ export default function UserManagement() {
                     </td>
                     <td className="py-3 px-4">
                       <Badge 
-                        variant={user.status === 'active' ? 'default' : 'secondary'}
-                        className={user.status === 'active' ? 'bg-green-600' : 'bg-gray-600'}
+                        variant={'default'}
+                        className={'bg-green-600'}
                       >
-                        {user.status}
+                        Active
                       </Badge>
                     </td>
                     <td className="py-3 px-4 text-gray-300">
-                      {user.lastLogin ? new Date(user.lastLogin).toLocaleDateString() : 'Never'}
+                      {user.updatedAt ? new Date(user.updatedAt).toLocaleDateString() : 'Never'}
                     </td>
                     <td className="py-3 px-4">
                       <div className="flex space-x-2">
@@ -392,7 +392,7 @@ export default function UserManagement() {
                         <Button
                           size="sm"
                           variant="outline"
-                          onClick={() => handleDeleteUser(user.id)}
+                          onClick={() => handleDeleteUser(user.id.toString())}
                           className="border-red-600 text-red-400 hover:bg-red-900/20"
                         >
                           <Trash2 className="h-3 w-3" />
@@ -425,7 +425,7 @@ export default function UserManagement() {
             </DialogHeader>
             <EditUserForm 
               user={editingUser} 
-              onSubmit={(data) => handleUpdateUser(editingUser.id, data)}
+              onSubmit={(data) => handleUpdateUser(editingUser.id.toString(), data)}
               onCancel={() => setEditingUser(null)}
             />
           </DialogContent>
@@ -437,10 +437,15 @@ export default function UserManagement() {
 
 // Create User Form Component
 function CreateUserForm({ onSubmit, onCancel }: { onSubmit: (data: Partial<PayloadUser>) => void; onCancel: () => void }) {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    name: string;
+    email: string;
+    role: 'creator' | 'brand' | 'admin';
+    password: string;
+  }>({
     name: '',
     email: '',
-    role: 'creator' as const,
+    role: 'creator',
     password: ''
   });
 
@@ -477,7 +482,7 @@ function CreateUserForm({ onSubmit, onCancel }: { onSubmit: (data: Partial<Paylo
         <select
           id="role"
           value={formData.role}
-          onChange={(e) => setFormData({ ...formData, role: e.target.value as any })}
+          onChange={(e) => setFormData({ ...formData, role: e.target.value as 'creator' | 'brand' | 'admin' })}
           className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white"
         >
           <option value="creator">Creator</option>
@@ -513,8 +518,7 @@ function EditUserForm({ user, onSubmit, onCancel }: { user: PayloadUser; onSubmi
   const [formData, setFormData] = useState({
     name: user.name,
     email: user.email,
-    role: user.role,
-    status: user.status
+    role: user.role
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -550,25 +554,12 @@ function EditUserForm({ user, onSubmit, onCancel }: { user: PayloadUser; onSubmi
         <select
           id="edit-role"
           value={formData.role}
-          onChange={(e) => setFormData({ ...formData, role: e.target.value as any })}
+          onChange={(e) => setFormData({ ...formData, role: e.target.value as 'creator' | 'brand' | 'admin' })}
           className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white"
         >
           <option value="creator">Creator</option>
           <option value="brand">Brand</option>
           <option value="admin">Admin</option>
-        </select>
-      </div>
-      <div>
-        <Label htmlFor="edit-status" className="text-gray-300">Status</Label>
-        <select
-          id="edit-status"
-          value={formData.status}
-          onChange={(e) => setFormData({ ...formData, status: e.target.value as any })}
-          className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white"
-        >
-          <option value="active">Active</option>
-          <option value="inactive">Inactive</option>
-          <option value="suspended">Suspended</option>
         </select>
       </div>
       <div className="flex justify-end space-x-2">

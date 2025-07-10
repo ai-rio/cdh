@@ -1,7 +1,8 @@
 import React from 'react';
-import { render, fireEvent, screen } from '@testing-library/react';
-import { CommandDeck } from '@/app/(frontend)/components/CommandDeck';
 import { vi } from 'vitest';
+import { render } from '../utils/test-utils';
+import { fireEvent, screen } from '@testing-library/react';
+import { CommandDeck } from '@/app/(frontend)/components/CommandDeck';
 
 // Mock the next/link component
 vi.mock('next/link', () => {

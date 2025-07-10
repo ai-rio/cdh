@@ -1,5 +1,7 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { vi } from 'vitest';
+import { render } from '../utils/test-utils';
+import { screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Footer } from '../../src/app/(frontend)/components/Footer';
 

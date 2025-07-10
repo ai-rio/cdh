@@ -16,17 +16,17 @@ interface ContactFormViewProps {
 const formConfigs = {
   demo: {
     title: "Request a Private Demo",
-    fields: ['name', 'email', 'company'] as const,
+    fields: ['name', 'email', 'company'] as (keyof ContactFormData)[],
     buttonText: "Submit Request"
   },
   press: {
     title: "Press & Media Inquiry", 
-    fields: ['name', 'email', 'publication', 'message'] as const,
+    fields: ['name', 'email', 'publication', 'message'] as (keyof ContactFormData)[],
     buttonText: "Send Inquiry"
   },
   general: {
     title: "General Question or Feedback",
-    fields: ['email', 'message'] as const,
+    fields: ['email', 'message'] as (keyof ContactFormData)[],
     buttonText: "Send Transmission"
   }
 }
