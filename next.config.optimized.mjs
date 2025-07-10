@@ -8,6 +8,7 @@ const nextConfig = {
     optimizePackageImports: ['lucide-react', '@radix-ui/react-dialog', '@radix-ui/react-tabs'],
     // Reduce bundle size
     bundlePagesRouterDependencies: true,
+    serverComponentsHmrCache: true,
   },
   
   // Compiler optimizations

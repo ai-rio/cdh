@@ -4,8 +4,8 @@ import { withPayload } from '@payloadcms/next/withPayload'
 const nextConfig = {
   // Performance optimizations
   experimental: {
-    // Disable HMR cache temporarily to prevent RSC issues
-    serverComponentsHmrCache: false,
+    // Enable HMR cache for faster development
+    serverComponentsHmrCache: true,
     // Optimize memory usage during development
     webpackMemoryOptimizations: true,
     // Disable problematic features during development
