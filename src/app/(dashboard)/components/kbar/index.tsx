@@ -1,7 +1,6 @@
 "use client"
 
 import { KBarProvider, KBarPortal, KBarPositioner, KBarAnimator, KBarSearch, KBarResults, useMatches, ActionImpl } from "kbar"
-import { useRouter } from "next/navigation"
 import { RenderResults } from "./render-results"
 import { useKBarActions } from "./use-kbar-actions"
 
@@ -31,7 +30,6 @@ function RenderResultsWrapper() {
 }
 
 export function KBar({ children }: KBarProps) {
-  const router = useRouter()
   const actions = useKBarActions()
 
   return (

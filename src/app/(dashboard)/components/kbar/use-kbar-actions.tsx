@@ -9,11 +9,13 @@ import {
   Briefcase, 
   Settings, 
   BarChart3, 
-  Search,
   User,
   LogOut,
   Moon,
-  Sun
+  Sun,
+  Mail,
+  FileText,
+  TrendingUp
 } from "lucide-react"
 import { useTheme } from "next-themes"
 
@@ -32,6 +34,24 @@ export function useKBarActions(): Action[] {
       keywords: "dashboard home overview",
       icon: <Home className="h-4 w-4" />,
       perform: () => router.push("/dashboard"),
+    },
+    {
+      id: "email",
+      name: "Email Management",
+      subtitle: "Manage email campaigns and templates",
+      shortcut: ["e"],
+      keywords: "email campaigns templates resend",
+      icon: <Mail className="h-4 w-4" />,
+      perform: () => router.push("/dashboard/email"),
+    },
+    {
+      id: "portfolio",
+      name: "Portfolio",
+      subtitle: "View and manage portfolio items",
+      shortcut: ["shift", "p"],
+      keywords: "portfolio projects work showcase",
+      icon: <FileText className="h-4 w-4" />,
+      perform: () => router.push("/dashboard/portfolio"),
     },
     
     // Theme Actions
@@ -86,43 +106,71 @@ export function useKBarActions(): Action[] {
         name: "Analytics",
         subtitle: "View platform analytics and metrics",
         shortcut: ["shift", "a"],
-        keywords: "analytics metrics stats data",
+        keywords: "analytics metrics stats data insights",
         icon: <BarChart3 className="h-4 w-4" />,
         perform: () => router.push("/dashboard/analytics"),
       },
       {
         id: "users",
         name: "User Management",
-        subtitle: "Manage platform users",
-        keywords: "users management admin",
+        subtitle: "Manage platform users and permissions",
+        keywords: "users management admin permissions roles",
         icon: <Users className="h-4 w-4" />,
-        perform: () => router.push("/dashboard/admin"),
+        perform: () => router.push("/dashboard/users"),
+      },
+      {
+        id: "performance",
+        name: "Performance Metrics",
+        subtitle: "View system performance and monitoring",
+        keywords: "performance monitoring system health metrics",
+        icon: <TrendingUp className="h-4 w-4" />,
+        perform: () => router.push("/dashboard/analytics"),
       }
     )
   }
 
   if (user?.role === "creator") {
-    roleActions.push({
-      id: "creator",
-      name: "Creator Dashboard",
-      subtitle: "Access creator tools and portfolio",
-      shortcut: ["c"],
-      keywords: "creator portfolio opportunities",
-      icon: <Users className="h-4 w-4" />,
-      perform: () => router.push("/dashboard/creator"),
-    })
+    roleActions.push(
+      {
+        id: "creator",
+        name: "Creator Dashboard",
+        subtitle: "Access creator tools and portfolio",
+        shortcut: ["c"],
+        keywords: "creator portfolio opportunities projects",
+        icon: <Users className="h-4 w-4" />,
+        perform: () => router.push("/dashboard/creator"),
+      },
+      {
+        id: "creator-portfolio",
+        name: "My Portfolio",
+        subtitle: "Manage your creative portfolio",
+        keywords: "portfolio projects showcase work creative",
+        icon: <FileText className="h-4 w-4" />,
+        perform: () => router.push("/dashboard/portfolio"),
+      }
+    )
   }
 
   if (user?.role === "brand") {
-    roleActions.push({
-      id: "brand",
-      name: "Brand Dashboard", 
-      subtitle: "Access brand campaigns and creator discovery",
-      shortcut: ["b"],
-      keywords: "brand campaigns creators discovery",
-      icon: <Briefcase className="h-4 w-4" />,
-      perform: () => router.push("/dashboard/brand"),
-    })
+    roleActions.push(
+      {
+        id: "brand",
+        name: "Brand Dashboard", 
+        subtitle: "Access brand campaigns and creator discovery",
+        shortcut: ["b"],
+        keywords: "brand campaigns creators discovery marketing",
+        icon: <Briefcase className="h-4 w-4" />,
+        perform: () => router.push("/dashboard/brand"),
+      },
+      {
+        id: "brand-analytics",
+        name: "Campaign Analytics",
+        subtitle: "View brand campaign performance",
+        keywords: "analytics campaigns performance metrics brand",
+        icon: <TrendingUp className="h-4 w-4" />,
+        perform: () => router.push("/dashboard/analytics"),
+      }
+    )
   }
 
   return [...baseActions, ...roleActions]
