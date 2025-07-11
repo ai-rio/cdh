@@ -60,8 +60,6 @@ body,
   height: 100%;
 }
 
-
-
 img {
   max-width: 100%;
   height: auto;
@@ -760,16 +758,16 @@ svg {
     padding: 1.5rem;
     margin-bottom: 2rem;
   }
-  
+
   .component-demo-wrapper {
     padding: 1.5rem;
   }
-  
+
   .demo-section .content-section {
     padding: 2rem 1rem; /* Reduced from 4rem */
     min-height: 50vh;
   }
-  
+
   .content-section {
     min-height: 60vh; /* Reduced for mobile */
     padding: 2rem 1rem; /* Reduced for mobile */

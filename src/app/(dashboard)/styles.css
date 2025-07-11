@@ -72,54 +72,6 @@
   --sidebar-ring: 84 81% 44%;
 }
 
-/* Dashboard specific styles */
-.dashboard-layout {
-  min-height: 100vh;
-  background: hsl(var(--background));
-  color: hsl(var(--foreground));
-}
-
-/* Sidebar specific styles */
-.sidebar-trigger {
-  transition: all 0.2s ease-in-out;
-}
-
-.sidebar-trigger:hover {
-  background: hsl(var(--accent));
-  color: hsl(var(--accent-foreground));
-}
-
-/* Ensure proper sidebar visibility and theming */
-[data-sidebar="sidebar"] {
-  background: hsl(var(--sidebar-background));
-  border-right: 1px solid hsl(var(--sidebar-border));
-}
-
-/* Fix sidebar state transitions */
-.group\/sidebar-wrapper[data-state="expanded"] [data-sidebar="sidebar"] {
-  transform: translateX(0);
-}
-
-.group\/sidebar-wrapper[data-state="collapsed"] [data-sidebar="sidebar"] {
-  transform: translateX(-100%);
-}
-
-/* Ensure sidebar content is visible */
-[data-sidebar="content"] {
-  opacity: 1;
-  visibility: visible;
-}
-
-/* Fix sidebar menu items */
-[data-sidebar="menu-button"] {
-  transition: all 0.2s ease-in-out;
-}
-
-[data-sidebar="menu-button"]:hover {
-  background: hsl(var(--sidebar-accent));
-  color: hsl(var(--sidebar-accent-foreground));
-}
-
 /* Theme transition animations */
 @supports (view-transition-name: none) {
   ::view-transition-old(root),
