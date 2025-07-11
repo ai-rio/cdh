@@ -14,6 +14,7 @@ import {
   ActivityLogTable, 
   ResponsiveDataVisualization 
 } from "@/components/dashboard/dashboard-data-components"
+import { EnhancedOverview } from "../components/enhanced-overview"
 import { 
   BarChart3, 
   Users, 
@@ -167,67 +168,8 @@ export default function DashboardPage() {
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
-            <div className="grid gap-6 md:grid-cols-2">
-              {/* User Profile Card - Enhanced */}
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-lg font-semibold flex items-center gap-2">
-                    <Settings className="h-5 w-5" />
-                    User Profile
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium">Name:</span>
-                      <span className="text-sm">{userInfo?.name || 'N/A'}</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium">Email:</span>
-                      <span className="text-sm">{userInfo?.email || 'N/A'}</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium">Role:</span>
-                      <Badge variant="outline">{userInfo?.role || 'N/A'}</Badge>
-                    </div>
-                    <div className="pt-2">
-                      <Button size="sm" className="w-full">
-                        Edit Profile
-                      </Button>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Quick Actions - Enhanced */}
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-lg font-semibold flex items-center gap-2">
-                    <TrendingUp className="h-5 w-5" />
-                    Quick Actions
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-2 gap-2">
-                    <Button variant="default" size="sm">
-                      New Project
-                    </Button>
-                    <Button variant="outline" size="sm">
-                      View Reports
-                    </Button>
-                    <Button variant="secondary" size="sm">
-                      Settings
-                    </Button>
-                    <Button variant="outline" size="sm">
-                      Help
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Responsive Data Visualization */}
-            <ResponsiveDataVisualization isLoading={dataLoading} />
+            {/* Enhanced Overview with Visual Feedback */}
+            <EnhancedOverview />
           </TabsContent>
 
           <TabsContent value="users" className="space-y-4">

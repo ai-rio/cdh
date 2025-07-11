@@ -41,6 +41,8 @@ import { toast } from 'sonner'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
+import { useVisualFeedback } from '../hooks/use-visual-feedback'
+import { LoadingButton, StatusAlert } from './visual-feedback'
 import {
   MoreHorizontal,
   Edit,
@@ -94,6 +96,9 @@ export function UserActions({
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  
+  // Add visual feedback hook
+  const feedback = useVisualFeedback()
 
   const profileForm = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
@@ -116,51 +121,48 @@ export function UserActions({
   })
 
   const handleProfileSubmit = async (data: ProfileFormValues) => {
-    setIsLoading(true)
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-
-      onUserUpdate?.(data)
-      toast.success('Profile updated successfully!')
-      setIsEditDialogOpen(false)
-      profileForm.reset()
+      await feedback.withLoading('profile-update', async () => {
+        // Simulate API call
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+        
+        onUserUpdate?.(data)
+        feedback.showSuccess('Profile updated successfully!', 'Your changes have been saved.')
+        setIsEditDialogOpen(false)
+        profileForm.reset()
+      })
     } catch (error) {
-      toast.error('Failed to update profile. Please try again.')
-    } finally {
-      setIsLoading(false)
+      feedback.showError('Failed to update profile', 'Please check your connection and try again.')
     }
   }
 
   const handleUserCreate = async (data: UserFormValues) => {
-    setIsLoading(true)
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-
-      toast.success(`User ${data.name} created successfully!`)
-      setIsCreateDialogOpen(false)
-      userForm.reset()
+      await feedback.withLoading('user-create', async () => {
+        // Simulate API call
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+        
+        feedback.showSuccess('User created successfully!', `${data.name} has been added to the system.`)
+        setIsCreateDialogOpen(false)
+        userForm.reset()
+      })
     } catch (error) {
-      toast.error('Failed to create user. Please try again.')
-    } finally {
-      setIsLoading(false)
+      feedback.showError('Failed to create user', 'Please check the information and try again.')
     }
   }
 
   const handleDeleteConfirm = async () => {
-    setIsLoading(true)
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-
-      onUserDelete?.(userId || '')
-      toast.success('User deleted successfully!')
-      setIsDeleteDialogOpen(false)
+      await feedback.withLoading('user-delete', async () => {
+        // Simulate API call
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+        
+        onUserDelete?.(userId || '')
+        feedback.showSuccess('User deleted successfully!', 'The user has been removed from the system.')
+        setIsDeleteDialogOpen(false)
+      })
     } catch (error) {
-      toast.error('Failed to delete user. Please try again.')
-    } finally {
-      setIsLoading(false)
+      feedback.showError('Failed to delete user', 'Please try again or contact support.')
     }
   }
 
@@ -331,13 +333,17 @@ export function UserActions({
                   type="button"
                   variant="outline"
                   onClick={() => setIsEditDialogOpen(false)}
-                  disabled={isLoading}
+                  disabled={feedback.isLoading('profile-update')}
                 >
                   Cancel
                 </Button>
-                <Button type="submit" disabled={isLoading}>
-                  {isLoading ? 'Saving...' : 'Save Changes'}
-                </Button>
+                <LoadingButton 
+                  type="submit" 
+                  isLoading={feedback.isLoading('profile-update')}
+                  loadingText="Saving..."
+                >
+                  Save Changes
+                </LoadingButton>
               </DialogFooter>
             </form>
           </Form>
@@ -364,13 +370,18 @@ export function UserActions({
             <Button
               variant="outline"
               onClick={() => setIsDeleteDialogOpen(false)}
-              disabled={isLoading}
+              disabled={feedback.isLoading('user-delete')}
             >
               Cancel
             </Button>
-            <Button variant="destructive" onClick={handleDeleteConfirm} disabled={isLoading}>
-              {isLoading ? 'Deleting...' : 'Delete User'}
-            </Button>
+            <LoadingButton 
+              variant="destructive" 
+              onClick={handleDeleteConfirm} 
+              isLoading={feedback.isLoading('user-delete')}
+              loadingText="Deleting..."
+            >
+              Delete User
+            </LoadingButton>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -471,13 +482,17 @@ export function UserActions({
                     type="button"
                     variant="outline"
                     onClick={() => setIsCreateDialogOpen(false)}
-                    disabled={isLoading}
+                    disabled={feedback.isLoading('user-create')}
                   >
                     Cancel
                   </Button>
-                  <Button type="submit" disabled={isLoading}>
-                    {isLoading ? 'Creating...' : 'Create User'}
-                  </Button>
+                  <LoadingButton 
+                    type="submit" 
+                    isLoading={feedback.isLoading('user-create')}
+                    loadingText="Creating..."
+                  >
+                    Create User
+                  </LoadingButton>
                 </DialogFooter>
               </form>
             </Form>
