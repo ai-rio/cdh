@@ -15,6 +15,7 @@ import {
   ResponsiveDataVisualization 
 } from "@/components/dashboard/dashboard-data-components"
 import { EnhancedOverview } from "../components/enhanced-overview"
+import { IntegratedAdminPanel } from "../components/integrated-admin-panel"
 import { 
   BarChart3, 
   Users, 
@@ -170,6 +171,11 @@ export default function DashboardPage() {
           <TabsContent value="overview" className="space-y-6">
             {/* Enhanced Overview with Visual Feedback */}
             <EnhancedOverview />
+            
+            {/* Integrated Admin Panel for Admin Users */}
+            {isAdmin && (
+              <IntegratedAdminPanel />
+            )}
           </TabsContent>
 
           <TabsContent value="users" className="space-y-4">

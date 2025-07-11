@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { useVisualFeedback } from "../hooks/use-visual-feedback"
+import { EnhancedRecentActivity } from "./enhanced-recent-activity"
 import { 
   StatusAlert, 
   ProgressWithLabel, 
@@ -258,19 +259,67 @@ export function EnhancedOverview() {
         </CardContent>
       </Card>
 
-      {/* Alert Examples */}
-      <div className="space-y-4">
-        <StatusAlert
-          variant="success"
-          title="Backup Completed"
-          description="Daily backup completed successfully at 3:00 AM."
+      {/* Enhanced Recent Activity with Timeline */}
+      <div className="grid gap-6 lg:grid-cols-2">
+        <EnhancedRecentActivity 
+          maxItems={8}
+          showFilters={true}
+          showRefresh={true}
         />
         
-        <StatusAlert
-          variant="warning"
-          title="High Memory Usage"
-          description="Server memory usage is at 85%. Consider scaling up resources."
-        />
+        <div className="space-y-4">
+          <StatusAlert
+            variant="success"
+            title="Backup Completed"
+            description="Daily backup completed successfully at 3:00 AM."
+          />
+          
+          <StatusAlert
+            variant="warning"
+            title="High Memory Usage"
+            description="Server memory usage is at 85%. Consider scaling up resources."
+          />
+          
+          <Card>
+            <CardHeader>
+              <CardTitle>Quick Actions</CardTitle>
+              <CardDescription>Frequently used administrative actions</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <LoadingButton
+                isLoading={feedback.isLoading('backup-data')}
+                loadingText="Creating backup..."
+                onClick={async () => {
+                  await feedback.withLoading('backup-data', async () => {
+                    await new Promise(resolve => setTimeout(resolve, 2000))
+                    feedback.showSuccess("Backup created", "System backup completed successfully")
+                  })
+                }}
+                variant="outline"
+                className="w-full justify-start"
+              >
+                <Download className="h-4 w-4 mr-2" />
+                Create System Backup
+              </LoadingButton>
+              
+              <LoadingButton
+                isLoading={feedback.isLoading('clear-cache')}
+                loadingText="Clearing cache..."
+                onClick={async () => {
+                  await feedback.withLoading('clear-cache', async () => {
+                    await new Promise(resolve => setTimeout(resolve, 1000))
+                    feedback.showInfo("Cache cleared", "System cache has been cleared")
+                  })
+                }}
+                variant="outline"
+                className="w-full justify-start"
+              >
+                <RefreshCw className="h-4 w-4 mr-2" />
+                Clear System Cache
+              </LoadingButton>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   )
