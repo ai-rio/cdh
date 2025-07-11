@@ -71,6 +71,13 @@
       "env": {},
       "timeout": 120000,
       "disabled": false
+    },
+    "next-shadcn-dashboard-starter Docs": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://gitmcp.io/Kiranism/next-shadcn-dashboard-starter"
+      ]
     }
   }
 }

@@ -15,7 +15,7 @@ export function useStableValue<T>(value: T, deps?: React.DependencyList): T {
     if (deps.length !== depsRef.current.length) return true;
     
     return deps.some((dep, index) => dep !== depsRef.current![index]);
-  }, deps);
+  }, deps || []);
 
   if (hasChanged) {
     ref.current = value;
@@ -112,11 +112,11 @@ export function useUpdateEffect(effect: React.EffectCallback, deps?: React.Depen
  * Hook to track previous value
  */
 export function usePrevious<T>(value: T): T | undefined {
-  const ref = useRef<T>();
+  const ref = useRef<T | undefined>(undefined);
   
   useEffect(() => {
     ref.current = value;
-  });
+  }, [value]);
   
   return ref.current;
 }

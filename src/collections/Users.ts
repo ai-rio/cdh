@@ -10,7 +10,7 @@ export const Users: CollectionConfig = {
     useAPIKey: false,
     cookies: {
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      sameSite: 'Lax',
     },
   },
   access: {
@@ -65,7 +65,7 @@ export const Users: CollectionConfig = {
         {
           name: 'website',
           type: 'text',
-          validate: (val) => {
+          validate: (val: string | null | undefined) => {
             if (val && !/^https?:\/\/.+/.test(val)) {
               return 'Please enter a valid URL starting with http:// or https://';
             }

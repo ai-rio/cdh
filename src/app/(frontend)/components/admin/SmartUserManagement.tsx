@@ -183,7 +183,7 @@ export default function SmartUserManagement() {
     const token = getToken();
     if (!selectedUser || !token) return;
 
-    if (selectedUser.id === currentUserId) {
+    if (String(selectedUser.id) === String(currentUserId)) {
       setError('You cannot delete your own account');
       return;
     }
@@ -283,7 +283,7 @@ export default function SmartUserManagement() {
             >
               Edit
             </button>
-            {user.id !== currentUserId && (
+            {String(user.id) !== String(currentUserId) && (
               <button 
                 onClick={() => openDeleteModal(user)}
                 className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm transition-colors"

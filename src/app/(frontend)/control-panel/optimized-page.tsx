@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState, useMemo, lazy, Suspense } from 'react';
 
 // Lazy load heavy components
-const OptimizedUserManagement = lazy(() => import('@/app/(frontend)/components/admin/OptimizedUserManagement'));
+const OptimizedUserManagement = lazy(() => import('@/app/(frontend)/components/admin/SmartUserManagement'));
 
 // Loading component for lazy-loaded components
 const ComponentLoader = ({ name }: { name: string }) => (

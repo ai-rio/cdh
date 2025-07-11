@@ -142,8 +142,8 @@ export default function PerformanceMonitor() {
     
     return () => {
       // Cleanup on unmount
-      if (typeof window !== 'undefined' && window.performanceMonitor) {
-        window.performanceMonitor.stopAutoLogging();
+      if (typeof window !== 'undefined' && (window as any).performanceMonitor) {
+        (window as any).performanceMonitor.stopAutoLogging();
       }
     };
   }, []);

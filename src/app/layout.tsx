@@ -11,7 +11,7 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="light">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <link
           rel="preconnect"
@@ -27,7 +27,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           rel="stylesheet"
         />
       </head>
-      <body className="bg-white text-black">
+      <body>
         <PerformanceMonitor />
         <ScrollOptimizer />
         <AuthProvider> {/* Wrap children with AuthProvider */}
