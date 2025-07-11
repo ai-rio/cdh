@@ -2,6 +2,9 @@
 
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { Separator } from "@/components/ui/separator"
+import { ThemeToggle } from "./theme-toggle"
+import { DashboardBreadcrumb } from "./dashboard-breadcrumb"
+import { SearchInput } from "./search-input"
 
 interface DashboardHeaderProps {
   title?: string
@@ -14,15 +17,17 @@ export function DashboardHeader({ title, children }: DashboardHeaderProps) {
       <div className="flex items-center gap-2 px-4">
         <SidebarTrigger className="-ml-1" />
         <Separator orientation="vertical" className="mr-2 h-4" />
-        {title && (
+        {title ? (
           <h1 className="text-lg font-semibold">{title}</h1>
+        ) : (
+          <DashboardBreadcrumb />
         )}
       </div>
-      {children && (
-        <div className="ml-auto px-4">
-          {children}
-        </div>
-      )}
+      <div className="ml-auto px-4 flex items-center gap-2">
+        <SearchInput />
+        {children}
+        <ThemeToggle />
+      </div>
     </header>
   )
 }

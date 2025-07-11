@@ -10,10 +10,7 @@ export default function ThemeProvider({
   ...props
 }: ThemeProviderProps) {
   return (
-    <NextThemesProvider 
-      {...props}
-      suppressHydrationWarning
-    >
+    <NextThemesProvider {...props}>
       {children}
     </NextThemesProvider>
   )

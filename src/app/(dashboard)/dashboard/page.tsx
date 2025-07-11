@@ -76,10 +76,10 @@ export default function DashboardPage() {
             </h1>
             <div className="flex items-center gap-2">
               <p className="text-sm text-muted-foreground">
-                Welcome back, <span className="text-primary">{userInfo.name}</span>
+                Welcome back, <span className="text-primary">{userInfo?.name || 'User'}</span>
               </p>
               <Badge variant="secondary">
-                {userInfo.role.toUpperCase()}
+                {userInfo?.role?.toUpperCase() || 'USER'}
               </Badge>
             </div>
           </div>
@@ -115,9 +115,9 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
-                <p className="text-sm"><span className="font-medium">Name:</span> {userInfo.name}</p>
-                <p className="text-sm"><span className="font-medium">Email:</span> {userInfo.email}</p>
-                <p className="text-sm"><span className="font-medium">Role:</span> {userInfo.role}</p>
+                <p className="text-sm"><span className="font-medium">Name:</span> {userInfo?.name || 'N/A'}</p>
+                <p className="text-sm"><span className="font-medium">Email:</span> {userInfo?.email || 'N/A'}</p>
+                <p className="text-sm"><span className="font-medium">Role:</span> {userInfo?.role || 'N/A'}</p>
               </div>
             </CardContent>
           </Card>
