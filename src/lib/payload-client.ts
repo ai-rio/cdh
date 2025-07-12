@@ -275,6 +275,70 @@ export class PayloadClient {
       return ['users', 'media'];
     }
   }
+
+  // Dashboard-specific methods
+  async getDashboardStats(): Promise<{
+    totalUsers: number;
+    totalMedia: number;
+    recentActivity: number;
+  }> {
+    try {
+      const [users, media] = await Promise.all([
+        this.getUsers({ limit: 1 }),
+        this.getMedia({ limit: 1 }),
+      ]);
+
+      return {
+        totalUsers: users.totalDocs,
+        totalMedia: media.totalDocs,
+        recentActivity: 0, // This would need to be implemented based on actual activity tracking
+      };
+    } catch (error) {
+      const dashboardError = new Error(`Failed to fetch dashboard stats: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw dashboardError;
+    }
+  }
+
+  async getCollectionCounts(): Promise<Record<string, number>> {
+    try {
+      const collections = await this.getCollections();
+      const counts: Record<string, number> = {};
+
+      await Promise.all(
+        collections.map(async (collection) => {
+          try {
+            const data = await this.getCollection(collection, { limit: 1 });
+            counts[collection] = data.totalDocs;
+          } catch (error) {
+            counts[collection] = 0;
+          }
+        })
+      );
+
+      return counts;
+    } catch (error) {
+      throw new Error(`Failed to fetch collection counts: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  }
+
+  async getRecentDocuments(collection: string, days = 7): Promise<any[]> {
+    try {
+      const sinceDate = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
+      const response = await this.getCollection(collection, {
+        where: {
+          createdAt: {
+            greater_than: sinceDate.toISOString(),
+          },
+        },
+        sort: '-createdAt',
+        limit: 10,
+      });
+
+      return response.docs;
+    } catch (error) {
+      throw new Error(`Failed to fetch recent documents for ${collection}: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  }
 }
 
 // Singleton instance

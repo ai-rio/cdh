@@ -209,7 +209,7 @@ Request → Cache Check → Cache Hit? → Return Cached Data
 ## Technology Stack
 
 ### Frontend Technologies
-- **Framework**: Next.js 14 (App Router)
+- **Framework**: Next.js 15 (App Router)
 - **UI Library**: React 18
 - **Styling**: Tailwind CSS
 - **Components**: Radix UI + shadcn/ui
