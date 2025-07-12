@@ -20,9 +20,9 @@ import {
 } from "lucide-react";
 import dynamic from 'next/dynamic';
 
-// Dynamically import components to prevent SSR issues
-const SmartUserManagement = dynamic(
-  () => import('@/app/(frontend)/components/admin/SmartUserManagement'),
+// Import our Payload CMS integration components
+const CollectionManager = dynamic(
+  () => import('./collection-manager'),
   { 
     ssr: false,
     loading: () => (
@@ -49,8 +49,9 @@ const SmartUserManagement = dynamic(
   }
 );
 
-const ResendAdminUI = dynamic(
-  () => import('@/app/(frontend)/components/admin/ResendAdminUI'),
+// Email management component using Payload CMS
+const PayloadEmailManager = dynamic(
+  () => import('./payload-email-manager'),
   {
     ssr: false,
     loading: () => (
@@ -279,11 +280,15 @@ export function IntegratedAdminPanel({ className }: IntegratedAdminPanelProps) {
         </TabsContent>
 
         <TabsContent value="users" className="mt-6">
-          <SmartUserManagement />
+          <CollectionManager 
+            collection="users"
+            title="User Management"
+            description="Manage users, roles, and permissions"
+          />
         </TabsContent>
 
         <TabsContent value="email" className="mt-6">
-          <ResendAdminUI />
+          <PayloadEmailManager />
         </TabsContent>
 
         <TabsContent value="settings" className="mt-6">

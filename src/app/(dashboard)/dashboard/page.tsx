@@ -16,6 +16,7 @@ import {
 } from "@/components/dashboard/dashboard-data-components"
 import { EnhancedOverview } from "../components/enhanced-overview"
 import { IntegratedAdminPanel } from "../components/integrated-admin-panel"
+import { DeprecationNotice } from "../components/deprecation-notice"
 import { 
   BarChart3, 
   Users, 
@@ -169,6 +170,9 @@ export default function DashboardPage() {
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
+            {/* Migration Success Notice */}
+            <DeprecationNotice />
+            
             {/* Enhanced Overview with Visual Feedback */}
             <EnhancedOverview />
             
