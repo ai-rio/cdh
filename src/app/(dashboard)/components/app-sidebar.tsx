@@ -32,12 +32,19 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "./theme-toggle"
 
+interface MenuItem {
+  title: string;
+  url: string;
+  icon: React.ComponentType<any>;
+  badge?: string;
+}
+
 // Menu items based on user role
-const getMenuItems = (userRole: string) => {
+const getMenuItems = (userRole: string): MenuItem[] => {
   const baseItems = [
     {
       title: "Overview",
-      url: "/dashboard/dashboard",
+      url: "/dashboard",
       icon: Home,
     },
   ]
@@ -46,23 +53,29 @@ const getMenuItems = (userRole: string) => {
     return [
       ...baseItems,
       {
+        title: "Collections",
+        url: "/collections",
+        icon: BarChart3,
+        badge: "New" as const,
+      },
+      {
         title: "User Management",
-        url: "/dashboard/users",
+        url: "/users",
         icon: Users,
       },
       {
         title: "Platform Analytics",
-        url: "/dashboard/analytics",
+        url: "/analytics",
         icon: BarChart3,
       },
       {
         title: "System Settings",
-        url: "/dashboard/settings",
+        url: "/settings",
         icon: Settings,
       },
       {
         title: "Email",
-        url: "/dashboard/email",
+        url: "/email",
         icon: Mail,
       },
     ]
@@ -73,12 +86,12 @@ const getMenuItems = (userRole: string) => {
       ...baseItems,
       {
         title: "Portfolio",
-        url: "/dashboard/portfolio",
+        url: "/portfolio",
         icon: Briefcase,
       },
       {
         title: "Opportunities",
-        url: "/dashboard/opportunities",
+        url: "/opportunities",
         icon: Target,
       },
     ]
@@ -89,12 +102,12 @@ const getMenuItems = (userRole: string) => {
       ...baseItems,
       {
         title: "Campaigns",
-        url: "/dashboard/campaigns",
+        url: "/campaigns",
         icon: Target,
       },
       {
         title: "Find Creators",
-        url: "/dashboard/creators",
+        url: "/creators",
         icon: Search,
       },
     ]
@@ -140,9 +153,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
+                    <a href={item.url} className="flex items-center justify-between w-full">
+                      <div className="flex items-center gap-2">
+                        <item.icon />
+                        <span>{item.title}</span>
+                      </div>
+                      {item.badge && (
+                        <Badge variant="secondary" className="text-xs">
+                          {item.badge}
+                        </Badge>
+                      )}
                     </a>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

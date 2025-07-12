@@ -3,6 +3,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState, useMemo, useCallback, useRef, memo } from 'react';
 import dynamic from 'next/dynamic';
+import { DeprecationNotice } from './deprecation-notice';
 
 // Dynamically import SmartUserManagement to prevent SSR issues
 const SmartUserManagement = dynamic(
@@ -366,6 +367,11 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-black text-white" style={{ scrollBehavior: 'auto' }}>
       <div className="container mx-auto px-4 py-8">
+        {/* Deprecation Notice */}
+        <div className="mb-6">
+          <DeprecationNotice autoRedirect={false} />
+        </div>
+        
         <header className="mb-8">
           <div className="flex justify-between items-center mb-6">
             <div>
