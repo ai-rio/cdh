@@ -4,6 +4,39 @@ import type { NextRequest } from 'next/server'
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
   
+  // Redirect old control panel routes to new dashboard
+  if (pathname.startsWith('/control-panel')) {
+    // Preserve query parameters if any
+    const searchParams = request.nextUrl.searchParams;
+    const newUrl = new URL('/dashboard', request.url);
+    
+    // Copy search parameters
+    searchParams.forEach((value, key) => {
+      newUrl.searchParams.set(key, value);
+    });
+
+    // Add migration parameter to show notice
+    newUrl.searchParams.set('migrated', 'true');
+    
+    console.log('🔄 Redirecting deprecated control panel to dashboard:', pathname, '→', newUrl.pathname);
+    return NextResponse.redirect(newUrl, 301); // Permanent redirect
+  }
+
+  // Redirect specific admin panel pages to equivalent dashboard pages
+  const redirectMap: Record<string, string> = {
+    '/admin/users': '/dashboard/users',
+    '/admin/collections': '/dashboard/collections',
+    '/admin/settings': '/dashboard',
+    '/admin': '/dashboard',
+  };
+
+  if (redirectMap[pathname]) {
+    const newUrl = new URL(redirectMap[pathname], request.url);
+    newUrl.searchParams.set('migrated', 'true');
+    console.log('🔄 Redirecting deprecated admin route:', pathname, '→', newUrl.pathname);
+    return NextResponse.redirect(newUrl, 301);
+  }
+  
   // Define protected routes that require authentication
   const protectedRoutes = ['/dashboard']
   
