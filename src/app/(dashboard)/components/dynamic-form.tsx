@@ -39,7 +39,12 @@ import {
   FileText,
   Mail,
   Phone,
-  Globe
+  Globe,
+  CircleDot,
+  PenTool,
+  Layers,
+  Package,
+  FolderOpen
 } from "lucide-react";
 
 interface CollectionField {
@@ -155,9 +160,14 @@ function getFieldIcon(type: string) {
     case 'number': return <Hash className="h-4 w-4" />;
     case 'checkbox': return <ToggleLeft className="h-4 w-4" />;
     case 'select': return <List className="h-4 w-4" />;
+    case 'radio': return <CircleDot className="h-4 w-4" />;
     case 'date': return <Calendar className="h-4 w-4" />;
     case 'upload': return <Upload className="h-4 w-4" />;
     case 'relationship': return <Link className="h-4 w-4" />;
+    case 'richText': return <PenTool className="h-4 w-4" />;
+    case 'array': return <List className="h-4 w-4" />;
+    case 'blocks': return <Layers className="h-4 w-4" />;
+    case 'group': return <Package className="h-4 w-4" />;
     case 'url': return <Globe className="h-4 w-4" />;
     case 'phone': return <Phone className="h-4 w-4" />;
     default: return <Type className="h-4 w-4" />;
@@ -429,6 +439,246 @@ export function DynamicForm({
                 <FormMessage />
               </FormItem>
             )}
+          />
+        );
+
+      case 'radio':
+        return (
+          <FormField
+            key={field.name}
+            control={form.control}
+            name={field.name}
+            render={({ field: formField }) => (
+              <FormItem className="space-y-3">
+                <FormLabel className="flex items-center gap-2">
+                  {getFieldIcon(field.type)}
+                  {field.label || field.name}
+                  {field.required && <Badge variant="destructive" className="text-xs">Required</Badge>}
+                </FormLabel>
+                <FormControl>
+                  <div className="flex flex-col space-y-2">
+                    {field.options?.map((option: any) => (
+                      <div key={option.value} className="flex items-center space-x-2">
+                        <input
+                          type="radio"
+                          id={`${field.name}-${option.value}`}
+                          name={field.name}
+                          value={option.value}
+                          checked={formField.value === option.value}
+                          onChange={() => formField.onChange(option.value)}
+                          disabled={isLoading}
+                          className="w-4 h-4"
+                        />
+                        <label htmlFor={`${field.name}-${option.value}`} className="text-sm">
+                          {option.label}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </FormControl>
+                {field.admin?.description && (
+                  <FormDescription>{field.admin.description}</FormDescription>
+                )}
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        );
+
+      case 'richText':
+        return (
+          <FormField
+            key={field.name}
+            control={form.control}
+            name={field.name}
+            render={({ field: formField }) => (
+              <FormItem>
+                <FormLabel className="flex items-center gap-2">
+                  {getFieldIcon(field.type)}
+                  {field.label || field.name}
+                  {field.required && <Badge variant="destructive" className="text-xs">Required</Badge>}
+                </FormLabel>
+                <FormControl>
+                  <Textarea
+                    {...formField}
+                    {...fieldProps}
+                    rows={8}
+                    value={formField.value as string || ''}
+                    placeholder="Rich text content..."
+                    className="min-h-[200px]"
+                  />
+                </FormControl>
+                {field.admin?.description && (
+                  <FormDescription>{field.admin.description}</FormDescription>
+                )}
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        );
+
+      case 'array':
+        return (
+          <FormField
+            key={field.name}
+            control={form.control}
+            name={field.name}
+            render={({ field: formField }) => {
+              const arrayValue = (formField.value as any[]) || [];
+              
+              return (
+                <FormItem>
+                  <FormLabel className="flex items-center gap-2">
+                    {getFieldIcon(field.type)}
+                    {field.label || field.name}
+                    {field.required && <Badge variant="destructive" className="text-xs">Required</Badge>}
+                  </FormLabel>
+                  <FormControl>
+                    <div className="space-y-2">
+                      {arrayValue.map((item, index) => (
+                        <div key={index} className="flex items-center gap-2">
+                          <Input
+                            value={item || ''}
+                            onChange={(e) => {
+                              const newArray = [...arrayValue];
+                              newArray[index] = e.target.value;
+                              formField.onChange(newArray);
+                            }}
+                            placeholder={`Item ${index + 1}`}
+                            disabled={isLoading}
+                          />
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            onClick={() => {
+                              const newArray = arrayValue.filter((_, i) => i !== index);
+                              formField.onChange(newArray);
+                            }}
+                            disabled={isLoading}
+                          >
+                            Remove
+                          </Button>
+                        </div>
+                      ))}
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => formField.onChange([...arrayValue, ''])}
+                        disabled={isLoading}
+                      >
+                        Add Item
+                      </Button>
+                    </div>
+                  </FormControl>
+                  {field.admin?.description && (
+                    <FormDescription>{field.admin.description}</FormDescription>
+                  )}
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
+          />
+        );
+
+      case 'group':
+        return (
+          <Card key={field.name} className="p-4">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-lg">
+                {getFieldIcon(field.type)}
+                {field.label || field.name}
+                {field.required && <Badge variant="destructive" className="text-xs">Required</Badge>}
+              </CardTitle>
+              {field.admin?.description && (
+                <p className="text-sm text-muted-foreground">{field.admin.description}</p>
+              )}
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {field.fields?.map((subField: CollectionField) => 
+                renderField(subField)
+              )}
+            </CardContent>
+          </Card>
+        );
+
+      case 'blocks':
+        return (
+          <FormField
+            key={field.name}
+            control={form.control}
+            name={field.name}
+            render={({ field: formField }) => {
+              const blocksValue = (formField.value as any[]) || [];
+              
+              return (
+                <FormItem>
+                  <FormLabel className="flex items-center gap-2">
+                    {getFieldIcon(field.type)}
+                    {field.label || field.name}
+                    {field.required && <Badge variant="destructive" className="text-xs">Required</Badge>}
+                  </FormLabel>
+                  <FormControl>
+                    <div className="space-y-4">
+                      {blocksValue.map((block, index) => (
+                        <Card key={index} className="p-4">
+                          <CardHeader className="flex flex-row items-center justify-between">
+                            <CardTitle className="text-sm">
+                              Block {index + 1} {block.blockType && `(${block.blockType})`}
+                            </CardTitle>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={() => {
+                                const newBlocks = blocksValue.filter((_, i) => i !== index);
+                                formField.onChange(newBlocks);
+                              }}
+                              disabled={isLoading}
+                            >
+                              Remove
+                            </Button>
+                          </CardHeader>
+                          <CardContent>
+                            <Textarea
+                              value={typeof block === 'object' ? JSON.stringify(block, null, 2) : block}
+                              onChange={(e) => {
+                                try {
+                                  const newBlocks = [...blocksValue];
+                                  newBlocks[index] = JSON.parse(e.target.value);
+                                  formField.onChange(newBlocks);
+                                } catch {
+                                  const newBlocks = [...blocksValue];
+                                  newBlocks[index] = e.target.value;
+                                  formField.onChange(newBlocks);
+                                }
+                              }}
+                              rows={4}
+                              placeholder="Block content (JSON or text)"
+                              disabled={isLoading}
+                            />
+                          </CardContent>
+                        </Card>
+                      ))}
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => formField.onChange([...blocksValue, { blockType: 'default', content: '' }])}
+                        disabled={isLoading}
+                      >
+                        Add Block
+                      </Button>
+                    </div>
+                  </FormControl>
+                  {field.admin?.description && (
+                    <FormDescription>{field.admin.description}</FormDescription>
+                  )}
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
           />
         );
 
