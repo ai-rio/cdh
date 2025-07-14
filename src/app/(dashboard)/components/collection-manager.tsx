@@ -7,6 +7,8 @@
 
 import React, { useState, useCallback, useMemo } from 'react';
 import { useCollectionManager } from '../hooks/use-collection-manager';
+import { useCollectionSchema } from '../hooks/use-collection-schema';
+import { DynamicForm } from './dynamic-form';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -49,6 +51,14 @@ export function CollectionManager({
     changePageSize,
     refresh,
   } = useCollectionManager(collection);
+
+  // Collection schema for dynamic form generation
+  const {
+    schema,
+    fields,
+    isLoading: schemaLoading,
+    error: schemaError,
+  } = useCollectionSchema({ collection });
 
   // Local state for UI interactions
   const [searchQuery, setSearchQuery] = useState('');
@@ -98,10 +108,31 @@ export function CollectionManager({
     setShowCreateDialog(true);
   }, []);
 
+  const handleCreateSubmit = useCallback(async (data: Record<string, any>) => {
+    try {
+      await create(data);
+      setShowCreateDialog(false);
+    } catch (error) {
+      console.error('Failed to create document:', error);
+    }
+  }, [create]);
+
   const handleEdit = useCallback((document: any) => {
     setEditingDocument(document);
     setShowEditDialog(true);
   }, []);
+
+  const handleEditSubmit = useCallback(async (data: Record<string, any>) => {
+    try {
+      if (editingDocument) {
+        await update(editingDocument.id, data);
+        setShowEditDialog(false);
+        setEditingDocument(null);
+      }
+    } catch (error) {
+      console.error('Failed to update document:', error);
+    }
+  }, [update, editingDocument]);
 
   const handleDelete = useCallback((document: any) => {
     setDeletingDocument(document);
@@ -150,6 +181,31 @@ export function CollectionManager({
     refresh();
   }, [refresh]);
 
+  // Format cell value based on field type
+  const formatCellValue = useCallback((value: any, type: string) => {
+    if (value === null || value === undefined) return '-';
+    
+    switch (type) {
+      case 'date':
+        return new Date(value).toLocaleDateString();
+      case 'email':
+        return value.toString();
+      case 'number':
+        return Number(value).toLocaleString();
+      case 'checkbox':
+        return value ? '✓' : '✗';
+      case 'select':
+        return value.toString();
+      case 'array':
+        return Array.isArray(value) ? `${value.length} items` : value.toString();
+      case 'richText':
+        // Strip HTML tags for display
+        return value.toString().replace(/<[^>]*>/g, '').slice(0, 50) + (value.toString().length > 50 ? '...' : '');
+      default:
+        return value.toString().slice(0, 50) + (value.toString().length > 50 ? '...' : '');
+    }
+  }, []);
+
   // Memoized computed values
   const isAllSelected = useMemo(() => 
     documents.length > 0 && selectedItems.length === documents.length,
@@ -161,12 +217,31 @@ export function CollectionManager({
     [selectedItems.length, documents.length]
   );
 
-  // Get table columns based on document structure
+  // Get table columns based on schema or document structure
   const columns = useMemo(() => {
+    if (fields && fields.length > 0) {
+      // Use schema fields for better column display
+      return fields
+        .filter(field => !field.admin?.hidden)
+        .slice(0, 5) // Limit to first 5 fields for table display
+        .map(field => ({
+          key: field.name,
+          label: field.label || field.name,
+          type: field.type
+        }));
+    }
+    
     if (documents.length === 0) return [];
     const firstDoc = documents[0];
-    return Object.keys(firstDoc).filter(key => key !== 'id');
-  }, [documents]);
+    return Object.keys(firstDoc)
+      .filter(key => key !== 'id')
+      .slice(0, 5)
+      .map(key => ({
+        key,
+        label: key.charAt(0).toUpperCase() + key.slice(1),
+        type: 'text'
+      }));
+  }, [fields, documents]);
 
   // Responsive layout detection
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
@@ -179,7 +254,7 @@ export function CollectionManager({
   const visibleDocuments = shouldUseVirtualScrolling ? documents.slice(0, 49) : documents;
 
   // Loading state
-  if (isLoading) {
+  if (isLoading || schemaLoading) {
     return (
       <div className="flex items-center justify-center p-8">
         <Loader2 className="h-8 w-8 animate-spin" />
@@ -190,11 +265,11 @@ export function CollectionManager({
   }
 
   // Error state
-  if (error) {
+  if (error || schemaError) {
     return (
       <Alert variant="destructive">
         <AlertDescription>
-          Failed to load collection
+          {error ? 'Failed to load collection' : 'Failed to load schema'}
           <Button onClick={handleRetry} variant="outline" size="sm" className="ml-2">
             Retry
           </Button>
@@ -284,8 +359,37 @@ export function CollectionManager({
           <CardHeader>
             <CardTitle>Filter by</CardTitle>
           </CardHeader>
-          <CardContent>
-            <p>Filter controls will be implemented here</p>
+          <CardContent className="space-y-4">
+            {fields && fields.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {fields.filter(field => ['text', 'email', 'select', 'number', 'date'].includes(field.type)).map((field) => (
+                  <div key={field.name} className="space-y-2">
+                    <label className="text-sm font-medium">{field.label || field.name}</label>
+                    {field.type === 'select' && field.options ? (
+                      <Select>
+                        <SelectTrigger>
+                          <SelectValue placeholder={`Filter by ${field.label || field.name}`} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {field.options.map((option) => (
+                            <SelectItem key={option.value} value={String(option.value)}>
+                              {option.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    ) : (
+                      <Input
+                        placeholder={`Filter by ${field.label || field.name}`}
+                        type={field.type === 'number' ? 'number' : field.type === 'date' ? 'date' : 'text'}
+                      />
+                    )}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-muted-foreground">No filterable fields available</p>
+            )}
           </CardContent>
         </Card>
       )}
@@ -372,18 +476,18 @@ export function CollectionManager({
                     </TableHead>
                     {columns.map((column) => (
                       <TableHead
-                        key={column}
+                        key={column.key}
                         className="cursor-pointer hover:bg-muted/50"
-                        onClick={() => handleSort(column)}
+                        onClick={() => handleSort(column.key)}
                         aria-sort={
-                          sortField === column 
+                          sortField === column.key 
                             ? sortDirection === 'asc' ? 'ascending' : 'descending'
                             : 'none'
                         }
                       >
                         <div className="flex items-center gap-2">
-                          {column.charAt(0).toUpperCase() + column.slice(1)}
-                          {sortField === column && (
+                          {column.label}
+                          {sortField === column.key && (
                             <span className="text-xs">
                               {sortDirection === 'asc' ? '↑' : '↓'}
                             </span>
@@ -404,8 +508,8 @@ export function CollectionManager({
                         />
                       </TableCell>
                       {columns.map((column) => (
-                        <TableCell key={column}>
-                          {doc[column]?.toString() || '-'}
+                        <TableCell key={column.key}>
+                          {formatCellValue(doc[column.key], column.type)}
                         </TableCell>
                       ))}
                       <TableCell>
@@ -486,25 +590,49 @@ export function CollectionManager({
 
       {/* Create Dialog */}
       <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
-        <DialogContent>
+        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Create New {collection.slice(0, -1)}</DialogTitle>
           </DialogHeader>
-          <div className="p-4">
-            <p>Create form will be implemented here</p>
-          </div>
+          {fields && fields.length > 0 ? (
+            <DynamicForm
+              fields={fields}
+              onSubmit={handleCreateSubmit}
+              onCancel={() => setShowCreateDialog(false)}
+              submitLabel="Create"
+              isLoading={isLoading}
+            />
+          ) : (
+            <div className="p-4">
+              <p>No fields configured for this collection</p>
+            </div>
+          )}
         </DialogContent>
       </Dialog>
 
       {/* Edit Dialog */}
       <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
-        <DialogContent>
+        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Edit {collection.slice(0, -1)}</DialogTitle>
           </DialogHeader>
-          <div className="p-4">
-            <p>Edit form will be implemented here</p>
-          </div>
+          {fields && fields.length > 0 && editingDocument ? (
+            <DynamicForm
+              fields={fields}
+              initialData={editingDocument}
+              onSubmit={handleEditSubmit}
+              onCancel={() => {
+                setShowEditDialog(false);
+                setEditingDocument(null);
+              }}
+              submitLabel="Update"
+              isLoading={isLoading}
+            />
+          ) : (
+            <div className="p-4">
+              <p>No fields configured for this collection</p>
+            </div>
+          )}
         </DialogContent>
       </Dialog>
 
