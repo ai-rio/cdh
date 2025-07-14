@@ -239,41 +239,44 @@ export class ImportExportManager {
         throw new Error(`Collection ${collection} not found`);
       }
 
-      // Validate required fields
+      // Validate required fields and types
       for (const field of collectionConfig.fields) {
-        if (field.required && (record[field.name] === undefined || record[field.name] === null)) {
+        const fieldValue = record[field.name];
+        
+        // Check required fields
+        if (field.required && (fieldValue === undefined || fieldValue === null || fieldValue === '')) {
           if (validationLevel === 'strict') {
             errors.push({
               field: field.name,
-              value: record[field.name],
+              value: fieldValue,
               message: `Required field ${field.name} is missing`,
               code: 'REQUIRED_FIELD'
             });
           } else {
             warnings.push({
               field: field.name,
-              value: record[field.name],
+              value: fieldValue,
               message: `Required field ${field.name} is missing`,
               suggestion: 'Provide a value or set a default'
             });
           }
         }
 
-        // Type validation
-        if (record[field.name] !== undefined) {
-          const typeValidation = this.validateFieldType(field, record[field.name]);
+        // Type validation for non-null values
+        if (fieldValue !== undefined && fieldValue !== null && fieldValue !== '') {
+          const typeValidation = this.validateFieldType(field, fieldValue);
           if (!typeValidation.valid) {
             if (validationLevel === 'strict') {
               errors.push({
                 field: field.name,
-                value: record[field.name],
+                value: fieldValue,
                 message: typeValidation.message,
                 code: 'TYPE_MISMATCH'
               });
             } else {
               warnings.push({
                 field: field.name,
-                value: record[field.name],
+                value: fieldValue,
                 message: typeValidation.message,
                 suggestion: typeValidation.suggestion
               });
@@ -326,6 +329,19 @@ export class ImportExportManager {
             message: 'Expected boolean value',
             suggestion: 'Use true/false or 1/0'
           };
+        }
+        break;
+      case 'select':
+        // Validate against options if available
+        if (field.options && field.options.length > 0) {
+          const validValues = field.options.map(opt => opt.value);
+          if (!validValues.includes(value)) {
+            return {
+              valid: false,
+              message: `Invalid value "${value}" for select field. Valid options: ${validValues.join(', ')}`,
+              suggestion: `Use one of: ${validValues.join(', ')}`
+            };
+          }
         }
         break;
       case 'date':
@@ -450,7 +466,11 @@ export class ImportExportManager {
   }
 
   private getNestedValue(obj: any, path: string): any {
-    return path.split('.').reduce((current, key) => current?.[key], obj);
+    if (!path || !obj) return undefined;
+    return path.split('.').reduce((current, key) => {
+      if (current === null || current === undefined) return undefined;
+      return current[key];
+    }, obj);
   }
 
   private setNestedValue(obj: any, path: string, value: any): void {
