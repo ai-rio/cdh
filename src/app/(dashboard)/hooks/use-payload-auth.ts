@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { authService } from '@/lib/auth-service';
-import { PayloadClient } from '@/lib/payload-client';
+import { usePayload } from '@/lib/payload-client';
+import type { IPayloadClient } from '@/lib/payload-client';
 import { 
   hasPermission, 
   getUserPermissions, 
@@ -30,15 +31,8 @@ export function usePayloadAuth(): UsePayloadAuthReturn {
   const [lastActivity, setLastActivity] = useState(new Date());
   
   // Refs for managing async operations
-  const payloadClientRef = useRef<PayloadClient>();
+  const payloadClient = usePayload();
   const initializationAttempted = useRef(false);
-
-  // Initialize payload client
-  useEffect(() => {
-    if (!payloadClientRef.current) {
-      payloadClientRef.current = new PayloadClient(process.env.NEXT_PUBLIC_PAYLOAD_SERVER_URL || 'http://localhost:3000');
-    }
-  }, []);
 
   // Derived state
   const isAuthenticated = Boolean(user && user.isActive);
@@ -55,10 +49,10 @@ export function usePayloadAuth(): UsePayloadAuthReturn {
         const storedToken = localStorage.getItem('auth_token');
         const storedUser = localStorage.getItem('auth_user');
 
-        if (storedToken && storedUser && payloadClientRef.current) {
+        if (storedToken && storedUser && payloadClient) {
           try {
             // Verify token is still valid
-            const currentUser = await payloadClientRef.current.me();
+            const currentUser = await payloadClient.me();
             if (currentUser) {
               const parsedUser = JSON.parse(storedUser);
               setUser({
@@ -99,7 +93,7 @@ export function usePayloadAuth(): UsePayloadAuthReturn {
       // Login through both services for unified auth
       const [authResult, payloadResult] = await Promise.all([
         authService.login(email, password),
-        payloadClientRef.current?.login(email, password)
+        payloadClient?.login(email, password)
       ]);
 
       if (!authResult.user || !authResult.token) {
@@ -140,7 +134,7 @@ export function usePayloadAuth(): UsePayloadAuthReturn {
       // Logout from both services
       await Promise.allSettled([
         token ? authService.logout(token) : Promise.resolve(),
-        payloadClientRef.current?.logout()
+        payloadClient?.logout()
       ]);
 
       // Clear state and storage

@@ -19,7 +19,7 @@ import {
   Settings
 } from "lucide-react";
 import { toast } from "sonner";
-import { PayloadClient } from '../../../lib/payload-client';
+import { usePayload } from '../../../lib/payload-client';
 
 interface EmailTemplate {
   id: string;
@@ -54,7 +54,7 @@ export default function PayloadEmailManager() {
     totalPending: 0
   });
   
-  const payloadClient = new PayloadClient();
+  const payloadClient = usePayload();
 
   useEffect(() => {
     loadEmailData();

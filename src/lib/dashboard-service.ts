@@ -1,6 +1,7 @@
 'use client';
 
-import { PayloadClient } from './payload-client';
+import type { IPayloadClient, FindResult } from './payload-client';
+import type { User } from '../payload-types';
 import { 
   DashboardOverview, 
   CollectionStats, 
@@ -24,7 +25,7 @@ import {
 } from './dashboard-utils';
 
 export class DashboardService {
-  private payloadClient: PayloadClient;
+  private payloadClient: IPayloadClient;
   private performanceMonitor: PerformanceMonitor;
   private errorHandler: ErrorHandler;
   private logger: Logger;
@@ -33,8 +34,8 @@ export class DashboardService {
   private config: DashboardServiceConfig;
   private initialized = false;
 
-  constructor(payloadClient?: PayloadClient, config?: Partial<DashboardServiceConfig>) {
-    this.payloadClient = payloadClient || new PayloadClient();
+  constructor(payloadClient: IPayloadClient, config?: Partial<DashboardServiceConfig>) {
+    this.payloadClient = payloadClient;
     
     // Default configuration
     this.config = {
@@ -106,7 +107,7 @@ export class DashboardService {
     this.ensureInitialized();
     
     const cacheKey = 'dashboard-overview';
-    const cached = this.cache.get<DashboardOverview>(cacheKey);
+    const cached = this.cache.get(cacheKey);
     
     if (cached) {
       this.performanceMonitor.recordCacheHit('getDashboardData');
@@ -120,7 +121,7 @@ export class DashboardService {
       this.logger.info('Fetching dashboard overview data...');
       
       // Batch requests for better performance
-      const [users, media, collections, systemHealth] = await Promise.all([
+      const [users, media, _collections, systemHealth] = await Promise.all([
         this.getUsersData(),
         this.getMediaData(),
         this.getCollectionStats(),
@@ -161,7 +162,7 @@ export class DashboardService {
     this.ensureInitialized();
     
     const cacheKey = 'collection-stats';
-    const cached = this.cache.get<CollectionStats[]>(cacheKey);
+    const cached = this.cache.get(cacheKey);
     
     if (cached) {
       this.performanceMonitor.recordCacheHit('getCollectionStats');
@@ -221,7 +222,7 @@ export class DashboardService {
     this.ensureInitialized();
     
     const cacheKey = 'user-analytics';
-    const cached = this.cache.get<UserAnalytics>(cacheKey);
+    const cached = this.cache.get(cacheKey);
     
     if (cached) {
       this.performanceMonitor.recordCacheHit('getUserAnalytics');
@@ -264,7 +265,7 @@ export class DashboardService {
         userActivity: {
           loginCount: 0, // This would need to be tracked separately
           averageSessionTime: 0, // This would need to be tracked separately
-          mostActiveUsers: allUsers.docs.slice(0, 5),
+          mostActiveUsers: allUsers.docs.slice(0, 5) as unknown as User[],
         },
       };
 
@@ -290,7 +291,7 @@ export class DashboardService {
     this.ensureInitialized();
     
     const cacheKey = 'system-health';
-    const cached = this.cache.get<SystemHealth>(cacheKey);
+    const cached = this.cache.get(cacheKey);
     
     if (cached) {
       this.performanceMonitor.recordCacheHit('getSystemHealth');
@@ -459,7 +460,7 @@ export class DashboardService {
     ];
   }
 
-  private generateQuickStats(users: any, media: any): QuickStats {
+  private generateQuickStats(users: FindResult, media: FindResult): QuickStats {
     // This would calculate actual stats based on date ranges
     // For now, return basic structure
     return {
@@ -524,8 +525,22 @@ export class DashboardService {
   }
 }
 
-// Singleton instance
-export const dashboardService = new DashboardService();
+// Singleton instance - lazy initialization
+let _dashboardService: DashboardService | null = null;
+
+export const getDashboardService = (): DashboardService => {
+  if (!_dashboardService) {
+    // Import PayloadClient here to avoid circular dependencies
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { PayloadClient } = require('./payload-client');
+    const payloadClient = new PayloadClient();
+    _dashboardService = new DashboardService(payloadClient);
+  }
+  return _dashboardService;
+};
+
+// For backward compatibility
+export const dashboardService = getDashboardService();
 
 // React hook for using Dashboard service
 export function useDashboardService() {

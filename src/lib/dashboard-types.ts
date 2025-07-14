@@ -1,4 +1,4 @@
-import { User, Media } from '@/payload-types';
+import { User, Media } from '../payload-types';
 
 // Dashboard Overview Data
 export interface DashboardOverview {
