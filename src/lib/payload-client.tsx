@@ -3,26 +3,48 @@ import { useContext, createContext, ReactNode } from 'react'
 // Payload client interface
 export interface IPayloadClient {
   find: (options: FindOptions) => Promise<FindResult>
-  create: (options: CreateOptions) => Promise<any>
-  update: (options: UpdateOptions) => Promise<any>
+  create: (options: CreateOptions) => Promise<Document>
+  update: (options: UpdateOptions) => Promise<Document>
   delete: (options: DeleteOptions) => Promise<void>
-  findByID: (options: FindByIDOptions) => Promise<any>
-  login: (email: string, password: string) => Promise<any>
+  findByID: (options: FindByIDOptions) => Promise<Document | null>
+  login: (email: string, password: string) => Promise<{ user: Document; token: string }>
   logout: () => Promise<void>
-  me: () => Promise<any>
+  me: () => Promise<Document | null>
+  getCollections: () => Promise<string[]>
+  getCollection: (
+    collection: string,
+    options?: Omit<FindOptions, 'collection'>,
+  ) => Promise<FindResult>
+  getUsers: (options?: Omit<FindOptions, 'collection'>) => Promise<FindResult>
+  getMedia: (options?: Omit<FindOptions, 'collection'>) => Promise<FindResult>
+}
+
+export interface WhereCondition {
+  contains?: string
+  [key: string]: unknown
+}
+
+export interface WhereClause {
+  or?: WhereCondition[]
+  [key: string]: unknown
 }
 
 export interface FindOptions {
   collection: string
   page?: number
   limit?: number
-  where?: any
+  where?: WhereClause
   sort?: string
   depth?: number
 }
 
+export interface Document {
+  id: string
+  [key: string]: unknown
+}
+
 export interface FindResult {
-  docs: any[]
+  docs: Document[]
   totalDocs: number
   totalPages: number
   page: number
@@ -33,13 +55,13 @@ export interface FindResult {
 
 export interface CreateOptions {
   collection: string
-  data: any
+  data: Record<string, any>
 }
 
 export interface UpdateOptions {
   collection: string
   id: string
-  data: any
+  data: Record<string, any>
 }
 
 export interface DeleteOptions {
@@ -80,10 +102,13 @@ class MockPayloadClient implements IPayloadClient {
       docs = docs.filter((doc) => {
         // Handle OR conditions for search
         if (where.or) {
-          return where.or.some((condition: any) => {
+          return where.or.some((condition: WhereCondition) => {
             return Object.entries(condition).some(([key, value]) => {
-              if (typeof value === 'object' && value.contains) {
-                return doc[key]?.toLowerCase().includes(value.contains.toLowerCase())
+              if (value && typeof value === 'object' && 'contains' in value) {
+                const whereValue = value as WhereCondition
+                if (whereValue.contains) {
+                  return doc[key]?.toLowerCase().includes(whereValue.contains.toLowerCase())
+                }
               }
               return doc[key] === value
             })
@@ -92,8 +117,11 @@ class MockPayloadClient implements IPayloadClient {
 
         // Handle regular conditions
         return Object.entries(where).every(([key, value]) => {
-          if (typeof value === 'object' && value.contains) {
-            return doc[key]?.toLowerCase().includes(value.contains.toLowerCase())
+          if (value && typeof value === 'object' && 'contains' in value) {
+            const whereValue = value as WhereCondition
+            if (whereValue.contains) {
+              return doc[key]?.toLowerCase().includes(whereValue.contains.toLowerCase())
+            }
           }
           return doc[key] === value
         })
@@ -136,7 +164,7 @@ class MockPayloadClient implements IPayloadClient {
     }
   }
 
-  async create(options: CreateOptions): Promise<any> {
+  async create(options: CreateOptions): Promise<Document> {
     const { collection, data } = options
     const docs = this.mockData.get(collection) || []
 
@@ -153,7 +181,7 @@ class MockPayloadClient implements IPayloadClient {
     return newDoc
   }
 
-  async update(options: UpdateOptions): Promise<any> {
+  async update(options: UpdateOptions): Promise<Document> {
     const { collection, id, data } = options
     const docs = this.mockData.get(collection) || []
 
@@ -187,7 +215,7 @@ class MockPayloadClient implements IPayloadClient {
     this.mockData.set(collection, docs)
   }
 
-  async findByID(options: FindByIDOptions): Promise<any> {
+  async findByID(options: FindByIDOptions): Promise<Document | null> {
     const { collection, id } = options
     const docs = this.mockData.get(collection) || []
 
@@ -199,7 +227,7 @@ class MockPayloadClient implements IPayloadClient {
     return doc
   }
 
-  async login(email: string, password: string): Promise<any> {
+  async login(email: string, password: string): Promise<{ user: Document; token: string }> {
     // Mock login implementation
     const users = this.mockData.get('users') || []
     const user = users.find((u: any) => u.email === email)
@@ -211,7 +239,6 @@ class MockPayloadClient implements IPayloadClient {
     return {
       user,
       token: 'mock-jwt-token',
-      exp: Date.now() + 3600000, // 1 hour
     }
   }
 
@@ -220,10 +247,33 @@ class MockPayloadClient implements IPayloadClient {
     return Promise.resolve()
   }
 
-  async me(): Promise<any> {
+  async me(): Promise<Document | null> {
     // Mock me implementation - return current user
     const users = this.mockData.get('users') || []
     return users[0] || null // Return first user as mock current user
+  }
+
+  async getCollections(): Promise<string[]> {
+    // Return available collection names
+    return Array.from(this.mockData.keys())
+  }
+
+  async getCollection(
+    collection: string,
+    options: Omit<FindOptions, 'collection'> = {},
+  ): Promise<FindResult> {
+    // Use the existing find method with collection-specific options
+    return this.find({ collection, ...options })
+  }
+
+  async getUsers(options: Omit<FindOptions, 'collection'> = {}): Promise<FindResult> {
+    // Get users collection with options
+    return this.find({ collection: 'users', ...options })
+  }
+
+  async getMedia(options: Omit<FindOptions, 'collection'> = {}): Promise<FindResult> {
+    // Get media collection with options
+    return this.find({ collection: 'media', ...options })
   }
 }
 
